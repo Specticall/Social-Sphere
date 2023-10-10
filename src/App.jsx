@@ -1,5 +1,7 @@
+import Login from "./Pages/Login";
+
 function App() {
-  return;
+  return <Login />;
 }
 
 export default App;
