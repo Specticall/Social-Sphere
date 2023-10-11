@@ -1,12 +1,23 @@
 import { useState } from "react";
+import { usersData } from "./Data/userdata";
+
+// Pages
 import Login from "./Pages/Login";
 import Feeds from "./Pages/Feeds";
 
 function App() {
   const [activePage, setActivePage] = useState("login");
-  const [data, setData] = useState([]);
+  const [activeUser, setActiveUser] = useState({});
+  const [userData, setUserData] = useState(usersData);
 
-  const props = { setActivePage, setData, data };
+  const props = {
+    setUserData,
+    userData,
+    setActiveUser,
+    activeUser,
+    setActivePage,
+    activePage,
+  };
 
   return (
     <>

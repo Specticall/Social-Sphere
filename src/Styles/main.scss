@@ -1,7 +1,10 @@
 @import "./Mixins/mixins.scss";
 
+@import "./General/general.scss";
+
 @import "./Components/buttons.scss";
 @import "./Components/checkmark.scss";
+@import "./Components/navbar.scss";
 
-@import "./General/general.scss";
 @import "./Pages/login.scss";
+@import "./Pages/feeds.scss";
