@@ -1,0 +1,19 @@
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin max-width($dimension) {
+  @if $dimension == tablet {
+    @media (max-width: 724px) {
+      @content;
+    }
+  }
+
+  @if $dimension == phone {
+    @media (max-width: 420px) {
+      @content;
+    }
+  }
+}

@@ -1,0 +1,25 @@
+.checkmark {
+  @include flex-center;
+
+  width: 1.25rem;
+  aspect-ratio: 1;
+
+  border-radius: 0.1rem;
+  border: 1px solid var(--clr-gray-light);
+
+  cursor: pointer;
+
+  &.active {
+    background: var(--clr-purple);
+    border: 1px solid var(--clr-purple);
+
+    i {
+      color: var(--clr-white);
+    }
+  }
+
+  i {
+    color: var(--clr-white);
+    font-size: 1.1rem;
+  }
+}

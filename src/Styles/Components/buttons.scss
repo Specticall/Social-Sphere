@@ -1,0 +1,12 @@
+.purple-button {
+  background: var(--clr-purple);
+  color: var(--clr-white);
+
+  transition: 0.05s;
+}
+
+@media (hover: hover) {
+  .purple-hover:hover {
+    background: var(--clr-purple-light);
+  }
+}
