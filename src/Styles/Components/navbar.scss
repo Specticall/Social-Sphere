@@ -12,6 +12,10 @@
 
   box-shadow: 0px 1.25rem, 2.5rem #f5f4fe;
 
+  position: absolute;
+  left: 1.5rem;
+  top: 0rem;
+
   // logo
   .logo {
     width: 11.5rem;
@@ -26,7 +30,7 @@
     .navbar-button__wrapper {
       padding-left: 2rem;
       padding-right: 2rem;
-      width: 21rem;
+      width: 20rem;
       display: flex;
       align-items: start;
       justify-content: center;
@@ -40,7 +44,7 @@
 
     // Floating selector
     .selector {
-      width: 22rem;
+      width: 21rem;
       height: 3.5rem;
       border-radius: 0 0.5rem 0.5rem 0;
 
@@ -110,4 +114,9 @@
       }
     }
   }
+}
+
+// For fixed positioning
+.navbar-wrapper {
+  position: fixed;
 }

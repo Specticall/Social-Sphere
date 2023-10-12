@@ -4,6 +4,11 @@
   justify-content: center;
 }
 
+@mixin stay-center {
+  margin-inline: auto;
+  max-width: 1800px;
+}
+
 @mixin max-width($dimension) {
   @if $dimension == tablet {
     @media (max-width: 724px) {

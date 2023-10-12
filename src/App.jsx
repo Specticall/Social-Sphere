@@ -6,6 +6,11 @@ import Login from "./Pages/Login";
 import Feeds from "./Pages/Feeds";
 import Navbar from "./Components/Navbar";
 
+// import function to register Swiper custom elements
+import { register } from "swiper/element/bundle";
+// register Swiper custom elements
+register();
+
 function App() {
   const [activePage, setActivePage] = useState("login");
   const [activeUser, setActiveUser] = useState({});
@@ -33,7 +38,9 @@ function App() {
     <>
       {activePage === "login" ? <Login {...props} /> : null}
       <main>
+        <div className="navbar-wrapper">
         {showNavbar ? <Navbar {...props}/> : null}
+        </div>
         {activePage === "feeds" ? <Feeds {...props} /> : null}
       </main>
     </>
