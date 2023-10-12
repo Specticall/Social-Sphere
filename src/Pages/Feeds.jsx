@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { register } from "swiper/element/bundle";
 import { storyImage } from "../Data/storydata";
 import { recommendationData } from "../Data/recommendationData";
+import Button from "../Components/Button";
 
 register();
 
@@ -65,7 +66,7 @@ function Recommendation({
           <h3>{user}</h3>
           <p>{tag}</p>
         </div>
-        <button>Contact</button>
+        <Button type="primary" buttonText="Contact" />
       </div>
       <p className="caption">{caption}</p>
       <div className="images">
@@ -85,12 +86,16 @@ function Recommendation({
 function Slider() {
   const swiperElRef = useRef(null);
 
+  useEffect(() => {});
+
   return (
     <swiper-container
       ref={swiperElRef}
       slides-per-view="4"
       space-between="15"
       bulletClass="story-pagination"
+      delay="3000"
+      disableOnInteraction="true"
     >
       {storyImage.map((story) => (
         <swiper-slide key={story.id}>

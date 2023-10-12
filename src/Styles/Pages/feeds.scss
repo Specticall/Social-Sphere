@@ -12,10 +12,12 @@
   // background-color: red;
 
   .middle {
+    // Search Bar
     .search-bar {
       position: relative;
       margin-bottom: 2rem;
 
+      // Search input
       input {
         width: 100%;
         padding: 1.25rem 1.5rem;
@@ -25,6 +27,7 @@
         font-size: var(--fs-tiny);
       }
 
+      // Search icon
       i {
         position: absolute;
         right: 1.25rem;
@@ -37,9 +40,12 @@
     }
     // === SWIPER ===
     .slider-container {
-      width: 40rem;
+      width: 50vw;
+      max-width: 55rem;
+      margin-inline: auto;
     }
 
+    // Individual slider elements
     .story-cards {
       height: 20rem;
       width: 100%;
@@ -99,6 +105,7 @@
         }
       }
 
+      // Animation
       @media (hover: hover) {
         &:hover {
           .truncate {
@@ -107,6 +114,7 @@
             overflow: hidden;
           }
         }
+        // Zoom image on hover
         &:hover > img {
           scale: 1.05;
         }
@@ -116,28 +124,34 @@
   // === SWIPER ===
 
   // === RECOMMENDATION ===
-
+  // CONTAINER
   .recommendation {
     display: grid;
     gap: 2.5rem;
 
+    // "People you might like"
     &__title {
       font-size: var(--fs-large);
-      font-weight: var(--fw-bold);
+      font-weight: var(--fw-semi-bold);
       margin-block: 2.5rem;
     }
 
+    // Feeds main content (content itself)
     .feeds__recommendation {
       background-color: var(--clr-white);
 
       padding: 2rem;
 
+      border-radius: 1rem;
+
+      // pfp, username, @, contact btn
       .info {
         display: flex;
         align-items: center;
         justify-content: start;
         gap: 1rem;
 
+        // pfp image
         .profile-picture {
           width: 3.25rem;
           aspect-ratio: 1;
@@ -145,14 +159,17 @@
           object-fit: cover;
         }
 
+        // name & @ grouped together
         .profile {
           flex: 1;
 
+          // name
           h3 {
             font-size: var(--fs-small);
             font-weight: var(--fw-semi-bold);
           }
 
+          //  @
           p {
             color: var(--clr-gray);
             font-size: var(--fs-tiny);
@@ -161,12 +178,14 @@
         }
       }
 
+      // Paragraph below info
       .caption {
         margin-block: 1rem;
         line-height: 1.5rem;
         color: var(--clr-gray);
       }
 
+      // Image container
       .images {
         height: 40rem;
 
@@ -177,6 +196,7 @@
           "slot1 slot3";
         gap: 1.5rem;
 
+        // Img element
         img {
           height: 100%;
           width: 100%;
@@ -184,16 +204,21 @@
           background: var(--clr-gray);
           object-fit: cover;
           object-position: center;
+
+          border-radius: 0.5rem;
         }
 
+        // Left (span top to bottom)
         .img-0 {
           grid-area: slot1;
         }
 
+        // top right
         .img-1 {
           grid-area: slot2;
         }
 
+        // bottom right
         .img-2 {
           grid-area: slot3;
         }

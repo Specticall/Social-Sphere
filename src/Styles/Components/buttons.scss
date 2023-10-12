@@ -5,8 +5,27 @@
   transition: 0.05s;
 }
 
+.gray-button {
+  background: var(--clr-white);
+  border: 1px solid var(--clr-gray-light);
+  color: var(--clr-gray);
+}
+
+.button-default {
+  padding: 0.8rem 0rem;
+  border-radius: 0.3rem;
+}
+
 @media (hover: hover) {
   .purple-hover:hover {
     background: var(--clr-purple-light);
+  }
+  .purple-button.button-default:hover {
+    background: var(--clr-purple-light);
+  }
+  .gray-button.button-default:hover {
+    background: var(--clr-gray-light);
+    color: var(--clr-black);
+    border: none;
   }
 }
