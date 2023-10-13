@@ -3,14 +3,15 @@
   margin-top: 3rem;
 
   display: grid;
-  grid-template-columns: 22.5rem 1fr 22.5rem;
-  gap: 1rem;
+  grid-template-columns: 22rem 1fr 22.5rem;
+  gap: 2rem;
 
   place-items: center;
   @include stay-center;
 
-  // background-color: red;
-
+  .right {
+    align-self: start;
+  }
   .middle {
     // Search Bar
     .search-bar {
