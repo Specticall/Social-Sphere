@@ -58,4 +58,12 @@
   @include max-width(desktop) {
     grid-template-columns: 7rem 1fr minmax(22.5rem, 25rem);
   }
+
+  @include max-width(small-desktop) {
+    grid-template-columns: 1fr;
+
+    max-width: 800px;
+    width: 60vw;
+    margin-inline: auto;
+  }
 }

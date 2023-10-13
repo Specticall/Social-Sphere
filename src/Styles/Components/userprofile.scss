@@ -1,14 +1,15 @@
 .user-profile {
+  position: relative;
   background-color: var(--clr-white);
   padding-inline: 2.35rem;
   padding-block: 2.75rem;
   border-radius: 1.25rem;
   margin-right: 1.5rem;
+  box-shadow: 0px 30px 29px #ededf4;
   overflow: hidden;
 
-  box-shadow: 0px 30px 29px #ededf4;
+  transition: var(--animation-nav);
 
-  position: relative;
   .background {
     position: absolute;
     width: 100%;
@@ -102,6 +103,36 @@
         font-size: var(--fs-medium);
         color: var(--clr-gray-dark);
       }
+    }
+  }
+
+  @include max-width(small-desktop) {
+    &__container {
+      position: fixed;
+
+      right: 0;
+      top: 0;
+      bottom: 0;
+
+      // background-color: var(--clr-white);
+      z-index: 2;
+    }
+
+    & {
+      box-shadow: 0px 30px 29px rgba(0, 0, 0, 0.162);
+      position: absolute;
+      right: 0;
+
+      // border-radius: 0.75rem 0 0 0.75rem;
+      border-radius: 0;
+
+      transform: translate(100%, 0%);
+
+      margin-right: 0;
+      width: 25rem;
+      height: 100%;
+
+      overflow-y: scroll;
     }
   }
 }

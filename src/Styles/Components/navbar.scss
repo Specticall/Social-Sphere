@@ -102,8 +102,12 @@
         }
       }
 
+      p {
+        color: var(--clr-gray);
+      }
+
       @media (hover: hover) {
-        &:hover:not(.selected) {
+        &:hover:not(.selected) > p {
           color: var(--clr-black);
         }
       }

@@ -20,6 +20,13 @@
   --fs-small: 1rem;
   --fs-tiny: 0.875rem;
 
+  @include max-width(small-desktop) {
+    --fs-large: 1.8rem;
+    --fs-medium: 1.35rem;
+    --fs-small: 0.9rem;
+    --fs-tiny: 0.7875rem;
+  }
+
   /* ==== FONT WEIGHT === */
   --fw-medium: 500;
   --fw-semi-bold: 600;
@@ -36,7 +43,10 @@
   padding: 0;
   box-sizing: border-box;
   font: inherit;
+  font-size: var(--fs-small);
   color: var(--clr-black);
+
+  scrollbar-width: thin;
 }
 
 body {
