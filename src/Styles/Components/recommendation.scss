@@ -1,0 +1,100 @@
+.recommendation {
+  display: grid;
+  gap: 2.5rem;
+
+  // "People you might like"
+  &__title {
+    font-size: var(--fs-large);
+    font-weight: var(--fw-semi-bold);
+    margin-block: 2.5rem;
+  }
+
+  // Feeds main content (content itself)
+  .feeds__recommendation {
+    background-color: var(--clr-white);
+
+    padding: 2rem;
+
+    border-radius: 1rem;
+
+    // pfp, username, @, contact btn
+    .info {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      gap: 1rem;
+
+      // pfp image
+      .profile-picture {
+        width: 3.25rem;
+        aspect-ratio: 1;
+        border-radius: 100%;
+        object-fit: cover;
+      }
+
+      // name & @ grouped together
+      .profile {
+        flex: 1;
+
+        // name
+        h3 {
+          font-size: var(--fs-small);
+          font-weight: var(--fw-semi-bold);
+        }
+
+        //  @
+        p {
+          color: var(--clr-gray);
+          font-size: var(--fs-tiny);
+          margin-top: 0.1rem;
+        }
+      }
+    }
+
+    // Paragraph below info
+    .caption {
+      margin-block: 1rem;
+      line-height: 1.5rem;
+      color: var(--clr-gray);
+    }
+
+    // Image container
+    .images {
+      height: 40rem;
+
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-areas:
+        "slot1 slot2"
+        "slot1 slot3";
+      gap: 1.5rem;
+
+      // Img element
+      img {
+        height: 100%;
+        width: 100%;
+        // vertical-align: middle;
+        background: var(--clr-gray);
+        object-fit: cover;
+        object-position: center;
+
+        border-radius: 0.5rem;
+      }
+
+      // Left (span top to bottom)
+      .img-0 {
+        grid-area: slot1;
+      }
+
+      // top right
+      .img-1 {
+        grid-area: slot2;
+      }
+
+      // bottom right
+      .img-2 {
+        grid-area: slot3;
+      }
+    }
+  }
+}
