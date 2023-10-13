@@ -1,12 +1,10 @@
-import { register } from "swiper/element/bundle";
+// import { register } from "swiper/element/bundle";
+// register();
 import { recommendationData } from "../Data/recommendationData";
-import Button from "../Components/Button";
 import UserProfile from "../Components/UserProfile";
 import { Slider } from "../Components/Slider";
 import SearchBar from "../Components/Searchbar";
 import Recommendation from "../Components/Recommendation";
-
-register();
 
 export default function Feeds({
   activeUser,
@@ -23,7 +21,7 @@ export default function Feeds({
 
   return (
     <div className="page__feeds">
-      <div className="left">left</div>
+      <div className="left">{/* <FriendReqs /> */}</div>
       <div className="middle">
         <SearchBar />
         <Slider />

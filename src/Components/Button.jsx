@@ -3,13 +3,14 @@ export default function Button({
   buttonText = "Contact",
   type = "primary",
   className = "",
+  padding = "0.8rem 0rem",
 }) {
   const customClassList =
     type === "primary" ? "purple-button" : "gray-button";
 
   return (
     <button
-      style={{ width }}
+      style={{ width, padding }}
       className={`${className} ${customClassList} button-default`}
     >
       {buttonText}

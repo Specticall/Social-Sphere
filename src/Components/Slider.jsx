@@ -1,5 +1,9 @@
 import { useEffect, useRef } from "react";
 import { storyImage } from "../Data/storydata";
+import { Autoplay } from "swiper/modules";
+import { register } from "swiper/element/bundle";
+
+register();
 
 export function Slider() {
   const swiperElRef = useRef(null);
@@ -13,8 +17,10 @@ export function Slider() {
         slides-per-view="4"
         space-between="15"
         bulletClass="story-pagination"
-        delay="3000"
         disableOnInteraction="true"
+        autoplay-delay="4000"
+        autoplay-disable-on-interaction="false"
+        autoplay-pause-on-mouse-enter="true"
       >
         {storyImage.map((story) => (
           <swiper-slide key={story.id}>

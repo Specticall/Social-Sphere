@@ -13,7 +13,7 @@
   .feeds__recommendation {
     background-color: var(--clr-white);
 
-    padding: 2rem;
+    padding: 2.5rem;
 
     border-radius: 1rem;
 
@@ -64,6 +64,7 @@
 
       display: grid;
       grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: 1fr 1fr;
       grid-template-areas:
         "slot1 slot2"
         "slot1 slot3";
@@ -77,6 +78,7 @@
         background: var(--clr-gray);
         object-fit: cover;
         object-position: center;
+        overflow: hidden;
 
         border-radius: 0.5rem;
       }

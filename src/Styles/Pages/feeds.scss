@@ -3,17 +3,24 @@
   margin-top: 3rem;
 
   display: grid;
-  grid-template-columns: 22rem 1fr 22.5rem;
+  grid-template-columns: 22rem 1fr minmax(22.5rem, 1fr);
   gap: 2rem;
 
   place-items: center;
   @include stay-center;
+
+  overflow-x: hidden;
 
   .your-profile__title {
     color: var(--clr-gray);
     font-size: var(--fs-small);
     letter-spacing: 0.1rem;
     margin-bottom: 1.5rem;
+  }
+
+  .left {
+    align-self: start;
+    // padding-top: 30rem;
   }
 
   .right {
@@ -32,7 +39,7 @@
         border: none;
 
         border-radius: 0.5rem;
-        font-size: var(--fs-tiny);
+        font-size: var(--fs-small);
       }
 
       // Search icon
@@ -46,5 +53,9 @@
         color: var(--clr-gray);
       }
     }
+  }
+
+  @include max-width(desktop) {
+    grid-template-columns: 7rem 1fr minmax(22.5rem, 25rem);
   }
 }

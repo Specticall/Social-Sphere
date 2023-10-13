@@ -84,7 +84,7 @@ function NavigationLabel({
   return (
     <li className={className} onClick={(e) => onSelect(e)}>
       <i className={iconClass}></i>
-      {label}
+      <p>{label}</p>
     </li>
   );
 }

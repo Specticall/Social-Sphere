@@ -1,6 +1,7 @@
 @import "./Mixins/mixins.scss";
 
 @import "./General/general.scss";
+@import "./General/mainPage.scss";
 
 @import "./Components/buttons.scss";
 @import "./Components/checkmark.scss";
@@ -8,6 +9,7 @@
 @import "./Components/userprofile.scss";
 @import "./Components/slider.scss";
 @import "./Components/recommendation.scss";
+@import "./Components/friendreq.scss";
 
 @import "./Pages/login.scss";
 @import "./Pages/feeds.scss";

@@ -8,6 +8,7 @@ import Navbar from "./Components/Navbar";
 
 // import function to register Swiper custom elements
 import { register } from "swiper/element/bundle";
+import FriendReqs from "./Components/FriendReqs";
 // register Swiper custom elements
 register();
 
@@ -39,6 +40,7 @@ function App() {
       {activePage === "login" ? <Login {...props} /> : null}
       <main>
         <div className="navbar-wrapper">
+        {activePage === "feeds" ? <FriendReqs {...props}/> : null}
         {showNavbar ? <Navbar {...props}/> : null}
         </div>
         {activePage === "feeds" ? <Feeds {...props} /> : null}

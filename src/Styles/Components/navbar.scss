@@ -114,9 +114,30 @@
       }
     }
   }
-}
 
-// For fixed positioning
-.navbar-wrapper {
-  position: fixed;
+  // RESPONSIVE
+  @include max-width(desktop) {
+    & {
+      border-radius: 0.5rem;
+    }
+
+    & ul {
+      width: fit-content;
+      .selector {
+        width: inherit;
+      }
+
+      .navbar-button__wrapper {
+        width: fit-content;
+
+        p {
+          display: none;
+        }
+      }
+    }
+
+    .logo {
+      display: none;
+    }
+  }
 }

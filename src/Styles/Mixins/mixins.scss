@@ -6,10 +6,16 @@
 
 @mixin stay-center {
   margin-inline: auto;
-  max-width: 1800px;
+  max-width: 1900px;
 }
 
 @mixin max-width($dimension) {
+  @if $dimension == desktop {
+    @media (max-width: 1600px) {
+      @content;
+    }
+  }
+
   @if $dimension == tablet {
     @media (max-width: 724px) {
       @content;

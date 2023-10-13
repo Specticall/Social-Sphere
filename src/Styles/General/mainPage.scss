@@ -1,0 +1,19 @@
+main {
+  max-width: 1700px;
+  position: relative;
+  margin-inline: auto;
+}
+
+// For fixed positioning
+.navbar-wrapper {
+  position: fixed;
+
+  height: 100vh;
+  width: 21rem;
+}
+
+@include max-width(desktop) {
+  .navbar-wrapper {
+    width: 7rem;
+  }
+}
