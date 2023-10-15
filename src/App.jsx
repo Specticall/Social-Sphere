@@ -5,6 +5,7 @@ import { usersData } from "./Data/userdata";
 import Login from "./Pages/Login";
 import Feeds from "./Pages/Feeds";
 import Navbar from "./Components/Navbar";
+import Friends from "./Pages/Friends";
 
 // import function to register Swiper custom elements
 import { register } from "swiper/element/bundle";
@@ -59,6 +60,7 @@ function App() {
         {showNavbar ? <Navbar {...props}/> : null}
         </div>
         {activePage === "feeds" ? <Feeds {...props} /> : null}
+        {activePage === "friends" ? <Friends {...props} /> : null}
       </main>
     </>
   );

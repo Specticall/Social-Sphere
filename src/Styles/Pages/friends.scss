@@ -1,0 +1,220 @@
+.page__friends {
+  margin: 1.5rem;
+  margin-top: 3rem;
+  padding-right: 1.75rem;
+  padding-top: 0.2rem;
+
+  display: grid;
+  grid-template-columns: 22rem 1fr;
+  gap: 2rem;
+
+  place-items: center;
+  @include stay-center;
+
+  h1 {
+    font-size: var(--fs-large);
+    font-weight: var(--fw-semi-bold);
+    margin-bottom: 2.5rem;
+  }
+
+  .right {
+    width: 100%;
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-inline: 2rem;
+
+      p {
+        font-size: var(--fs-small);
+        color: var(--clr-black);
+        font-weight: var(--fw-bold);
+      }
+      .friend-sort {
+        &__container {
+          label {
+            margin-right: 0.75rem;
+            color: var(--clr-gray);
+          }
+
+          select {
+            border: none;
+            background: none;
+          }
+        }
+      }
+    }
+
+    // SEARCHBAR STYLES
+    .navbar-filters {
+      * {
+        border-radius: 0.3rem;
+      }
+
+      display: grid;
+      grid-template-columns: 5fr 4fr;
+      gap: 2rem;
+
+      .filter-search {
+        height: 4.5rem;
+        & > * {
+          height: 100%;
+          position: relative;
+        }
+
+        i {
+          right: 1.5rem;
+          top: 50%;
+          transform: translateY(-50%);
+
+          position: absolute;
+          font-size: var(--fs-medium);
+        }
+
+        input {
+          padding-inline: 1.5rem;
+          width: 100%;
+          height: inherit;
+          border: none;
+        }
+      }
+
+      // SELECTED FILTER STYLES
+      .filter {
+        background: var(--clr-white);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0rem 3.25rem;
+
+        li {
+          p {
+            color: var(--clr-gray);
+          }
+
+          cursor: pointer;
+          transition: 0.05s;
+          //Padding is set  here instead of .selected
+          // so that it they don't "jump around"
+          padding: 0.65rem 1.25rem;
+          width: fit-content;
+
+          &:hover {
+            p {
+              color: var(--clr-black);
+            }
+          }
+
+          &.selected {
+            background-color: var(--clr-purple);
+            border-radius: 0.5rem;
+
+            p {
+              color: var(--clr-white);
+            }
+          }
+        }
+      }
+    }
+
+    .friends-list {
+      background-color: var(--clr-white);
+      margin-top: 2.25rem;
+      padding-block: 2rem;
+
+      display: grid;
+      // gap: 1.25rem;
+
+      li {
+        cursor: pointer;
+
+        padding-inline: 2rem;
+        padding-block: 1.25rem;
+        border-top: 1px solid var(--clr-gray-light);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        article {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1.25rem;
+
+          .pfp {
+            height: 2.5rem;
+
+            aspect-ratio: 1;
+            border-radius: 100%;
+            background-color: var(--clr-gray);
+
+            object-fit: cover;
+            object-position: 50% 50%;
+          }
+
+          .name {
+            color: var(--clr-gray-dark);
+          }
+
+          .tag {
+            color: var(--clr-gray-light);
+          }
+        }
+
+        .buttons {
+          display: flex;
+          align-items: center;
+          gap: 1.25rem;
+          justify-content: center;
+
+          i {
+            font-size: var(--fs-medium);
+            color: var(--clr-gray);
+          }
+        }
+
+        & p {
+          font-size: var(--fs-small);
+        }
+        @media (hover: hover) {
+          & i:hover {
+            color: var(--clr-black);
+          }
+
+          &:hover {
+            background: #f7f6ff;
+          }
+        }
+      }
+    }
+  }
+
+  @include max-width(desktop) {
+    // Small navbar
+    grid-template-columns: 7rem 1fr;
+  }
+
+  @include max-width(tablet) {
+    // Navbar at bottom
+    padding-left: 1.75rem;
+    grid-template-columns: 1fr;
+
+    .right .navbar-filters {
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+
+    .filter {
+      height: 4.5rem;
+    }
+  }
+
+  @include max-width(phone) {
+    .right .navbar-filters .filter {
+      display: none !important;
+    }
+  }
+}
