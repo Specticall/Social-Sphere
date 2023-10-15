@@ -23,13 +23,13 @@
   }
 
   @if $dimension == tablet {
-    @media (max-width: 724px) {
+    @media (max-width: 920px) {
       @content;
     }
   }
 
   @if $dimension == phone {
-    @media (max-width: 420px) {
+    @media (max-width: 500px) {
       @content;
     }
   }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usersData } from "./Data/userdata";
 
 // Pages
@@ -16,6 +16,19 @@ function App() {
   const [activePage, setActivePage] = useState("login");
   const [activeUser, setActiveUser] = useState({});
   const [userData, setUserData] = useState(usersData);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect viewport changes
+  useEffect(() => {
+    const detectResize = () => {
+      setIsMobile(() => window.innerWidth < 1300);
+    };
+
+    window.addEventListener("resize", detectResize);
+
+    return () =>
+      window.removeEventListener("resize", detectResize);
+  });
 
   // Checks if the user is viewing the home page (which will show the navbar)
   const showNavbar = [
@@ -32,6 +45,8 @@ function App() {
     activeUser,
     setActivePage,
     activePage,
+    isMobile,
+    setIsMobile,
   };
 
   //prettier-ignore

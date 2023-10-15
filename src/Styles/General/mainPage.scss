@@ -17,3 +17,12 @@ main {
     width: 7rem;
   }
 }
+
+@include max-width(tablet) {
+  .navbar-wrapper {
+    z-index: 5;
+    width: 100%;
+    bottom: 0;
+    height: 7rem;
+  }
+}

@@ -1,6 +1,7 @@
 .page__feeds {
   margin: 1.5rem;
   margin-top: 3rem;
+  padding-top: 0.2rem;
 
   display: grid;
   grid-template-columns: 22rem 1fr minmax(22.5rem, 1fr);
@@ -9,7 +10,7 @@
   place-items: center;
   @include stay-center;
 
-  overflow-x: hidden;
+  // overflow-x: hidden;
 
   .your-profile__title {
     color: var(--clr-gray);
@@ -30,12 +31,34 @@
     // Search Bar
     .search-bar {
       position: relative;
+      padding-inline: 0.2rem;
       margin-bottom: 2rem;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+
+      .pfp-button {
+        width: 4rem;
+        aspect-ratio: 1;
+        border-radius: 100%;
+        object-fit: cover;
+        cursor: pointer;
+
+        display: none;
+      }
+
+      &__input {
+        position: relative;
+        width: 100%;
+      }
 
       // Search input
       input {
         width: 100%;
         padding: 1.25rem 1.5rem;
+        padding-right: 3.5rem;
         border: none;
 
         border-radius: 0.5rem;
@@ -60,10 +83,33 @@
   }
 
   @include max-width(small-desktop) {
-    grid-template-columns: 1fr;
-
-    max-width: 800px;
+    .your-profile__title {
+      display: none;
+    }
+    grid-template-columns: 0fr 1fr 0fr;
     width: 60vw;
     margin-inline: auto;
+
+    .pfp-button {
+      display: block !important;
+    }
+  }
+
+  @include max-width(tablet) {
+    & {
+      grid-template-columns: 1fr;
+      width: 100vw;
+      padding-inline: 5rem;
+
+      margin-top: 0;
+    }
+
+    .middle {
+      width: 100%;
+    }
+  }
+
+  @include max-width(tablet) {
+    padding-inline: 2rem;
   }
 }

@@ -144,4 +144,42 @@
       display: none;
     }
   }
+
+  @include max-width(tablet) {
+    & {
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      width: 90%;
+
+      margin-inline: auto;
+      height: fit-content;
+
+      padding-block: 1rem;
+
+      z-index: 5;
+
+      box-shadow: 0 0.5rem 1rem 0.1rem rgba(0, 0, 0, 0.238);
+    }
+
+    .selector {
+      display: none;
+    }
+
+    & ul {
+      width: 100%;
+      .navbar-button__wrapper {
+        width: inherit;
+        flex-direction: row;
+      }
+
+      li {
+        justify-content: center;
+        i {
+          font-size: 1.75rem;
+        }
+      }
+    }
+  }
 }

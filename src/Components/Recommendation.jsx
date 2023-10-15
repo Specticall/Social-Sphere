@@ -10,14 +10,16 @@ export default function Recommendation({
   return (
     <article className="feeds__recommendation">
       <div className="info">
-        <img
-          className="profile-picture"
-          src={`https://source.unsplash.com/${pfpUrl}`}
-          alt="pfp"
-        />
-        <div className="profile">
-          <h3>{user}</h3>
-          <p>{tag}</p>
+        <div className="info-text">
+          <img
+            className="profile-picture"
+            src={`https://source.unsplash.com/${pfpUrl}`}
+            alt="pfp"
+          />
+          <div className="profile">
+            <h3>{user}</h3>
+            <p>{tag}</p>
+          </div>
         </div>
         <Button type="primary" buttonText="Contact" />
       </div>

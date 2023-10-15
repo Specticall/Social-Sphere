@@ -1,7 +1,42 @@
-export default function UserProfile() {
+import { useEffect, useRef, useState } from "react";
+
+export default function UserProfile({
+  openProfile,
+  setOpenProfile,
+  isMobile,
+}) {
+  const profileEl = useRef(null);
+
+  useEffect(() => {
+    const closeProfile = (e) => {
+      if (
+        !e.target.closest(".user-profile") &&
+        !e.target.closest(".pfp-button")
+      )
+        setOpenProfile(false);
+    };
+
+    document.addEventListener("click", closeProfile);
+
+    return () =>
+      document.removeEventListener("click", closeProfile);
+  }, [setOpenProfile, openProfile, isMobile]);
+
   return (
     <div className="user-profile__container">
-      <article className="user-profile">
+      <article
+        className="user-profile"
+        ref={profileEl}
+        style={
+          isMobile
+            ? {
+                transform: `translate(${
+                  openProfile ? 0 : 100
+                }%, 0%)`,
+              }
+            : null
+        }
+      >
         <div className="background"></div>
         <div className="user-profile__wrapper">
           <button className="user-profile__logout-btn">

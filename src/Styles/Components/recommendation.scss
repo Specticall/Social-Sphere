@@ -24,6 +24,12 @@
       justify-content: start;
       gap: 1rem;
 
+      &-text {
+        @include flex-center;
+        gap: 1rem;
+        flex: 1;
+      }
+
       // pfp image
       .profile-picture {
         width: 3.25rem;
@@ -96,6 +102,42 @@
       // bottom right
       .img-2 {
         grid-area: slot3;
+      }
+    }
+
+    @include max-width(tablet) {
+      .images {
+        gap: 1rem;
+      }
+    }
+
+    @include max-width(phone) {
+      .caption {
+        margin-block: 1.25rem;
+      }
+      .info {
+        gap: 1.25rem;
+        flex-direction: column;
+        align-items: start;
+
+        button {
+          width: 100% !important;
+        }
+      }
+
+      & {
+        padding: 1.5rem;
+      }
+
+      .images {
+        height: 30rem;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        grid-template-areas: "slot1";
+        .img-1,
+        .img-2 {
+          display: none;
+        }
       }
     }
   }

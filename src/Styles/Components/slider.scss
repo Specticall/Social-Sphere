@@ -1,13 +1,20 @@
 .slider-container {
   width: 50vw;
-  max-width: 55rem;
+  max-width: 50rem;
   margin-inline: auto;
 
   @include max-width(desktop) {
-    & {
-      width: 60vw;
-      max-width: 60rem;
-    }
+    width: 100%;
+    // max-width: 60rem;
+  }
+
+  @include max-width(small-desktop) {
+    max-width: 40rem;
+  }
+
+  @include max-width(tablet) {
+    width: 100%;
+    max-width: 80vw;
   }
 }
 
