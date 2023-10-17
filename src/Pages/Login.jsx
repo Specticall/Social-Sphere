@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Checkmark from "../Components/Checkmark";
 import logo from "../assets/logo.svg";
 import { useForm } from "react-hook-form";
@@ -11,6 +11,9 @@ export default function Login({
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
+
+  const hasSubmit = useRef(null);
+
   const {
     register,
     handleSubmit,
@@ -26,6 +29,8 @@ export default function Login({
 
   // Runs to check whether the input is correct or not
   const validateInputs = (data) => {
+    hasSubmit.current = true;
+
     const { email, password } = data;
 
     // Find user index
@@ -144,6 +149,20 @@ export default function Login({
         <p className="signup-link ">
           Don&apos;t have an account? <span>Sign Up</span>
         </p>
+        {hasSubmit.current ? (
+          <div className="password-list">
+            <h2></h2>
+            <p>email: kevin.johnson@example.net</p>
+            <p>password: kevinj123</p>
+            <a
+              href="https://pastebin.com/8EQgdCCz"
+              target="_blank"
+              rel="noreferrer"
+            >
+              View All Accounts
+            </a>
+          </div>
+        ) : null}
       </form>
     </div>
   );

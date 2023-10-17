@@ -6,6 +6,7 @@ import Login from "./Pages/Login";
 import Feeds from "./Pages/Feeds";
 import Navbar from "./Components/Navbar";
 import Friends from "./Pages/Friends";
+import Landing from "./Pages/Landing";
 
 // import function to register Swiper custom elements
 import { register } from "swiper/element/bundle";
@@ -14,7 +15,7 @@ import FriendReqs from "./Components/FriendReqs";
 register();
 
 function App() {
-  const [activePage, setActivePage] = useState("login");
+  const [activePage, setActivePage] = useState("landing");
   const [activeUser, setActiveUser] = useState({});
   const [userData, setUserData] = useState(usersData);
   const [isMobile, setIsMobile] = useState(false);
@@ -53,6 +54,7 @@ function App() {
   //prettier-ignore
   return (
     <>
+      {activePage === "landing" ? <Landing {...props}/> : null}
       {activePage === "login" ? <Login {...props} /> : null}
       <main>
         <div className="navbar-wrapper">

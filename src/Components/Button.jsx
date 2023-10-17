@@ -4,6 +4,7 @@ export default function Button({
   type = "primary",
   className = "",
   padding = "0.8rem 0rem",
+  goToPage = () => {},
 }) {
   const customClassList =
     type === "primary" ? "purple-button" : "gray-button";
@@ -12,6 +13,9 @@ export default function Button({
     <button
       style={{ width, padding }}
       className={`${className} ${customClassList} button-default`}
+      onClick={() => {
+        goToPage();
+      }}
     >
       {buttonText}
     </button>

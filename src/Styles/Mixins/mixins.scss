@@ -4,6 +4,12 @@
   justify-content: center;
 }
 
+@mixin section {
+  margin-inline: auto;
+  max-width: 1400px;
+  padding-inline: 2rem;
+}
+
 @mixin stay-center {
   margin-inline: auto;
   max-width: 1900px;

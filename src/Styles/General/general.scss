@@ -15,12 +15,16 @@
   --clr-background: hsl(0, 0%, 97%);
 
   /* ==== FONT SIZE === */
+  --fs-very-large: 2.5rem;
+  --fs-semi-large: 2.25rem;
   --fs-large: 2rem;
-  --fs-medium: 1.5rem;
   --fs-small: 1rem;
+  --fs-medium: 1.5rem;
   --fs-tiny: 0.875rem;
 
   @include max-width(small-desktop) {
+    --fs-very-large: 2.25rem;
+    --fs-semi-large: 2.025rem;
     --fs-large: 1.8rem;
     --fs-medium: 1.35rem;
     --fs-small: 0.9rem;
@@ -47,6 +51,10 @@
   color: var(--clr-black);
 
   scrollbar-width: thin;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {

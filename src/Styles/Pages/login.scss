@@ -199,4 +199,22 @@
       }
     }
   }
+
+  .password-list {
+    background-color: white;
+    padding: 1rem;
+
+    display: grid;
+    gap: 1rem;
+
+    text-align: center;
+
+    p {
+      color: var(--clr-gray);
+    }
+
+    a {
+      color: var(--clr-purple);
+    }
+  }
 }
