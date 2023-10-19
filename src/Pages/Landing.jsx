@@ -72,7 +72,7 @@ export default function Landing({ setActivePage }) {
 }
 
 function Nav() {
-  const [mobileNavOpen, setMobileNavOpen] = useState(true);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
     const toggleMobileNav = (e) => {
