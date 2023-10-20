@@ -1,12 +1,4 @@
-import { useState } from "react";
 import logo from "../assets/logo.svg";
-
-const positions = {
-  feeds: "0%",
-  friends: "120%",
-  chatRoom: "240%",
-  inbox: "360%",
-};
 
 const navigations = [
   {

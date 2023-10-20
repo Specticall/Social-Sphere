@@ -1,11 +1,12 @@
 // import { register } from "swiper/element/bundle";
 // register();
 import { recommendationData } from "../Data/recommendationData";
-import UserProfile from "../Components/UserProfile";
+import { useEffect, useState } from "react";
+
 import { Slider } from "../Components/Slider";
 import SearchBar from "../Components/Searchbar";
+import UserProfile from "../Components/UserProfile";
 import Recommendation from "../Components/Recommendation";
-import { useEffect, useState } from "react";
 
 export default function Feeds({
   activeUser,

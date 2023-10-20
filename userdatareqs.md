@@ -1,0 +1,15 @@
+username
+occupation
+tag
+aboutMe
+status:
+  location
+  activity
+  loveStatus
+  Age
+story:
+  storyImage
+  storyDescription
+displayImg
+friends
+friendRequest

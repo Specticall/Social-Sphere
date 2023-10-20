@@ -7,7 +7,7 @@ import { EMAIL_REGEX } from "../Helper/config";
 export default function Login({
   setActivePage,
   setActiveUser,
-  userData,
+  userLoginData,
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
@@ -34,12 +34,12 @@ export default function Login({
     const { email, password } = data;
 
     // Find user index
-    const userIndex = userData.findIndex(
+    const userIndex = userLoginData.findIndex(
       (data) => data.email === email
     );
 
     // Find user
-    const selectedUser = userData.at(userIndex);
+    const selectedUser = userLoginData.at(userIndex);
 
     // Validate Password against email
     if (selectedUser.password === password) {
@@ -60,8 +60,9 @@ export default function Login({
 
     // Check if email is registered
     return (
-      userData.some((data) => data.email === emailInput) ||
-      "Email not registered"
+      userLoginData.some(
+        (data) => data.email === emailInput
+      ) || "Email not registered"
     );
   };
 

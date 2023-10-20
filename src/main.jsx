@@ -3,9 +3,12 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./assets/boxicons-2.1.4/css/boxicons.min.css";
 import "./Styles/main.scss";
+import { getImage } from "./Helper/helper.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
+
+getImage();

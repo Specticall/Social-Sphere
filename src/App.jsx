@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usersData } from "./Data/userdata";
+import { usersLoginData } from "./Data/userdata";
 
 // Pages
 import Login from "./Pages/Login";
@@ -11,14 +11,18 @@ import Landing from "./Pages/Landing";
 // import function to register Swiper custom elements
 import { register } from "swiper/element/bundle";
 import FriendReqs from "./Components/FriendReqs";
+
 // register Swiper custom elements
 register();
 
 function App() {
   const [activePage, setActivePage] = useState("landing");
   const [activeUser, setActiveUser] = useState({});
-  const [userData, setUserData] = useState(usersData);
   const [isMobile, setIsMobile] = useState(false);
+
+  // LOGIN DATA
+  const [userLoginData, setUserLoginData] =
+    useState(usersLoginData);
 
   // Detect viewport changes
   useEffect(() => {
@@ -41,8 +45,8 @@ function App() {
   ].some((page) => activePage === page);
 
   const props = {
-    setUserData,
-    userData,
+    setUserLoginData,
+    userLoginData,
     setActiveUser,
     activeUser,
     setActivePage,
