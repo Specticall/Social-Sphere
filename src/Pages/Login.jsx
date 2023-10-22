@@ -6,8 +6,8 @@ import { EMAIL_REGEX } from "../Helper/config";
 
 export default function Login({
   setActivePage,
-  setActiveUser,
   userLoginData,
+  setActiveUserId,
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
@@ -44,8 +44,17 @@ export default function Login({
     // Validate Password against email
     if (selectedUser.password === password) {
       // Correct
-      setActiveUser(selectedUser);
+      //
+
+      // DEPRECATED
+      // setActiveUser(selectedUser);
+
+      setActiveUserId(selectedUser.id);
+
+      // Set page to feeds
       setActivePage("feeds");
+
+      // reset input validation state
       setWrongPassword(false);
     } else {
       // Incorrect

@@ -1,6 +1,5 @@
 // import { register } from "swiper/element/bundle";
 // register();
-import { recommendationData } from "../Data/recommendationData";
 import { useEffect, useState } from "react";
 
 import { Slider } from "../Components/Slider";
@@ -8,19 +7,56 @@ import SearchBar from "../Components/Searchbar";
 import UserProfile from "../Components/UserProfile";
 import Recommendation from "../Components/Recommendation";
 
+import { getRecommendation } from "../Helper/logic";
+import { RECOMMENDATION_AMOUNT } from "../Helper/config";
+import { isEmptyObject } from "../Helper/helper";
+
+// TEMP Mockup Story data
+import { storyImage } from "../Data/storydata";
+
 export default function Feeds({
-  activeUser,
   userData,
+  activeUserId,
   setActivePage,
   activePage,
   isMobile,
+  allUser,
 }) {
   const [openProfile, setOpenProfile] = useState(false);
 
+  // DATA (User Object)
+  const activeUser = allUser.find(
+    (user) => user.id === activeUserId
+  );
+  const recommended = getRecommendation(
+    allUser,
+    activeUserId,
+    RECOMMENDATION_AMOUNT
+  );
+  /*
+  Scan all the user's friends and check if they have a story.
+  */
+  let stories = activeUser.data.friends
+    .map(
+      (friendId) =>
+        allUser.find((user) => user.id === friendId)?.data
+          ?.story
+    )
+    .filter((story) => !isEmptyObject(story));
+
+  // TEMP
+  // Adds mockup stories to make the list longer
+  stories = [...stories, ...storyImage];
+
+  /*
+  Make sure the navbar is always closed when 
+  screen changes from desktop to mobile
+  */
   useEffect(() => {
     setOpenProfile(isMobile ? false : true);
   }, [isMobile]);
 
+  // Prop pack
   const props = {
     activeUser,
     userData,
@@ -40,14 +76,22 @@ export default function Feeds({
             setOpenProfile((current) => !current);
           }}
         />
-        <Slider />
+        <Slider items={stories} />
         <h2 className="recommendation__title">
           People you might like
         </h2>
         <div className="recommendation">
-          {recommendationData.map((data, i) => (
-            <Recommendation {...data} key={data.user + i} />
-          ))}
+          {recommended.map((id, i) => {
+            const data = allUser.find(
+              (user) => user.id === id
+            );
+            return (
+              <Recommendation
+                {...data}
+                key={`${data.user}${i}`}
+              />
+            );
+          })}
         </div>
       </div>
       <div className="right">

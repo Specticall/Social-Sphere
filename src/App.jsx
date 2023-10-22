@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { usersLoginData } from "./Data/userdata";
+import { useEffect, useRef, useState } from "react";
+import { usersLoginData } from "./Data/userLogindata";
 
 // Pages
 import Login from "./Pages/Login";
@@ -11,23 +11,35 @@ import Landing from "./Pages/Landing";
 // import function to register Swiper custom elements
 import { register } from "swiper/element/bundle";
 import FriendReqs from "./Components/FriendReqs";
+import { data } from "./Data/data";
 
 // register Swiper custom elements
 register();
 
 function App() {
   const [activePage, setActivePage] = useState("landing");
-  const [activeUser, setActiveUser] = useState({});
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    window.innerWidth < 1300
+  );
 
-  // LOGIN DATA
+  // DATA (Login)
   const [userLoginData, setUserLoginData] =
     useState(usersLoginData);
+  const [activeUserId, setActiveUserId] = useState(null);
+
+  // All array of user objects
+  const [allUser, setAllUser] = useState(data);
 
   // Detect viewport changes
   useEffect(() => {
     const detectResize = () => {
-      setIsMobile(() => window.innerWidth < 1300);
+      // Only toggle mobile when screensize goes between
+      // the 1300px breakpoint
+      if (window.innerWidth > 1300 && isMobile) {
+        setIsMobile(false);
+      } else if (window.innerWidth <= 1300 && !isMobile) {
+        setIsMobile(true);
+      }
     };
 
     window.addEventListener("resize", detectResize);
@@ -46,9 +58,11 @@ function App() {
 
   const props = {
     setUserLoginData,
+    setActiveUserId,
+    activeUserId,
     userLoginData,
-    setActiveUser,
-    activeUser,
+    allUser,
+    setAllUser,
     setActivePage,
     activePage,
     isMobile,
@@ -66,7 +80,7 @@ function App() {
         {showNavbar ? <Navbar {...props}/> : null}
         </div>
         {activePage === "feeds" ? <Feeds {...props} /> : null}
-        {activePage === "friends" ? <Friends {...props} /> : null}
+        {/* {activePage === "friends" ? <Friends {...props} /> : null} */}
       </main>
     </>
   );

@@ -1,31 +1,25 @@
 import Button from "./Button";
 
-export default function Recommendation({
-  user,
-  pfpUrl,
-  tag,
-  caption,
-  imagesID,
-}) {
+export default function Recommendation({ data }) {
   return (
     <article className="feeds__recommendation">
       <div className="info">
         <div className="info-text">
           <img
             className="profile-picture"
-            src={`https://source.unsplash.com/${pfpUrl}`}
+            src={`https://source.unsplash.com/${data.pfp}`}
             alt="pfp"
           />
           <div className="profile">
-            <h3>{user}</h3>
-            <p>{tag}</p>
+            <h3>{data.username}</h3>
+            <p>{data.tag}</p>
           </div>
         </div>
         <Button type="primary" buttonText="Contact" />
       </div>
-      <p className="caption">{caption}</p>
+      <p className="caption">{data.aboutMe}</p>
       <div className="images">
-        {imagesID.map((IMG_URL, i) => (
+        {data.displayImg.map((IMG_URL, i) => (
           <img
             src={`https://source.unsplash.com/${IMG_URL}`}
             className={`img-${i}`}

@@ -3,9 +3,10 @@ import { storyImage } from "../Data/storydata";
 import { Autoplay } from "swiper/modules";
 import { register } from "swiper/element/bundle";
 
-export function Slider() {
+export function Slider({ items }) {
   const swiperElRef = useRef(null);
 
+  // SwiperJS Configs
   useEffect(() => {
     register();
     // swiperElRef.current
@@ -41,7 +42,7 @@ export function Slider() {
         autoplay-disable-on-interaction="false"
         autoplay-pause-on-mouse-enter="true"
       >
-        {storyImage.map((story) => (
+        {items.map((story) => (
           <swiper-slide key={story.id}>
             <StoryCards {...story} />
           </swiper-slide>
@@ -50,7 +51,11 @@ export function Slider() {
     </div>
   );
 }
-function StoryCards({ image: IMG_URL, caption, poster }) {
+function StoryCards({
+  storyImage: IMG_URL,
+  storyDescription: caption,
+  tag: poster,
+}) {
   return (
     <div className="story-cards">
       <img

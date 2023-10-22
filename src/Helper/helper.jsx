@@ -18,4 +18,8 @@ export const getImage = async () => {
   }
 };
 
-getImage();
+export const randomInt = (min, max) =>
+  Math.trunc(Math.random() * (max - min + 1) + min);
+
+export const isEmptyObject = (obj) =>
+  JSON.stringify(obj) === "{}";
