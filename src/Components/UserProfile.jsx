@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Image from "./Image";
 
 export default function UserProfile({
   openProfile,
@@ -6,7 +7,6 @@ export default function UserProfile({
   isMobile,
   activeUser,
   setActivePage,
-  setActiveUser,
   setActiveUserId,
 }) {
   const profileEl = useRef(null);
@@ -63,7 +63,13 @@ export default function UserProfile({
             <i className="bx bx-log-out"></i>
             Log out
           </button>
-          <div className="user-profile__pfp"></div>
+          <div className="user-profile__pfp">
+            <Image
+              link={user.pfp}
+              alt="logged in user profile picture"
+            />
+            <div className="online-indicator"></div>
+          </div>
           <h2>{user.username}</h2>
           <p className="user-profile__profession">
             {user.occupation}

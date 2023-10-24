@@ -26,6 +26,7 @@ class Data {
     }
 }
 
+// DEFAULT DATA
 export const data = [
   new Data("AAA01", {
     username: "Sarah Wilson",
@@ -300,7 +301,7 @@ export const data = [
     username: "Mark Johnson",
     occupation: "Engineer",
     tag: "@markj",
-    profile: "A0pO8aBY",
+    pfp: "oRsSeYqJUgY",
     aboutMe: `"Hi, I'm Mark, an engineer who finds joy in solving complex problems and turning innovative ideas into reality."`,
     status: {
       country: "Indonesia",

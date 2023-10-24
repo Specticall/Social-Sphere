@@ -57,6 +57,14 @@
       aspect-ratio: 1;
       border-radius: 100%;
       background-color: var(--clr-gray);
+      overflow: hidden;
+
+      // img {
+      //   width: 100%;
+      //   aspect-ratio: 1;
+      //   object-position: center;
+      //   object-fit: cover;
+      // }
     }
   }
 

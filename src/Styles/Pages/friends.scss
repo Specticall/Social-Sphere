@@ -144,19 +144,9 @@
           justify-content: center;
           gap: 1.25rem;
 
-          .pfp {
-            height: 2.5rem;
-
-            aspect-ratio: 1;
-            border-radius: 100%;
-            background-color: var(--clr-gray);
-
-            object-fit: cover;
-            object-position: 50% 50%;
-          }
-
           .name {
             color: var(--clr-gray-dark);
+            margin-bottom: 0.25rem;
           }
 
           .tag {

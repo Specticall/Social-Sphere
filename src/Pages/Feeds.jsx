@@ -21,20 +21,30 @@ export default function Feeds({
   activePage,
   isMobile,
   allUser,
+  activeUserObject: activeUser,
 }) {
   const [openProfile, setOpenProfile] = useState(false);
 
   // DATA (User Object)
-  const activeUser = allUser.find(
-    (user) => user.id === activeUserId
+
+  /*
+    State default value is needed to prevent recommendation 
+    change everytime user adds a new friend / switch pages.
+
+    With this, a new recommendation will only get created 
+    on every initial render / mount of the component.
+  */
+  const [recommended] = useState(
+    getRecommendation(
+      allUser,
+      activeUserId,
+      RECOMMENDATION_AMOUNT
+    )
   );
-  const recommended = getRecommendation(
-    allUser,
-    activeUserId,
-    RECOMMENDATION_AMOUNT
-  );
+
   /*
   Scan all the user's friends and check if they have a story.
+  -> Returns the an array of user story objects (whom are the users friend's)
   */
   let stories = activeUser.data.friends
     .map(
@@ -75,6 +85,7 @@ export default function Feeds({
           onOpenProfile={() => {
             setOpenProfile((current) => !current);
           }}
+          props={props}
         />
         <Slider items={stories} />
         <h2 className="recommendation__title">

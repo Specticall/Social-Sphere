@@ -1,21 +1,18 @@
 export const fetch = () => {};
 
 export const getImage = async () => {
-  try {
-    const res = await fetch(`https://picsum.photos/800`);
-    const data = await res.json();
-
-    console.log(res);
-
-    if (!res.ok)
-      throw new Error(
-        "There was a problem on fetching the image"
-      );
-
-    console.log(data);
-  } catch (err) {
-    console.log(err.message);
-  }
+  // try {
+  //   const res = await fetch(`https://picsum.photos/800`);
+  //   const data = await res.json();
+  //   console.log(res);
+  //   if (!res.ok)
+  //     throw new Error(
+  //       "There was a problem on fetching the image"
+  //     );
+  //   console.log(data);
+  // } catch (err) {
+  //   console.log(err.message);
+  // }
 };
 
 export const randomInt = (min, max) =>
@@ -23,3 +20,38 @@ export const randomInt = (min, max) =>
 
 export const isEmptyObject = (obj) =>
   JSON.stringify(obj) === "{}";
+
+// Finds user object from specified array ids on a given field
+export const filterFieldbyId = (field, ids) => {
+  return ids.map((id) =>
+    field.find((entry) => entry.id === id)
+  );
+};
+
+/*
+Accepts 2 array inputs, a target and a reference
+
+Whenever the target array contains the same element as the
+ref array, then the element from the target array gets removed.
+  target = [1,2,3]
+  ref    = [2,3,4]
+
+target = [1]; Because 2 and 3 exists in the ref array.
+*/
+export const deleteDuplicatesFrom = (
+  targetArray,
+  refArray
+) => {
+  return targetArray.reduce((cleaned, targetEl) => {
+    /*
+    Creates a new element that contains elements from
+    target array except ones that is contined within
+    the target element.
+    */
+    if (!refArray.includes(targetEl))
+      cleaned.push(targetEl);
+    return cleaned;
+  }, []);
+};
+
+console.log(deleteDuplicatesFrom([1, 2, 3], [2, 3, 4, 1]));

@@ -12,6 +12,7 @@ import Landing from "./Pages/Landing";
 import { register } from "swiper/element/bundle";
 import FriendReqs from "./Components/FriendReqs";
 import { data } from "./Data/data";
+import { deleteDuplicatesFrom } from "./Helper/helper";
 
 // register Swiper custom elements
 register();
@@ -22,13 +23,20 @@ function App() {
     window.innerWidth < 1300
   );
 
-  // DATA (Login)
+  // DATA (Login) -> Email, password, id object
   const [userLoginData, setUserLoginData] =
     useState(usersLoginData);
+
+  // Active user id -> String
   const [activeUserId, setActiveUserId] = useState(null);
 
   // All array of user objects
   const [allUser, setAllUser] = useState(data);
+
+  // Derived state that stores the object of the active user
+  const activeUserObject = allUser.find(
+    (user) => user.id === activeUserId
+  );
 
   // Detect viewport changes
   useEffect(() => {
@@ -56,6 +64,61 @@ function App() {
     "inbox",
   ].some((page) => activePage === page);
 
+  /*
+  Handles any action that revolves around adding new data to all user object.
+  */
+  const handleChangeData = ({
+    type,
+    newData,
+    changeTargetId,
+  }) => {
+    // Make sure the type of change is specified
+    if (!type)
+      return console.log(
+        "NO TYPE OF DATA CHANGE IS SELECTED"
+      );
+
+    // Declare new user object template
+    const newActiveUserObject = {
+      id: activeUserId,
+    };
+
+    // Insert new data to the object template
+    if (type === "addFriend") {
+      newActiveUserObject.data = {
+        ...activeUserObject.data,
+        friends: newData,
+        friendRequest: deleteDuplicatesFrom(
+          activeUserObject.data.friendRequest,
+          newData
+        ),
+      };
+    }
+
+    // TEMP
+    console.log(
+      "DATA CHANGED",
+      allUser.map((userObject) =>
+        userObject.id === changeTargetId
+          ? newActiveUserObject
+          : userObject
+      )
+    );
+
+    // Commit to change to the real object
+    /*
+    Maps through the entire object, changes the
+    data that matches with the specifed target id
+    */
+    setAllUser((current) =>
+      current.map((userObject) =>
+        userObject.id === changeTargetId
+          ? newActiveUserObject
+          : userObject
+      )
+    );
+  };
+
   const props = {
     setUserLoginData,
     setActiveUserId,
@@ -67,6 +130,8 @@ function App() {
     activePage,
     isMobile,
     setIsMobile,
+    activeUserObject,
+    handleChangeData,
   };
 
   //prettier-ignore
@@ -80,7 +145,7 @@ function App() {
         {showNavbar ? <Navbar {...props}/> : null}
         </div>
         {activePage === "feeds" ? <Feeds {...props} /> : null}
-        {/* {activePage === "friends" ? <Friends {...props} /> : null} */}
+        {activePage === "friends" ? <Friends {...props} /> : null}
       </main>
     </>
   );

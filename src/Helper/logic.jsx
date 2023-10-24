@@ -14,6 +14,9 @@ const getRandomElements = (
     (_, i) => i !== randomIndex
   );
 
+  // Early exit if we ever run out of users to recommend
+  if (arr.length - 1 < 1) return [arr[randomIndex]];
+
   if (depth < amount - 1) {
     return [
       arr[randomIndex],

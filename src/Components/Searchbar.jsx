@@ -1,10 +1,11 @@
+import Image from "./Image";
+
 export default function SearchBar({
   onOpenProfile = () => {},
   hideProfilePic = false,
   className = "",
+  props,
 }) {
-  const IMG_URL = "9S82-KpAEnE";
-
   return (
     <div className={`search-bar ${className}`}>
       <div className="search-bar__input">
@@ -15,15 +16,14 @@ export default function SearchBar({
         <i className="bx bx-search-alt-2"></i>
       </div>
       {!hideProfilePic ? (
-        <img
-          className="pfp-button"
-          src={`https://source.unsplash.com/${IMG_URL}`}
-          alt=""
+        <Image
+          className={"pfp-button"}
+          link={props.activeUser.data.pfp}
+          alt={`${props.activeUser.data.pfp}-mobile`}
           onClick={onOpenProfile}
+          defaultStyle={false}
         />
       ) : null}
     </div>
   );
 }
-
-// 9S82-KpAEnE

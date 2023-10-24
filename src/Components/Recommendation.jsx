@@ -1,4 +1,5 @@
 import Button from "./Button";
+import Image from "./Image";
 
 export default function Recommendation({ data }) {
   return (
@@ -20,10 +21,10 @@ export default function Recommendation({ data }) {
       <p className="caption">{data.aboutMe}</p>
       <div className="images">
         {data.displayImg.map((IMG_URL, i) => (
-          <img
-            src={`https://source.unsplash.com/${IMG_URL}`}
+          <Image
+            link={IMG_URL}
             className={`img-${i}`}
-            alt="feeds image"
+            alt={"feeds image"}
             key={`${IMG_URL}-${i}`}
           />
         ))}

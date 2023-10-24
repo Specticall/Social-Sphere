@@ -51,6 +51,27 @@
     align-self: center;
     margin-top: 2rem;
     margin-bottom: 1.5rem;
+
+    padding: 0.4rem;
+
+    position: relative;
+
+    img {
+      border-radius: 100%;
+    }
+
+    .online-indicator {
+      position: absolute;
+      right: 0.3rem;
+      bottom: 0.3rem;
+      border-radius: 100%;
+      width: 1.6rem;
+      border: 0.25rem solid white;
+      aspect-ratio: 1;
+      background: var(--clr-green);
+
+      z-index: 5;
+    }
   }
 
   h2 {
