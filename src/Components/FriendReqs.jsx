@@ -21,6 +21,12 @@ export default function FriendReqs({
   return (
     <div className="friend-reqs">
       <h2 className="title">REQUEST</h2>
+      {/* Placeholder if user has no friend request */}
+      {friendRequests.length === 0 ? (
+        <div className="req placeholder">
+          YOU HAVE NO REQUEST
+        </div>
+      ) : null}
       {friendRequests.map((user, i) => (
         <Request
           key={`${user.data.username}-${i}`}
@@ -34,19 +40,22 @@ export default function FriendReqs({
 
 function Request({ user, handleChangeData, activeUser }) {
   const handleAccept = () => {
-    const newFriendsList = [
-      ...activeUser.data.friends,
-      user.id,
-    ];
-
     handleChangeData({
-      type: "addFriend",
-      newData: newFriendsList,
+      type: "acceptFriendRequest",
+      newData: [...activeUser.data.friends, user.id],
       changeTargetId: activeUser.id,
     });
   };
 
-  const handleDecline = () => {};
+  const handleDecline = () => {
+    handleChangeData({
+      type: "declineFriendRequest",
+      newData: activeUser.data.friendRequest.filter(
+        (req) => req !== user.id
+      ),
+      changeTargetId: activeUser.id,
+    });
+  };
 
   return (
     <article className="req">
