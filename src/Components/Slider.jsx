@@ -42,8 +42,8 @@ export function Slider({ items }) {
         autoplay-disable-on-interaction="false"
         autoplay-pause-on-mouse-enter="true"
       >
-        {items.map((story) => (
-          <swiper-slide key={story.id}>
+        {items.map((story, i) => (
+          <swiper-slide key={`${story.storyImage}-${i}`}>
             <StoryCards {...story} />
           </swiper-slide>
         ))}

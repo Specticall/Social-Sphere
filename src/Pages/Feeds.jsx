@@ -99,7 +99,7 @@ export default function Feeds({
             return (
               <Recommendation
                 {...data}
-                key={`${data.user}${i}`}
+                key={`${data.user}--${i}`}
               />
             );
           })}

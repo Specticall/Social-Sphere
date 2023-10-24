@@ -83,7 +83,7 @@ function App() {
       id: activeUserId,
     };
 
-    // Insert new data to the object template
+    // Replace old data with new data to the object template
     if (type === "acceptFriendRequest") {
       newActiveUserObject.data = {
         ...activeUserObject.data,
@@ -96,7 +96,6 @@ function App() {
     }
 
     if (type === "declineFriendRequest") {
-      console.log(newData);
       newActiveUserObject.data = {
         ...activeUserObject.data,
         friendRequest: newData,

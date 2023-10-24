@@ -54,8 +54,8 @@ export const data = [
     ],
     friends: ["AAA02", "AAA05", "AAA09"],
     friendRequest: ["AAA07", "AAA03"],
-    blocked: [],
-    isOnline: true,
+    blocked: ["AAA10"],
+    isOnline: Math.random() > 0.5,
     chatId: "CCC01",
   }),
   new Data("AAA02", {
@@ -85,7 +85,7 @@ export const data = [
     friends: ["AAA01", "AAA03", "AAA04"],
     friendRequest: ["AAA08"],
     blocked: [],
-    isOnline: false,
+    isOnline: Math.random() > 0.5,
     chatId: "CCC01",
   }),
   new Data("AAA03", {
@@ -115,7 +115,7 @@ export const data = [
     friends: ["AAA01", "AAA02", "AAA05", "AAA07"],
     friendRequest: [],
     blocked: [],
-    isOnline: true,
+    isOnline: Math.random() > 0.5,
     chatId: "CCC01",
   }),
   new Data("AAA04", {
@@ -145,7 +145,7 @@ export const data = [
     friends: ["AAA01", "AAA03", "AAA05", "AAA06"],
     friendRequest: ["AAA09"],
     blocked: [],
-    isOnline: true,
+    isOnline: Math.random() > 0.5,
     chatId: "CCC01",
   }),
   new Data("AAA05", {
@@ -175,7 +175,7 @@ export const data = [
     friends: ["AAA01", "AAA03", "AAA04", "AAA06"],
     friendRequest: ["AAA10"],
     blocked: [],
-    isOnline: false,
+    isOnline: Math.random() > 0.5,
     chatId: "CCC01",
   }),
   new Data("AAA06", {
@@ -205,7 +205,7 @@ export const data = [
     friends: ["AAA01", "AAA05", "AAA07", "AAA10"],
     friendRequest: ["AAA08"],
     blocked: [],
-    isOnline: true,
+    isOnline: Math.random() > 0.5,
     chatId: "CCC01",
   }),
   new Data("AAA07", {
@@ -235,7 +235,7 @@ export const data = [
     friends: ["AAA01", "AAA03", "AAA04", "AAA09"],
     friendRequest: [],
     blocked: [],
-    isOnline: true,
+    isOnline: Math.random() > 0.5,
     chatId: "CCC01",
   }),
   new Data("AAA08", {
@@ -264,7 +264,7 @@ export const data = [
     friends: ["AAA03", "AAA07", "AAA09"],
     friendRequest: [],
     blocked: ["AAA05"],
-    isOnline: true,
+    isOnline: Math.random() > 0.5,
     chatId: "CCC01",
   }),
   new Data("AAA09", {
@@ -294,7 +294,7 @@ export const data = [
     friends: ["AAA01", "AAA03", "AAA05", "AAA08"],
     friendRequest: [],
     blocked: [],
-    isOnline: false,
+    isOnline: Math.random() > 0.5,
     chatId: "CCC01",
   }),
   new Data("AAA10", {
@@ -324,7 +324,7 @@ export const data = [
     friends: ["AAA02", "AAA06", "AAA08"],
     friendRequest: ["AAA04"],
     blocked: [],
-    isOnline: true,
+    isOnline: Math.random() > 0.5,
     chatId: "CCC01",
   }),
 ];

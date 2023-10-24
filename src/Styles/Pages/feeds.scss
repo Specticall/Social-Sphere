@@ -1,16 +1,13 @@
 .page__feeds {
-  margin: 1.5rem;
-  margin-top: 3rem;
+  margin: 3rem 1.5rem 1.5rem 1.5rem;
   padding-top: 0.2rem;
 
   display: grid;
-  grid-template-columns: 22rem 1fr minmax(22.5rem, 1fr);
+  grid-template-columns: 22rem 1fr minmax(22.5rem, 0.95fr);
   gap: 2rem;
 
   place-items: center;
   @include stay-center;
-
-  // overflow-x: hidden;
 
   .your-profile__title {
     color: var(--clr-gray);

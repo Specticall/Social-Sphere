@@ -21,7 +21,8 @@ export const randomInt = (min, max) =>
 export const isEmptyObject = (obj) =>
   JSON.stringify(obj) === "{}";
 
-// Finds user object from specified array ids on a given field
+// Finds user object(s) from specified array ids on a given field
+// Returns an array
 export const filterFieldbyId = (field, ids) => {
   return ids.map((id) =>
     field.find((entry) => entry.id === id)
@@ -53,5 +54,3 @@ export const deleteDuplicatesFrom = (
     return cleaned;
   }, []);
 };
-
-console.log(deleteDuplicatesFrom([1, 2, 3], [2, 3, 4, 1]));

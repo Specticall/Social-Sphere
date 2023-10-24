@@ -1,13 +1,14 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Checkmark from "../Components/Checkmark";
 import logo from "../assets/logo.svg";
 import { useForm } from "react-hook-form";
-import { EMAIL_REGEX } from "../Helper/config";
+import { DEV_LOGIN, EMAIL_REGEX } from "../Helper/config";
 
 export default function Login({
   setActivePage,
   userLoginData,
   setActiveUserId,
+  activePage,
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
@@ -44,23 +45,27 @@ export default function Login({
     // Validate Password against email
     if (selectedUser.password === password) {
       // Correct
-      //
-
-      // DEPRECATED
-      // setActiveUser(selectedUser);
-
-      setActiveUserId(selectedUser.id);
-
-      // Set page to feeds
-      setActivePage("feeds");
-
-      // reset input validation state
-      setWrongPassword(false);
+      handleLogin(selectedUser.id);
     } else {
       // Incorrect
       setWrongPassword(true);
     }
   };
+
+  const handleLogin = (id) => {
+    setActiveUserId(id);
+
+    // Set page to feeds
+    setActivePage("feeds");
+
+    // reset input validation state
+    setWrongPassword(false);
+  };
+
+  // TEMP
+  useEffect(() => {
+    if (DEV_LOGIN) handleLogin(DEV_LOGIN);
+  }, []);
 
   const validateEmail = (emailInput) => {
     // If email does match format (regex) then return early

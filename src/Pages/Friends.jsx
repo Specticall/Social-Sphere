@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Searchbar from "../Components/Searchbar";
-import { friendData } from "../Data/friendsdata";
+// import { friendData } from "../Data/friendsdata";
 import { filterFieldbyId } from "../Helper/helper";
 import ProfilePicture from "../Components/ProfilePicture";
 
@@ -16,9 +16,20 @@ export default function Friends({
     activeUser.data.friends
   );
 
+  // Contains all the filter functions / methods
+  const filterMethods = [
+    friends.filter((friend) => friend.data.isOnline),
+    friends,
+    filterFieldbyId(allUser, activeUser.data.friendRequest),
+    filterFieldbyId(allUser, activeUser.data.blocked),
+  ];
+
+  // Filter Friends list
+  let filteredFriends = filterMethods[selectedFilter];
+
   // TEMP
   // Filler data to make the friend list look longer
-  friends = [...friends, ...friendData];
+  // filteredFriends = [...filteredFriends, ...friendData];
 
   const props = {
     selectedFilter,
@@ -26,6 +37,7 @@ export default function Friends({
     activeUser,
     allUser,
     friends,
+    filteredFriends,
   };
 
   return (
@@ -55,7 +67,9 @@ function FriendFilter({
               selectedFilter === i ? "selected" : null
             } ${label.toLowerCase()}`}
             key={`${label}-${i}`}
-            onClick={() => setSelectedFilter(i)}
+            onClick={() => {
+              setSelectedFilter(i);
+            }}
           >
             <p>{label}</p>
           </li>
@@ -69,7 +83,9 @@ function FriendFilter({
   );
 }
 
-function FriendList({ selectedFilter, friends }) {
+function FriendList({ selectedFilter, filteredFriends }) {
+  // console.log("FILTERED FRIENDS =>", filteredFriends);
+
   return (
     <ul className="friends-list">
       {/* SORT */}
@@ -84,7 +100,7 @@ function FriendList({ selectedFilter, friends }) {
         </div>
       </header>
       {/* FRIENDS LIST */}
-      {friends.map((friend) => (
+      {filteredFriends.map((friend) => (
         <li key={friend.id}>
           {/* FRIEND PROFILE */}
           <article>
