@@ -5,6 +5,7 @@ export default function SearchBar({
   hideProfilePic = false,
   className = "",
   props,
+  inputWatcher = () => {},
 }) {
   return (
     <div className={`search-bar ${className}`}>
@@ -12,6 +13,7 @@ export default function SearchBar({
         <input
           type="text"
           placeholder="Who are you looking for?"
+          onChange={(e) => inputWatcher(e.target.value)}
         />
         <i className="bx bx-search-alt-2"></i>
       </div>

@@ -16,6 +16,7 @@ export default function Friends({
   handleUnblockFriend,
 }) {
   const [selectedFilter, setSelectedFilter] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
   let friends = filterFieldbyId(
     allUser,
     activeUser.data.friends
@@ -99,6 +100,7 @@ function FriendList({
   selectedFilter,
   filteredFriends,
   handleUnblockFriend,
+  activeUser,
 }) {
   const [sortType, setSortType] = useState(0);
 
@@ -107,10 +109,11 @@ function FriendList({
     handleDeclineFriend,
     handleChangeData,
     handleUnblockFriend,
+    activeUser,
   };
 
   const emptyFriendsMsg = [
-    "You Have No Friends",
+    "You Have No Online Friends",
     "You Have No Friends",
     "You Have No Friend Requests",
     "You Have No User Blocked",
@@ -231,8 +234,19 @@ function FriendPendingButtons({
 
 function FriendBlockedButtons({
   user: targetUser,
-  handleUnblockFriend,
+  activeUser,
+  handleChangeData,
 }) {
+  const handleUnblockFriend = (unblockedUser) => {
+    handleChangeData({
+      type: "unblockFriend",
+      newData: activeUser.data.blocked.filter(
+        (blocked) => blocked !== unblockedUser.id
+      ),
+      changeTargetId: activeUser.id,
+    });
+  };
+
   return (
     <div
       onClick={() => {

@@ -11,8 +11,12 @@ import Landing from "./Pages/Landing";
 // import function to register Swiper custom elements
 import { register } from "swiper/element/bundle";
 import FriendReqs from "./Components/FriendReqs";
-import { data } from "./Data/data";
-import { deleteDuplicatesFrom } from "./Helper/helper";
+import { data, db } from "./Data/data";
+import {
+  deleteDuplicatesFrom,
+  getData,
+  postData,
+} from "./Helper/helper";
 
 // register Swiper custom elements
 register();
@@ -23,15 +27,20 @@ function App() {
     window.innerWidth < 1300
   );
 
+  useEffect(() => {
+    // getData("www.mockdb/all-user");
+    postData("www.mockdb/post", ["FHJIUASHFUYSHFUY"]);
+  }, []);
+
+  // All array of user objects DEPRECATED
+  const [allUser, setAllUser] = useState(data);
+
   // DATA (Login) -> Email, password, id object
   const [userLoginData, setUserLoginData] =
     useState(usersLoginData);
 
   // Active user id -> String
   const [activeUserId, setActiveUserId] = useState(null);
-
-  // All array of user objects
-  const [allUser, setAllUser] = useState(data);
 
   // Derived state that stores the object of the active user
   const activeUserObject = allUser.find(
@@ -161,20 +170,6 @@ function App() {
     });
   };
 
-  /**
-   *
-   * @param {object} unblockedUser - user object
-   */
-  const handleUnblockFriend = (unblockedUser) => {
-    handleChangeData({
-      type: "unblockFriend",
-      newData: activeUserObject.data.blocked.filter(
-        (blocked) => blocked !== unblockedUser.id
-      ),
-      changeTargetId: activeUserObject.id,
-    });
-  };
-
   // Prop pack
   const props = {
     setUserLoginData,
@@ -191,7 +186,6 @@ function App() {
     handleChangeData,
     handleAcceptFriend,
     handleDeclineFriend,
-    handleUnblockFriend,
   };
 
   //prettier-ignore
@@ -205,7 +199,7 @@ function App() {
           {showNavbar ? <Navbar {...props}/> : null}
         </div>
         {activePage === "feeds" ? <Feeds {...props} /> : null}
-        {activePage === "friends" ? <Friends {...props} /> : null}
+        {/* {activePage === "friends" ? <Friends {...props} /> : null} */}
       </main>
     </>
   );

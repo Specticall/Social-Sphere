@@ -1,18 +1,68 @@
-export const fetch = () => {};
+import { FETCH_TIME_SECONDS } from "./config";
+import { data, db, setDb } from "../Data/data";
 
-export const getImage = async () => {
-  // try {
-  //   const res = await fetch(`https://picsum.photos/800`);
-  //   const data = await res.json();
-  //   console.log(res);
-  //   if (!res.ok)
-  //     throw new Error(
-  //       "There was a problem on fetching the image"
-  //     );
-  //   console.log(data);
-  // } catch (err) {
-  //   console.log(err.message);
-  // }
+// SIMULATES DATA FETCHING
+export const fetchData = (url, type = "GET", newData) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      if (!url.includes("www.mockdb/"))
+        resolve({ ok: false, status: 404 });
+
+      if (type === "GET") {
+        if (url.includes("all-user"))
+          resolve({
+            ok: true,
+            status: 200,
+            json: db,
+          });
+      }
+
+      if (type === "POST" && url.includes("post")) {
+        resolve(
+          (() => {
+            setDb(newData);
+
+            return {
+              ok: true,
+              status: 200,
+              message: "CHANGED",
+              updated: db,
+            };
+          })()
+        );
+      }
+
+      resolve({ ok: false, status: 404 });
+    }, FETCH_TIME_SECONDS * 1000);
+  });
+};
+
+export const getData = async (URL) => {
+  try {
+    const res = await fetchData(URL);
+    const data = res.json;
+
+    if (!res.ok)
+      throw new Error("Whoops! Something went wrong");
+
+    console.log(data);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const postData = async (URL, newData) => {
+  try {
+    const res = await fetchData(URL, "POST", newData);
+    const data = res.updated;
+
+    if (!res.ok)
+      throw new Error("Whoops! Something went wrong");
+
+    console.log(data);
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
 export const randomInt = (min, max) =>
