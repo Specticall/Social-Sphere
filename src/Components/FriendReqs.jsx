@@ -5,6 +5,8 @@ export default function FriendReqs({
   activeUserObject: activeUser,
   allUser,
   handleChangeData,
+  handleAcceptFriend,
+  handleDeclineFriend,
 }) {
   // Get all the friend user objects.
   const friendRequests = activeUser.data.friendRequest?.map(
@@ -15,6 +17,8 @@ export default function FriendReqs({
     allUser,
     activeUser,
     handleChangeData,
+    handleAcceptFriend,
+    handleDeclineFriend,
   };
 
   return (
@@ -37,25 +41,11 @@ export default function FriendReqs({
   );
 }
 
-function Request({ user, handleChangeData, activeUser }) {
-  const handleAccept = () => {
-    handleChangeData({
-      type: "acceptFriendRequest",
-      newData: [...activeUser.data.friends, user.id],
-      changeTargetId: activeUser.id,
-    });
-  };
-
-  const handleDecline = () => {
-    handleChangeData({
-      type: "declineFriendRequest",
-      newData: activeUser.data.friendRequest.filter(
-        (req) => req !== user.id
-      ),
-      changeTargetId: activeUser.id,
-    });
-  };
-
+function Request({
+  user,
+  handleAcceptFriend,
+  handleDecline,
+}) {
   return (
     <article className="req">
       <header>
@@ -78,14 +68,14 @@ function Request({ user, handleChangeData, activeUser }) {
           type="primary"
           buttonText="Accept"
           width="100%"
-          onClick={handleAccept}
+          onClick={() => handleAcceptFriend(user)}
         />
         <Button
           padding="0.6rem 0rem"
           type="secondary"
           buttonText="Decline"
           width="100%"
-          onClick={handleDecline}
+          onClick={() => handleDecline(user)}
         />
       </div>
     </article>

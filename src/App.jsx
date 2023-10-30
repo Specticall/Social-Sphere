@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usersLoginData } from "./Data/userLogindata";
 
 // Pages
@@ -64,13 +64,20 @@ function App() {
     "inbox",
   ].some((page) => activePage === page);
 
-  /*
-  Handles any action that revolves around adding new data to all user object.
-  */
+  /**
+   * Handles any action that revolves around adding / modifying data
+   * on the user object arrays.
+   * types : "acceptFriendRequest", "declineFriendRequest", "unblockFriend"
+   * @param {Object} obj
+   * @param {string} obj.type - Determine which action the function should take
+   * @param {array} obj.newData
+   * @param {string} obj.changeTargetId
+   * @returns {void}
+   */
   const handleChangeData = ({
     type,
     newData,
-    changeTargetId,
+    changeTargetId = activeUserObject.id,
   }) => {
     // Make sure the type of change is specified
     if (!type)
@@ -102,6 +109,13 @@ function App() {
       };
     }
 
+    if (type === "unblockFriend") {
+      newActiveUserObject.data = {
+        ...activeUserObject.data,
+        blocked: newData,
+      };
+    }
+
     // TEMP
     console.log(
       "DATA CHANGED",
@@ -126,6 +140,42 @@ function App() {
     );
   };
 
+  const handleAcceptFriend = (acceptedUser) => {
+    handleChangeData({
+      type: "acceptFriendRequest",
+      newData: [
+        ...activeUserObject.data.friends,
+        acceptedUser.id,
+      ],
+      changeTargetId: activeUserObject.id,
+    });
+  };
+
+  const handleDeclineFriend = (declinedUser) => {
+    handleChangeData({
+      type: "declineFriendRequest",
+      newData: activeUserObject.data.friendRequest.filter(
+        (req) => req !== declinedUser.id
+      ),
+      changeTargetId: activeUserObject.id,
+    });
+  };
+
+  /**
+   *
+   * @param {object} unblockedUser - user object
+   */
+  const handleUnblockFriend = (unblockedUser) => {
+    handleChangeData({
+      type: "unblockFriend",
+      newData: activeUserObject.data.blocked.filter(
+        (blocked) => blocked !== unblockedUser.id
+      ),
+      changeTargetId: activeUserObject.id,
+    });
+  };
+
+  // Prop pack
   const props = {
     setUserLoginData,
     setActiveUserId,
@@ -139,17 +189,20 @@ function App() {
     setIsMobile,
     activeUserObject,
     handleChangeData,
+    handleAcceptFriend,
+    handleDeclineFriend,
+    handleUnblockFriend,
   };
 
   //prettier-ignore
   return (
-    <>
+      <>
       {activePage === "landing" ? <Landing {...props}/> : null}
       {activePage === "login" ? <Login {...props} /> : null}
       <main>
         <div className="navbar-wrapper">
-        {activePage === "feeds" ? <FriendReqs {...props}/> : null}
-        {showNavbar ? <Navbar {...props}/> : null}
+          {activePage === "feeds" ? <FriendReqs {...props}/> : null}
+          {showNavbar ? <Navbar {...props}/> : null}
         </div>
         {activePage === "feeds" ? <Feeds {...props} /> : null}
         {activePage === "friends" ? <Friends {...props} /> : null}

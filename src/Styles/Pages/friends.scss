@@ -123,7 +123,7 @@
     .friends-list {
       background-color: var(--clr-white);
       margin-top: 2.25rem;
-      padding-block: 2rem;
+      padding-block: 2rem 0rem;
 
       display: grid;
       // gap: 1.25rem;
@@ -207,4 +207,55 @@
       display: none !important;
     }
   }
+}
+
+// Friend buttons
+.friend-pending-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 1rem;
+  .accept {
+    background-color: var(--clr-purple);
+  }
+
+  .decline {
+    background-color: var(--clr-gray);
+  }
+  button {
+    padding: 0.5rem;
+    aspect-ratio: 1;
+
+    transition: 0.1s;
+
+    color: var(--clr-white);
+    border-radius: 100%;
+
+    i {
+      color: var(--clr-white);
+      font-size: var(--fs-medium);
+    }
+  }
+
+  @media (hover: hover) {
+    .accept:hover {
+      opacity: 0.8;
+    }
+
+    .decline:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+// Empty Friends List
+.empty-friends {
+  color: var(--clr-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10rem;
+
+  border-top: 2px solid var(--clr-gray-light);
 }
