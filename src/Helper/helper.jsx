@@ -1,20 +1,50 @@
 import { FETCH_TIME_SECONDS } from "./config";
 import { data, db, setDb } from "../Data/data";
 
-// SIMULATES DATA FETCHING
+/**
+ * Simulates Data Fetching
+ * @param {string} url - "www.mockupdb/"
+ * @param {*} type - "POST", "GET"
+ * @param {*} newData - Entire modified user object, can not be singular
+ * @returns {promise}
+ */
 export const fetchData = (url, type = "GET", newData) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       if (!url.includes("www.mockdb/"))
-        resolve({ ok: false, status: 404 });
+        resolve({
+          ok: false,
+          status: 404,
+          message: "Invalid URL",
+        });
 
       if (type === "GET") {
-        if (url.includes("all-user"))
+        if (url.includes("user_all"))
           resolve({
             ok: true,
             status: 200,
             json: db,
           });
+
+        if (url.includes("user_id")) {
+          const userIdInput = url.split("?=").at(-1);
+          const targetUser = db.find(
+            (user) => user.id === userIdInput
+          );
+
+          if (!targetUser)
+            resolve({
+              ok: false,
+              status: 404,
+              message: "unable to find user",
+            });
+
+          resolve({
+            ok: true,
+            status: 200,
+            json: targetUser,
+          });
+        }
       }
 
       if (type === "POST" && url.includes("post")) {
@@ -32,25 +62,38 @@ export const fetchData = (url, type = "GET", newData) => {
         );
       }
 
-      resolve({ ok: false, status: 404 });
+      resolve({
+        ok: false,
+        status: 404,
+        message: "Something Went Wrong",
+      });
     }, FETCH_TIME_SECONDS * 1000);
   });
 };
 
+/**
+ * Gets data from database
+ * @param {string} URL - "www.mockdb/{"user_all", "user_id?=[ID HERE]"}"
+ */
 export const getData = async (URL) => {
   try {
     const res = await fetchData(URL);
     const data = res.json;
 
-    if (!res.ok)
-      throw new Error("Whoops! Something went wrong");
+    if (!res.ok) throw new Error(res.message || "Error");
 
-    console.log(data);
+    return data;
   } catch (err) {
     console.log(err.message);
   }
 };
 
+// This is not what the real world db looks like but for this scenario, it's fine
+/**
+ * Modify / replace database with given data
+ * @param {string} URL - "www.mockdb/post"
+ * @param {Object} newData - Entire array of user objects, cannot be singular
+ */
 export const postData = async (URL, newData) => {
   try {
     const res = await fetchData(URL, "POST", newData);
@@ -59,7 +102,7 @@ export const postData = async (URL, newData) => {
     if (!res.ok)
       throw new Error("Whoops! Something went wrong");
 
-    console.log(data);
+    return data;
   } catch (err) {
     console.log(err.message);
   }

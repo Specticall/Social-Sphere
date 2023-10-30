@@ -28,8 +28,16 @@ function App() {
   );
 
   useEffect(() => {
-    // getData("www.mockdb/all-user");
-    postData("www.mockdb/post", ["FHJIUASHFUYSHFUY"]);
+    // console.log(db);
+    const test = async () => {
+      const singleData = await getData(
+        "www.mockdb/user_id?=AAA01"
+      );
+
+      console.log(`SINGLE => ${singleData}`);
+    };
+
+    test();
   }, []);
 
   // All array of user objects DEPRECATED
