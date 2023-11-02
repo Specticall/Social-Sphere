@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "./Image";
 
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
 export default function UserProfile({
   openProfile,
   setOpenProfile,
@@ -10,6 +13,14 @@ export default function UserProfile({
   setActiveUserId,
 }) {
   const profileEl = useRef(null);
+
+  const [isLoading, setIsLoading] = useState(
+    activeUser ? false : true
+  );
+
+  useEffect(() => {
+    setIsLoading(activeUser ? false : true);
+  }, [activeUser]);
 
   /*
   Effect to open / close MOBILE profile by pressing
@@ -31,12 +42,17 @@ export default function UserProfile({
   }, [setOpenProfile, openProfile, isMobile]);
 
   // DATA deconstruct needed data from active user.
-  const { data: user } = activeUser;
+  const user = activeUser;
 
   // Function that handles logout
   const onLogout = () => {
     setActivePage("login");
     setActiveUserId("");
+  };
+
+  const props = {
+    user,
+    isLoading,
   };
 
   return (
@@ -63,45 +79,135 @@ export default function UserProfile({
             <i className="bx bx-log-out"></i>
             Log out
           </button>
-          <div className="user-profile__pfp">
-            <Image
-              link={user.pfp}
-              alt="logged in user profile picture"
-            />
-            <div className="online-indicator"></div>
-          </div>
-          <h2>{user.username}</h2>
-          <p className="user-profile__profession">
-            {user.occupation}
-          </p>
-          <p className="user-profile__tag">{user.tag}</p>
-          <article className="user-profile__about-me">
-            <h3>About me</h3>
-            <p>{user.aboutMe}</p>
-          </article>
-          <article className="user-profile__status">
-            <h3>Status</h3>
-            <ul className="status-list">
-              <li>
-                <i className="bx bx-map"></i>
-                {user.status.city}, {user.status.country}
-              </li>
-              <li>
-                <i className="bx bx-user"></i>
-                {user.status.activity}
-              </li>
-              <li>
-                <i className="bx bx-heart"></i>
-                {user.status.loveStatus}
-              </li>
-              <li>
-                <i className="bx bx-calendar"></i>
-                {user.status.age} Years old
-              </li>
-            </ul>
-          </article>
+          <UserPfp {...props} />
+          <UserHeading {...props} />
+          <UserAboutMe {...props} />
+          <UserStatus {...props} />
         </div>
       </article>
     </div>
+  );
+}
+
+function UserPfp({ user, isLoading }) {
+  return (
+    <div className="user-profile__pfp">
+      <Image
+        isVisible={!isLoading}
+        link={user?.pfp}
+        alt="logged in user profile picture"
+      />
+      {isLoading && (
+        <Skeleton
+          containerClassName="skeleton skeleton__full-h skeleton__circle"
+          height={"100%"}
+          borderRadius={"100%"}
+        />
+      )}
+      <div className="online-indicator"></div>
+    </div>
+  );
+}
+
+function UserHeading({ user }) {
+  return (
+    <>
+      <h2>
+        {user?.username || (
+          <Skeleton
+            containerClassName="skeleton"
+            width={"150px"}
+            height={"30px"}
+          />
+        )}
+      </h2>
+      <p className="user-profile__profession">
+        {user?.occupation || (
+          <Skeleton
+            containerClassName="skeleton"
+            width={"140px"}
+            height={"20px"}
+          />
+        )}
+      </p>
+      <p className="user-profile__tag">
+        {user?.tag || (
+          <Skeleton
+            containerClassName="skeleton"
+            width={"90px"}
+            height={"20px"}
+          />
+        )}
+      </p>
+    </>
+  );
+}
+
+function UserAboutMe({ user }) {
+  return (
+    <article className="user-profile__about-me">
+      <h3>About me</h3>
+      <p>
+        {user?.aboutMe || (
+          <Skeleton
+            containerClassName="skeleton__about-me skeleton"
+            height={"20px"}
+            count={3}
+          />
+        )}
+      </p>
+    </article>
+  );
+}
+
+function UserStatus({ user, isLoading }) {
+  return (
+    <article className="user-profile__status">
+      <h3>Status</h3>
+      <ul className="status-list">
+        <li>
+          <i className="bx bx-map"></i>
+          {isLoading ? (
+            <Skeleton
+              containerClassName="skeleton"
+              height={"20px"}
+            />
+          ) : (
+            <>
+              {user?.status.city}, {user?.status.country}
+            </>
+          )}
+        </li>
+        <li>
+          <i className="bx bx-user"></i>
+          {user?.status.activity || (
+            <Skeleton
+              containerClassName="skeleton"
+              height={"20px"}
+            />
+          )}
+        </li>
+        <li>
+          <i className="bx bx-heart"></i>
+          {user?.status.loveStatus || (
+            <Skeleton
+              containerClassName="skeleton"
+              height={"20px"}
+            />
+          )}
+        </li>
+        <li>
+          <i className="bx bx-calendar"></i>
+          {isLoading ? (
+            <Skeleton
+              containerClassName="skeleton"
+              height={"20px"}
+            />
+          ) : (
+            `${user?.status.age} Years old`
+          )}
+        </li>
+      </ul>
+    </article>
   );
 }

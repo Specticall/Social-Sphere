@@ -1,0 +1,24 @@
+.skeleton {
+  flex: 1;
+  display: block;
+
+  &__full-h {
+    height: 100%;
+  }
+  &__circle {
+    border-radius: 100%;
+  }
+
+  &__about-me {
+    min-width: 18.75rem; //300px
+    max-width: 22.5rem; //360px
+
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  &__paragraph {
+    display: grid;
+    gap: 0.25rem;
+  }
+}

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Slider } from "../Components/Slider";
 import SearchBar from "../Components/Searchbar";
 import UserProfile from "../Components/UserProfile";
-import Recommendation from "../Components/Recommendation";
+import RecommendationCard from "../Components/Recommendation";
 
 import { getRecommendation } from "../Helper/logic";
 import { RECOMMENDATION_AMOUNT } from "../Helper/config";
@@ -13,50 +13,35 @@ import { isEmptyObject } from "../Helper/helper";
 
 // TEMP Mockup Story data
 import { storyImage } from "../Data/storydata";
+import { getData } from "../db/backend";
+
+/*
+  userData,
+  allUser,
+  activeUserObject: activeUser,
+*/
 
 export default function Feeds({
-  userData,
-  activeUserId,
   setActivePage,
   activePage,
   isMobile,
+  activeUserId,
   allUser,
-  activeUserObject: activeUser,
+  activeUser,
 }) {
   const [openProfile, setOpenProfile] = useState(false);
-
-  // DATA (User Object)
-
-  /*
-    State default value is needed to prevent recommendation 
-    change everytime user adds a new friend / switch pages.
-
-    With this, a new recommendation will only get created 
-    on every initial render / mount of the component.
-  */
-  const [recommended] = useState(
-    getRecommendation(
-      allUser,
-      activeUserId,
-      RECOMMENDATION_AMOUNT
-    )
-  );
 
   /*
   Scan all the user's friends and check if they have a story.
   -> Returns the an array of user story objects (whom are the users friend's)
   */
-  let stories = activeUser.data.friends
-    .map(
-      (friendId) =>
-        allUser.find((user) => user.id === friendId)?.data
-          ?.story
-    )
+  let stories = activeUser?.friends
+    .map((friendId) => allUser[friendId]?.story)
     .filter((story) => !isEmptyObject(story));
 
   // TEMP
   // Adds mockup stories to make the list longer
-  stories = [...stories, ...storyImage];
+  stories = stories ? [...stories, ...storyImage] : null;
 
   /*
   Make sure the navbar is always closed when 
@@ -69,12 +54,13 @@ export default function Feeds({
   // Prop pack
   const props = {
     activeUser,
-    userData,
+    activeUserId,
     setActivePage,
     activePage,
     openProfile,
     setOpenProfile,
     isMobile,
+    allUser,
   };
 
   return (
@@ -88,22 +74,7 @@ export default function Feeds({
           props={props}
         />
         <Slider items={stories} />
-        <h2 className="recommendation__title">
-          People you might like
-        </h2>
-        <div className="recommendation">
-          {recommended.map((id, i) => {
-            const data = allUser.find(
-              (user) => user.id === id
-            );
-            return (
-              <Recommendation
-                {...data}
-                key={`${data.user}--${i}`}
-              />
-            );
-          })}
-        </div>
+        <Recommendations {...props} />
       </div>
       <div className="right">
         <h2 className="your-profile__title">
@@ -112,5 +83,55 @@ export default function Feeds({
         <UserProfile {...props} />
       </div>
     </div>
+  );
+}
+
+function Recommendations({ allUser, activeUserId }) {
+  /*
+    State default value is needed to prevent recommendation 
+    change everytime user adds a new friend / switch pages.
+
+    With this, a new recommendation will only get created 
+    on every initial render / mount of the component.
+  */
+  // console.log(allUser, activeUserId && allUser);
+  const [isLoading, setIsLoading] = useState(
+    activeUserId && allUser ? false : true
+  );
+  const [recommended, setRecommended] = useState(
+    new Array(3).fill("loading")
+  );
+
+  useEffect(() => {
+    setIsLoading(activeUserId && allUser ? false : true);
+
+    setRecommended(
+      activeUserId && allUser
+        ? getRecommendation(
+            allUser,
+            activeUserId,
+            RECOMMENDATION_AMOUNT
+          )
+        : new Array(3).fill("loading")
+    );
+  }, [allUser, activeUserId]);
+
+  return (
+    <>
+      <h2 className="recommendation__title">
+        People you might like
+      </h2>
+      <div className="recommendation">
+        {recommended?.map((id, i) => {
+          const data = !isLoading ? allUser[id] : null;
+          return (
+            <RecommendationCard
+              data={data}
+              key={`recommendedCard--${i}`}
+            />
+          );
+        })}
+      </div>
+    </>
   );
 }

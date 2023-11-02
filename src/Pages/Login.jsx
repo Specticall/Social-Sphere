@@ -8,7 +8,6 @@ export default function Login({
   setActivePage,
   userLoginData,
   setActiveUserId,
-  activePage,
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
@@ -53,6 +52,7 @@ export default function Login({
   };
 
   const handleLogin = (id) => {
+    // SETTING THE USER ID
     setActiveUserId(id);
 
     // Set page to feeds

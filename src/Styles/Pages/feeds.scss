@@ -37,11 +37,13 @@
       gap: 1rem;
 
       .pfp-button {
-        width: 4rem;
-        aspect-ratio: 1;
-        border-radius: 100%;
-        object-fit: cover;
-        cursor: pointer;
+        img {
+          width: 4rem;
+          aspect-ratio: 1;
+          border-radius: 100%;
+          object-fit: cover;
+          cursor: pointer;
+        }
 
         display: none;
       }

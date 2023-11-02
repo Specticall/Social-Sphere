@@ -1,4 +1,3 @@
-import { RECOMMENDATION_AMOUNT } from "./config";
 import { randomInt } from "./helper";
 
 // Function that returns certain amount of items from an array
@@ -36,17 +35,16 @@ const getRandomElements = (
  the user's friend list
 */
 export const getRecommendation = (
-  userObject,
+  // userObject,
+  allUser,
   targetId,
   amount
 ) => {
   // Get friend list from target id
-  const friendsList = userObject.find(
-    (user) => user.id === targetId
-  ).data.friends;
+  const friendsList = allUser[targetId].friends;
 
   // Get array of every id that exists
-  const allId = userObject.map((user) => user.id);
+  const allId = Object.keys(allUser);
 
   // Remove ids that are the targetId's friends and the target's itself.
   const filteredList = allId.filter((friendId) => {

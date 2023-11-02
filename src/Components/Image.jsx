@@ -1,10 +1,3 @@
-const imageStyle = {
-  width: "100%",
-  aspectRatio: "1",
-  objectPosition: "center",
-  objectFit: "cover",
-};
-
 export default function Image({
   isUnsplashURL = true,
   link = "",
@@ -13,22 +6,33 @@ export default function Image({
   defaultStyle = true,
   onClick = () => {},
   isCircle = false,
+  isVisible = true,
 }) {
   const borderType = isCircle ? "100%" : null;
   const source = isUnsplashURL
     ? `https://source.unsplash.com/${link}`
     : link;
+
+  const imageStyle = {
+    width: "100%",
+    aspectRatio: "1",
+    objectPosition: "center",
+    objectFit: "cover",
+  };
+
   return (
-    <img
-      style={
-        defaultStyle
-          ? { ...imageStyle, borderRadius: borderType }
-          : { borderRadius: borderType }
-      }
-      src={source}
-      alt={alt}
-      className={className}
-      onClick={onClick}
-    />
+    isVisible && (
+      <img
+        style={
+          defaultStyle
+            ? { ...imageStyle, borderRadius: borderType }
+            : { borderRadius: borderType }
+        }
+        src={source}
+        alt={alt}
+        className={className}
+        onClick={onClick}
+      />
+    )
   );
 }
