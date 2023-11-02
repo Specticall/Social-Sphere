@@ -15,7 +15,8 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.47.0",
     "react-loading-skeleton": "^3.3.1",
-    "swiper": "^10.3.1"
+    "swiper": "^10.3.1",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

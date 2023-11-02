@@ -4,12 +4,14 @@ export const randomInt = (min, max) =>
 export const isEmptyObject = (obj) =>
   JSON.stringify(obj) === "{}";
 
-// Finds user object(s) from specified array ids on a given field
-// Returns an array
+/**
+ * Finds user object(s) from specified array ids on a given field
+ * @param {Array} field - Array of user objects
+ * @param {Array} ids - Array of ids (strings)
+ * @returns {Array} - Filtered of user objects
+ */
 export const filterFieldbyId = (field, ids) => {
-  return ids.map((id) =>
-    field.find((entry) => entry.id === id)
-  );
+  return ids.map((id) => field[id]);
 };
 
 /*
@@ -36,4 +38,15 @@ export const deleteDuplicatesFrom = (
       cleaned.push(targetEl);
     return cleaned;
   }, []);
+};
+
+/**
+ * Creates a place holder array when data is loading
+ * enables skeletons to still be able to load despite having no data.
+ * @param {Number} length
+ * @param {String} text
+ * @returns {Array}
+ */
+export const createFieldPlaceholder = (length, text) => {
+  return new Array(length).fill(text);
 };

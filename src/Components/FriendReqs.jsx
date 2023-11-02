@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Button from "./Button";
 import Image from "./Image";
 import Skeleton from "react-loading-skeleton";
@@ -12,14 +11,6 @@ export default function FriendReqs({
   activeUser,
   allUser,
 }) {
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Updates the data when they are loaded
-  useEffect(() => {
-    if (!activeUser) return;
-    setIsLoading(false);
-  }, [activeUser]);
-
   // Get all the friend user objects.
   const friendRequests =
     activeUser?.friendRequest?.map(
@@ -61,7 +52,6 @@ function Request({
   // handleDecline,
   isLoading = false,
 }) {
-  console.log(user);
   return (
     <article className="req">
       {isLoading ? (

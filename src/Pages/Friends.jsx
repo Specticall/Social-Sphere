@@ -1,41 +1,69 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Searchbar from "../Components/Searchbar";
-// import { friendData } from "../Data/friendsdata";
-import { filterFieldbyId } from "../Helper/helper";
+import { friendData } from "../Data/friendsdata";
+import {
+  createFieldPlaceholder,
+  filterFieldbyId,
+} from "../Helper/helper";
 import ProfilePicture from "../Components/ProfilePicture";
 import Sort from "../Components/Sort";
+import {
+  handleAcceptFriend,
+  handleDeclineFriend,
+  handleUnblockFriend,
+} from "../Helper/model_friend";
+import Skeleton from "react-loading-skeleton";
 
 const filters = ["Online", "All", "Pending", "Blocked"];
 
+/*
+  // handleAcceptFriend,
+  // handleDeclineFriend,
+  // handleChangeData,
+  // handleUnblockFriend,
+*/
 export default function Friends({
-  activeUserObject: activeUser,
+  activeUser,
   allUser,
-  handleAcceptFriend,
-  handleDeclineFriend,
-  handleChangeData,
-  handleUnblockFriend,
+  // handleAcceptFriend,
+  // handleDeclineFriend,
+  // handleChangeData,
+  // handleUnblockFriend,
 }) {
-  const [selectedFilter, setSelectedFilter] = useState(0);
-  const [searchQuery, setSearchQuery] = useState("");
-  let friends = filterFieldbyId(
-    allUser,
-    activeUser.data.friends
-  );
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Contains all the filter functions / methods
-  const filterMethods = [
-    friends.filter((friend) => friend.data.isOnline),
+  useEffect(() => {
+    if (!activeUser) return;
+    setIsLoading(false);
+  }, [activeUser]);
+
+  const [selectedFilter, setSelectedFilter] = useState(0);
+
+  let friends =
+    isLoading ||
+    filterFieldbyId(allUser, activeUser.friends);
+
+  const filterMethods = isLoading || [
+    friends.filter((friend) => friend.isOnline),
     friends,
-    filterFieldbyId(allUser, activeUser.data.friendRequest),
-    filterFieldbyId(allUser, activeUser.data.blocked),
+    filterFieldbyId(allUser, activeUser.friendRequest),
+    filterFieldbyId(allUser, activeUser.blocked),
   ];
 
-  // Filter Friends list
-  let filteredFriends = filterMethods[selectedFilter];
+  let filteredFriends = !isLoading
+    ? filterMethods[selectedFilter]
+    : createFieldPlaceholder(10, "LOADING");
 
   // TEMP
   // Filler data to make the friend list look longer
-  // filteredFriends = [...filteredFriends, ...friendData];
+  // if (!isLoading)
+  //   filteredFriends = [...filteredFriends, ...friendData];
+
+  // console.log(
+  //   "FRIEND COMPONENT : ",
+  //   !isLoading ? "LOADING FINISHED" : "LOADING...",
+  //   filteredFriends
+  // );
 
   const props = {
     selectedFilter,
@@ -44,10 +72,7 @@ export default function Friends({
     allUser,
     friends,
     filteredFriends,
-    handleAcceptFriend,
-    handleDeclineFriend,
-    handleChangeData,
-    handleUnblockFriend,
+    isLoading,
   };
 
   return (
@@ -94,21 +119,14 @@ function FriendFilter({
 }
 
 function FriendList({
-  handleAcceptFriend,
-  handleDeclineFriend,
-  handleChangeData,
   selectedFilter,
   filteredFriends,
-  handleUnblockFriend,
   activeUser,
+  isLoading,
 }) {
   const [sortType, setSortType] = useState(0);
 
   const props = {
-    handleAcceptFriend,
-    handleDeclineFriend,
-    handleChangeData,
-    handleUnblockFriend,
     activeUser,
   };
 
@@ -119,17 +137,23 @@ function FriendList({
     "You Have No User Blocked",
   ];
 
-  const sortingFunctions = [
-    (a, b) =>
-      a.data.username.localeCompare(b.data.username),
-    (a, b) =>
-      b.data.username.localeCompare(a.data.username),
+  const sortingFunctions = isLoading || [
+    (a, b) => a.username?.localeCompare(b.username),
+    (a, b) => b.username?.localeCompare(a.username),
   ];
 
+  // console.log(
+  //   !isLoading ? "LOADING FINISHED" : "LOADING...",
+  //   filteredFriends,
+  //   isLoading
+  //     ? filteredFriends
+  //     : filteredFriends?.sort(sortingFunctions[sortType])
+  // );
+
   // Sort the filteredFriends (mutating)
-  const sortedFriends = filteredFriends.sort(
-    sortingFunctions[sortType]
-  );
+  const sortedFriends = isLoading
+    ? filteredFriends
+    : filteredFriends?.sort(sortingFunctions[sortType]);
 
   return (
     <ul className="friends-list">
@@ -154,16 +178,36 @@ function FriendList({
           {/* FRIEND PROFILE */}
 
           <article>
-            <ProfilePicture
-              pfpLink={friend.data.pfp}
-              width={"2.5rem"}
-              isOnline={friend.data.isOnline}
-            />
+            {isLoading ? (
+              <Skeleton
+                width={"2.5rem"}
+                height={"2.5rem"}
+                borderRadius={"100%"}
+              />
+            ) : (
+              <ProfilePicture
+                pfpLink={friend?.pfp}
+                width={"2.5rem"}
+                isOnline={friend?.isOnline}
+              />
+            )}
             <div className="info">
               <h3 className="name">
-                {friend.data.username}
+                {friend?.username || (
+                  <Skeleton
+                    width={"120px"}
+                    height={"20px"}
+                  />
+                )}
               </h3>
-              <p className="tag">{friend.data.tag}</p>
+              <p className="tag">
+                {friend?.tag || (
+                  <Skeleton
+                    width={"80px"}
+                    height={"20px"}
+                  />
+                )}
+              </p>
             </div>
           </article>
 
@@ -208,7 +252,6 @@ function FriendMenuButtons() {
 }
 
 // Features component
-
 function FriendPendingButtons({
   handleAcceptFriend,
   handleDeclineFriend,

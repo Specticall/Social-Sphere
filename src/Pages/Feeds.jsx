@@ -13,7 +13,6 @@ import { isEmptyObject } from "../Helper/helper";
 
 // TEMP Mockup Story data
 import { storyImage } from "../Data/storydata";
-import { getData } from "../db/backend";
 
 /*
   userData,
@@ -72,6 +71,7 @@ export default function Feeds({
             setOpenProfile((current) => !current);
           }}
           props={props}
+          isLoading={activeUser ? false : true}
         />
         <Slider items={stories} />
         <Recommendations {...props} />

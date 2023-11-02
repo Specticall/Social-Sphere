@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import Image from "./Image";
 import Skeleton from "react-loading-skeleton";
 
@@ -8,16 +7,8 @@ export default function SearchBar({
   className = "",
   props,
   inputWatcher = () => {},
+  isLoading = false,
 }) {
-  // If the active user is undefined the the data is still fetching.
-  const [isLoading, setIsLoading] = useState(
-    props.activeUser ? true : false
-  );
-
-  useEffect(() => {
-    setIsLoading(props.activeUser ? false : true);
-  }, [props.activeUser]);
-
   return (
     <div className={`search-bar ${className}`}>
       <div className="search-bar__input">
@@ -39,8 +30,8 @@ export default function SearchBar({
           ) : (
             <Image
               isVisible={!isLoading}
-              link={props.activeUser?.pfp}
-              alt={`${props.activeUser?.pfp}-mobile`}
+              link={props?.activeUser?.pfp}
+              alt={`${props?.activeUser?.pfp}-mobile`}
               onClick={onOpenProfile}
               defaultStyle={false}
             />

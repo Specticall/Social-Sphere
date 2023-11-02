@@ -11,9 +11,7 @@ import Landing from "./Pages/Landing";
 // import function to register Swiper custom elements
 import { register } from "swiper/element/bundle";
 import FriendReqs from "./Components/FriendReqs";
-import { data, db } from "./db/data";
-import { deleteDuplicatesFrom } from "./Helper/helper";
-import { getData, putData } from "./db/backend";
+import { getData } from "./db/backend";
 // import { getData, postData } from "./db/backend";
 
 // register Swiper custom elements
@@ -198,7 +196,7 @@ function App() {
           {showNavbar ? <Navbar {...props}/> : null}
         </div>
         {activePage === "feeds" ? <Feeds {...props} /> : null}
-        {/* {activePage === "friends" ? <Friends {...props} /> : null} */}
+        {activePage === "friends" ? <Friends {...props} /> : null}
       </main>
     </>
   );
