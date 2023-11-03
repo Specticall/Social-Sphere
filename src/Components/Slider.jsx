@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { register } from "swiper/element/bundle";
-import Loading from "./Loading";
 import Skeleton from "react-loading-skeleton";
 
 export function Slider({ items }) {

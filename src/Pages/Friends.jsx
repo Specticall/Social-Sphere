@@ -9,26 +9,22 @@ import ProfilePicture from "../Components/ProfilePicture";
 import Sort from "../Components/Sort";
 import {
   handleAcceptFriend,
-  handleDeclineFriend,
   handleUnblockFriend,
 } from "../Helper/model_friend";
 import Skeleton from "react-loading-skeleton";
+import { Loader } from "../Components/Loader";
 
 const filters = ["Online", "All", "Pending", "Blocked"];
 
 /*
   // handleAcceptFriend,
-  // handleDeclineFriend,
   // handleChangeData,
   // handleUnblockFriend,
 */
 export default function Friends({
   activeUser,
   allUser,
-  // handleAcceptFriend,
-  // handleDeclineFriend,
-  // handleChangeData,
-  // handleUnblockFriend,
+  setDataUpdated,
 }) {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -73,6 +69,7 @@ export default function Friends({
     friends,
     filteredFriends,
     isLoading,
+    setDataUpdated,
   };
 
   return (
@@ -123,11 +120,13 @@ function FriendList({
   filteredFriends,
   activeUser,
   isLoading,
+  setDataUpdated,
 }) {
   const [sortType, setSortType] = useState(0);
 
   const props = {
     activeUser,
+    setDataUpdated,
   };
 
   const emptyFriendsMsg = [
@@ -253,24 +252,37 @@ function FriendMenuButtons() {
 
 // Features component
 function FriendPendingButtons({
-  handleAcceptFriend,
-  handleDeclineFriend,
   user: targetUser,
+  activeUser,
+  setDataUpdated,
 }) {
+  const [isRequesting, setIsRequesting] = useState(false);
+
   return (
     <div className="friend-pending-buttons">
       <button
         className="accept"
-        onClick={() => handleAcceptFriend(targetUser)}
+        onClick={() => {
+          handleAcceptFriend(
+            activeUser,
+            targetUser.id,
+            () => {
+              setIsRequesting(false);
+              setDataUpdated(true);
+            }
+          );
+          setIsRequesting(true);
+        }}
       >
-        <i className="bx bx-check"></i>
+        {isRequesting ? (
+          <Loader isLoading={true} />
+        ) : (
+          <i className="bx bx-check"></i>
+        )}
       </button>
-      <button
-        className="decline"
-        onClick={() => handleDeclineFriend(targetUser)}
-      >
+      <button className="decline">
         <i className="bx bx-x"></i>
-      </button>
+      </button>{" "}
     </div>
   );
 }

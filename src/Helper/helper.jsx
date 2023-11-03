@@ -31,7 +31,7 @@ export const deleteDuplicatesFrom = (
   return targetArray.reduce((cleaned, targetEl) => {
     /*
     Creates a new element that contains elements from
-    target array except ones that is contined within
+    target array except ones that is contained within
     the target element.
     */
     if (!refArray.includes(targetEl))

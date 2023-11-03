@@ -1,28 +1,28 @@
-class Data {
-  //prettier-ignore
-  constructor(
-    id,
-    {username, occupation, tag, pfp, aboutMe, status, story, displayImg, friends, friendRequest, blocked, isOnline, chatId},
-  ) {
-      this.id = id;
-      this.username = username;
-      this.occupation = occupation;
-      this.tag = tag;
-      this.pfp = pfp;
-      this.aboutMe = aboutMe;
-      this.status = status;
-      this.story = {
-        tag,
-        ...story
-      };
-      this.displayImg = [...displayImg];
-      this.friends = [...friends];
-      this.friendRequest = [...friendRequest];
-      this.blocked = [...blocked];
-      this.isOnline = isOnline;
-      this.chatId = chatId;
-    }
-}
+// class Data {
+//   //prettier-ignore
+//   constructor(
+//     id,
+//     {username, occupation, tag, pfp, aboutMe, status, story, displayImg, friends, friendRequest, blocked, isOnline, chatId},
+//   ) {
+//       this.id = id;
+//       this.username = username;
+//       this.occupation = occupation;
+//       this.tag = tag;
+//       this.pfp = pfp;
+//       this.aboutMe = aboutMe;
+//       this.status = status;
+//       this.story = {
+//         tag,
+//         ...story
+//       };
+//       this.displayImg = [...displayImg];
+//       this.friends = [...friends];
+//       this.friendRequest = [...friendRequest];
+//       this.blocked = [...blocked];
+//       this.isOnline = isOnline;
+//       this.chatId = chatId;
+//     }
+// }
 
 // DEFAULT DATA
 export const data = [
@@ -330,6 +330,7 @@ export const data = [
 export const db = {
   AAA01: {
     username: "Sarah Wilson",
+    id: "AAA01",
     occupation: "Software Engineer",
     tag: "@sarahwls",
     pfp: "mEZ3PoFGs_k",
@@ -340,6 +341,7 @@ export const db = {
       activity: "Undergrad, Student",
       loveStatus: "Single",
       age: "21",
+      tag: "@sarahwls",
     },
     story: {
       dateCreated: Date.now(),
@@ -360,6 +362,7 @@ export const db = {
   },
   AAA02: {
     username: "John Doe",
+    id: "AAA02",
     occupation: "Graphic Designer",
     tag: "@johndoe",
     pfp: "bodgc6H44FA",
@@ -376,6 +379,7 @@ export const db = {
       storyImage: "numwIW6i8Iw",
       storyDescription:
         "Exploring the beauty of nature in Bandung",
+      tag: "@johndoe",
     },
     displayImg: [
       "r7eNm-rS8uM",
@@ -390,6 +394,7 @@ export const db = {
   },
   AAA03: {
     username: "Linda Smith",
+    id: "AAA03",
     occupation: "Teacher",
     tag: "@lindasmith",
     pfp: "3TLl_97HNJo",
@@ -406,6 +411,7 @@ export const db = {
       storyImage: "d5dIch5tkzs",
       storyDescription:
         "Educational field trip with my students",
+      tag: "@lindasmith",
     },
     displayImg: [
       "hxz83k3Ofi0",
@@ -420,6 +426,7 @@ export const db = {
   },
   AAA04: {
     username: "Michael Johnson",
+    id: "AAA04",
     occupation: "Doctor",
     tag: "@michaeljohnson",
     pfp: "RukI4qZGlQs",
@@ -436,6 +443,7 @@ export const db = {
       storyImage: "epQdtCvBrc4",
       storyDescription:
         "Volunteering at a local medical camp",
+      tag: "@michaeljohnson",
     },
     displayImg: [
       "aor99_D9QGM",
@@ -450,6 +458,7 @@ export const db = {
   },
   AAA05: {
     username: "Emily Lee",
+    id: "AAA05",
     occupation: "Entrepreneur",
     tag: "@emilylee",
     pfp: "2rIs8OH5ng0",
@@ -466,6 +475,7 @@ export const db = {
       storyImage: "f0K_OLxdNcw",
       storyDescription:
         "Exploring the vibrant culture of Bali",
+      tag: "@emilylee",
     },
     displayImg: [
       "IqI5MQi6R0c",
@@ -480,6 +490,7 @@ export const db = {
   },
   AAA06: {
     username: "Daniel Kim",
+    id: "AAA06",
     occupation: "Architect",
     tag: "@danielkim",
     pfp: "vEjg_eDaR0Q",
@@ -496,6 +507,7 @@ export const db = {
       storyImage: "kiv1ggvkgQk",
       storyDescription:
         "Showcasing my latest architectural project",
+      pfp: "vEjg_eDaR0Q",
     },
     displayImg: [
       "BzZ485WpIZw",
@@ -510,6 +522,7 @@ export const db = {
   },
   AAA07: {
     username: "Nadia Rahman",
+    id: "AAA07",
     occupation: "Writer",
     tag: "@nadiar",
     pfp: "lxsduAdWXy4",
@@ -526,6 +539,7 @@ export const db = {
       storyImage: "ip9R11FMbV8",
       storyDescription:
         "Lost in the world of books and imagination",
+      tag: "@nadiar",
     },
     displayImg: [
       "w5QDlbjJwEY",
@@ -540,6 +554,7 @@ export const db = {
   },
   AAA08: {
     username: "Elena Martinez",
+    id: "AAA08",
     occupation: "Chef",
     tag: "@elenam",
     pfp: "6W4F62sN_yI",
@@ -555,6 +570,7 @@ export const db = {
       dateCreated: Date.now(),
       storyImage: "feAeauewzF0",
       storyDescription: "Cooking up a storm in the kitchen",
+      tag: "@elenam",
     },
     displayImg: [
       "enG-8kd_2qc",
@@ -569,6 +585,7 @@ export const db = {
   },
   AAA09: {
     username: "Olivia Tan",
+    id: "AAA09",
     occupation: "Fashion Designer",
     pfp: "6LZuSzSwso0",
     tag: "@oliviatan",
@@ -585,6 +602,7 @@ export const db = {
       storyImage: "ShAHFTy-HKQ",
       storyDescription:
         "Behind the scenes at a fashion show",
+      tag: "@oliviatan",
     },
     displayImg: [
       "3b22YhWeYMU",
@@ -599,6 +617,7 @@ export const db = {
   },
   AAA10: {
     username: "Mark Johnson",
+    id: "AAA10",
     occupation: "Engineer",
     tag: "@markj",
     pfp: "oRsSeYqJUgY",
@@ -615,6 +634,7 @@ export const db = {
       storyImage: "K7OUs6y_cm8",
       storyDescription:
         "Testing a new prototype at the workshop",
+      tag: "@markj",
     },
     displayImg: [
       "g6Me5mUQQIQ",
