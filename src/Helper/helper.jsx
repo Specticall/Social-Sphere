@@ -50,3 +50,8 @@ export const deleteDuplicatesFrom = (
 export const createFieldPlaceholder = (length, text) => {
   return new Array(length).fill(text);
 };
+
+export const deleteElementAtIndex = (arr, index) => {
+  arr.splice(index, 1);
+  return arr;
+};

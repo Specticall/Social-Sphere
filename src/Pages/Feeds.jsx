@@ -13,12 +13,7 @@ import { isEmptyObject } from "../Helper/helper";
 
 // TEMP Mockup Story data
 import { storyImage } from "../Data/storydata";
-
-/*
-  userData,
-  allUser,
-  activeUserObject: activeUser,
-*/
+import { useLoading } from "../Hooks/useLoading";
 
 export default function Feeds({
   setActivePage,
@@ -77,9 +72,7 @@ export default function Feeds({
         <Recommendations {...props} />
       </div>
       <div className="right">
-        <h2 className="your-profile__title">
-          YOUR PROFILE
-        </h2>
+        <h2 className="your-profile__title">YOUR PROFILE</h2>
         <UserProfile {...props} />
       </div>
     </div>
@@ -94,41 +87,32 @@ function Recommendations({ allUser, activeUserId }) {
     With this, a new recommendation will only get created 
     on every initial render / mount of the component.
   */
-  // console.log(allUser, activeUserId && allUser);
-  const [isLoading, setIsLoading] = useState(
+  const { isLoading } = useLoading(allUser, () =>
     activeUserId && allUser ? false : true
   );
-  const [recommended, setRecommended] = useState(
+
+  const [recommended, setRecommended] = useState(() =>
     new Array(3).fill("loading")
   );
 
   useEffect(() => {
-    setIsLoading(activeUserId && allUser ? false : true);
+    // setIsLoading(activeUserId && allUser ? false : true);
 
     setRecommended(
       activeUserId && allUser
-        ? getRecommendation(
-            allUser,
-            activeUserId,
-            RECOMMENDATION_AMOUNT
-          )
+        ? getRecommendation(allUser, activeUserId, RECOMMENDATION_AMOUNT)
         : new Array(3).fill("loading")
     );
   }, [allUser, activeUserId]);
 
   return (
     <>
-      <h2 className="recommendation__title">
-        People you might like
-      </h2>
+      <h2 className="recommendation__title">People you might like</h2>
       <div className="recommendation">
         {recommended?.map((id, i) => {
           const data = !isLoading ? allUser[id] : null;
           return (
-            <RecommendationCard
-              data={data}
-              key={`recommendedCard--${i}`}
-            />
+            <RecommendationCard data={data} key={`recommendedCard--${i}`} />
           );
         })}
       </div>

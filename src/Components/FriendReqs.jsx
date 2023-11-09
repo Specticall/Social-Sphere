@@ -1,28 +1,32 @@
+import { deleteElementAtIndex } from "../Helper/helper";
+import {
+  handleAcceptFriend,
+  handleDeclineFriend,
+} from "../Helper/model_friend";
 import Button from "./Button";
 import Image from "./Image";
 import Skeleton from "react-loading-skeleton";
+import { Loader } from "./Loader";
+import { useState } from "react";
 
 /*
   handleChangeData,
   handleAcceptFriend,
   handleDeclineFriend,
 */
-export default function FriendReqs({
-  activeUser,
-  allUser,
-}) {
+export default function FriendReqs({ activeUser, allUser, setDataUpdated }) {
+  const [requests, setRequests] = useState([]);
   // Get all the friend user objects.
   const friendRequests =
-    activeUser?.friendRequest?.map(
-      (reqId) => allUser[reqId]
-    ) || new Array(2).fill("LOADING");
+    activeUser?.friendRequest?.map((reqId) => allUser[reqId]) ||
+    new Array(2).fill("LOADING");
 
   const props = {
     allUser,
     activeUser,
-    // handleChangeData,
-    // handleAcceptFriend,
-    // handleDeclineFriend,
+    requests,
+    setRequests,
+    setDataUpdated,
   };
 
   return (
@@ -30,13 +34,11 @@ export default function FriendReqs({
       <h2 className="title">REQUEST</h2>
       {/* Placeholder if user has no friend request */}
       {friendRequests?.length === 0 ? (
-        <div className="req placeholder">
-          YOU HAVE NO REQUEST
-        </div>
+        <div className="req placeholder">YOU HAVE NO REQUEST</div>
       ) : null}
-      {friendRequests?.map((user, i) => (
+      {friendRequests?.map((user) => (
         <Request
-          key={`feeds-friendreq-${i}`}
+          key={user.id}
           user={user}
           isLoading={user === "LOADING"}
           {...props}
@@ -47,11 +49,40 @@ export default function FriendReqs({
 }
 
 function Request({
-  user,
-  // handleAcceptFriend,
-  // handleDecline,
+  user: targetUser,
+  setRequests,
+  requests,
   isLoading = false,
+  activeUser,
+  setDataUpdated,
 }) {
+  const [isRequesting, setIsRequesting] = useState(
+    requests.includes(targetUser?.id) ? true : false
+  );
+
+  const handleAction = (type) => () => {
+    if (isRequesting) return;
+
+    const stateSetter = () => {
+      setRequests((current) => {
+        const index = current.indexOf(targetUser.id);
+        return deleteElementAtIndex(current, index);
+      });
+
+      setDataUpdated(true);
+    };
+    const dependencies = [activeUser, targetUser.id, stateSetter];
+
+    if (type === "accept") handleAcceptFriend(...dependencies);
+    if (type === "decline") handleDeclineFriend(...dependencies);
+
+    setIsRequesting(true);
+
+    setRequests((current) => {
+      return [...current, targetUser.id];
+    });
+  };
+
   return (
     <article className="req">
       {isLoading ? (
@@ -62,32 +93,38 @@ function Request({
             <div className="pfp">
               <Image
                 className={"friendReq-pfp"}
-                link={user.pfp}
-                key={`${user.pfp}-friendReq`}
-                alt={`${user.username}'s Profile Picture`}
+                link={targetUser.pfp}
+                key={`${targetUser.pfp}-friendReq`}
+                alt={`${targetUser.username}'s Profile Picture`}
               />
             </div>
             <p>
-              <span className="name">{user.username}</span>
+              <span className="name">{targetUser.username}</span>
               wants to be friends with you
             </p>
           </header>
           <div className="buttons">
-            <Button
-              padding="0.6rem 0rem"
-              type="primary"
-              buttonText="Accept"
-              width="100%"
-              // onClick={() => handleAcceptFriend(user)}
-            />
-            <Button
-              padding="0.6rem 0rem"
-              type="secondary"
-              buttonText="Decline"
-              width="100%"
-              // onClick={() => handleDecline(user)}
-            />
-          </div>{" "}
+            {isRequesting ? (
+              <Loader isLoading={true} />
+            ) : (
+              <>
+                <Button
+                  padding="0.6rem 0rem"
+                  type="primary"
+                  buttonText="Accept"
+                  width="100%"
+                  onClick={handleAction("accept")}
+                />
+                <Button
+                  padding="0.6rem 0rem"
+                  type="secondary"
+                  buttonText="Decline"
+                  width="100%"
+                  onClick={handleAction("decline")}
+                />
+              </>
+            )}
+          </div>
         </>
       )}
     </article>

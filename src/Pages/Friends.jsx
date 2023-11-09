@@ -1,43 +1,31 @@
-import { useEffect, useState } from "react";
+import { useReducer, useState } from "react";
 import Searchbar from "../Components/Searchbar";
-import { friendData } from "../Data/friendsdata";
 import {
   createFieldPlaceholder,
+  deleteElementAtIndex,
   filterFieldbyId,
 } from "../Helper/helper";
 import ProfilePicture from "../Components/ProfilePicture";
 import Sort from "../Components/Sort";
 import {
   handleAcceptFriend,
+  handleDeclineFriend,
   handleUnblockFriend,
 } from "../Helper/model_friend";
 import Skeleton from "react-loading-skeleton";
 import { Loader } from "../Components/Loader";
+import { useLoading } from "../Hooks/useLoading";
 
 const filters = ["Online", "All", "Pending", "Blocked"];
 
-/*
-  // handleAcceptFriend,
-  // handleChangeData,
-  // handleUnblockFriend,
-*/
-export default function Friends({
-  activeUser,
-  allUser,
-  setDataUpdated,
-}) {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (!activeUser) return;
-    setIsLoading(false);
-  }, [activeUser]);
-
+export default function Friends({ activeUser, allUser, setDataUpdated }) {
   const [selectedFilter, setSelectedFilter] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [requests, setRequests] = useState([]);
 
-  let friends =
-    isLoading ||
-    filterFieldbyId(allUser, activeUser.friends);
+  const { isLoading } = useLoading(activeUser);
+
+  let friends = isLoading || filterFieldbyId(allUser, activeUser.friends);
 
   const filterMethods = isLoading || [
     friends.filter((friend) => friend.isOnline),
@@ -46,20 +34,13 @@ export default function Friends({
     filterFieldbyId(allUser, activeUser.blocked),
   ];
 
-  let filteredFriends = !isLoading
-    ? filterMethods[selectedFilter]
+  const queriedFriends = !isLoading
+    ? filterMethods[selectedFilter].filter((friend) =>
+        friend.username
+          .toLocaleLowerCase()
+          .includes(searchQuery.toLocaleLowerCase())
+      )
     : createFieldPlaceholder(10, "LOADING");
-
-  // TEMP
-  // Filler data to make the friend list look longer
-  // if (!isLoading)
-  //   filteredFriends = [...filteredFriends, ...friendData];
-
-  // console.log(
-  //   "FRIEND COMPONENT : ",
-  //   !isLoading ? "LOADING FINISHED" : "LOADING...",
-  //   filteredFriends
-  // );
 
   const props = {
     selectedFilter,
@@ -67,9 +48,12 @@ export default function Friends({
     activeUser,
     allUser,
     friends,
-    filteredFriends,
+    queriedFriends,
     isLoading,
     setDataUpdated,
+    setSearchQuery,
+    requests,
+    setRequests,
   };
 
   return (
@@ -86,10 +70,7 @@ export default function Friends({
   );
 }
 
-function FriendFilter({
-  selectedFilter,
-  setSelectedFilter,
-}) {
+function FriendFilter({ selectedFilter, setSelectedFilter, setSearchQuery }) {
   return (
     <div className="navbar-filters">
       <ul className="filter">
@@ -110,6 +91,7 @@ function FriendFilter({
       <Searchbar
         hideProfilePic={true}
         className="filter-search"
+        inputWatcher={(query) => setSearchQuery(query)}
       />
     </div>
   );
@@ -117,16 +99,20 @@ function FriendFilter({
 
 function FriendList({
   selectedFilter,
-  filteredFriends,
+  queriedFriends,
   activeUser,
   isLoading,
   setDataUpdated,
+  requests,
+  setRequests,
 }) {
   const [sortType, setSortType] = useState(0);
 
   const props = {
     activeUser,
     setDataUpdated,
+    requests,
+    setRequests,
   };
 
   const emptyFriendsMsg = [
@@ -141,18 +127,10 @@ function FriendList({
     (a, b) => b.username?.localeCompare(a.username),
   ];
 
-  // console.log(
-  //   !isLoading ? "LOADING FINISHED" : "LOADING...",
-  //   filteredFriends,
-  //   isLoading
-  //     ? filteredFriends
-  //     : filteredFriends?.sort(sortingFunctions[sortType])
-  // );
-
-  // Sort the filteredFriends (mutating)
+  // Sort the queriedFriends (mutating)
   const sortedFriends = isLoading
-    ? filteredFriends
-    : filteredFriends?.sort(sortingFunctions[sortType]);
+    ? queriedFriends
+    : queriedFriends?.sort(sortingFunctions[sortType]);
 
   return (
     <ul className="friends-list">
@@ -166,9 +144,7 @@ function FriendList({
 
       {/* Empty Message */}
       {sortedFriends.length === 0 ? (
-        <div className="empty-friends">
-          {emptyFriendsMsg[selectedFilter]}
-        </div>
+        <div className="empty-friends">{emptyFriendsMsg[selectedFilter]}</div>
       ) : null}
 
       {/* List */}
@@ -193,19 +169,11 @@ function FriendList({
             <div className="info">
               <h3 className="name">
                 {friend?.username || (
-                  <Skeleton
-                    width={"120px"}
-                    height={"20px"}
-                  />
+                  <Skeleton width={"120px"} height={"20px"} />
                 )}
               </h3>
               <p className="tag">
-                {friend?.tag || (
-                  <Skeleton
-                    width={"80px"}
-                    height={"20px"}
-                  />
-                )}
+                {friend?.tag || <Skeleton width={"80px"} height={"20px"} />}
               </p>
             </div>
           </article>
@@ -216,16 +184,10 @@ function FriendList({
             <FriendMenuButtons {...props} user={friend} />
           ) : null}
           {selectedFilter === 2 ? (
-            <FriendPendingButtons
-              {...props}
-              user={friend}
-            />
+            <FriendPendingButtons {...props} user={friend} />
           ) : null}
           {selectedFilter === 3 ? (
-            <FriendBlockedButtons
-              {...props}
-              user={friend}
-            />
+            <FriendBlockedButtons {...props} user={friend} />
           ) : null}
         </li>
       ))}
@@ -255,34 +217,55 @@ function FriendPendingButtons({
   user: targetUser,
   activeUser,
   setDataUpdated,
+  requests,
+  setRequests,
 }) {
-  const [isRequesting, setIsRequesting] = useState(false);
+  /*
+  This state will not be reverted to false even after
+  the fetching is finished, this is done so that the
+  spinning bar will remain until the component is rerendered
+  */
+  const [isRequesting, setIsRequesting] = useState(
+    requests.includes(targetUser?.id) ? true : false
+  );
+
+  // Refactored accept / decline friend functions
+  const handleAction = (type) => () => {
+    if (isRequesting) return;
+
+    const stateSetter = () => {
+      setDataUpdated(true);
+      setRequests((current) => {
+        const index = current.indexOf(targetUser.id);
+        return deleteElementAtIndex(current, index);
+      });
+    };
+    const dependencies = [activeUser, targetUser.id, stateSetter];
+
+    if (type === "accept") handleAcceptFriend(...dependencies);
+    if (type === "decline") handleDeclineFriend(...dependencies);
+
+    setIsRequesting(true);
+
+    setRequests((current) => {
+      return [...current, targetUser.id];
+    });
+  };
 
   return (
     <div className="friend-pending-buttons">
-      <button
-        className="accept"
-        onClick={() => {
-          handleAcceptFriend(
-            activeUser,
-            targetUser.id,
-            () => {
-              setIsRequesting(false);
-              setDataUpdated(true);
-            }
-          );
-          setIsRequesting(true);
-        }}
-      >
-        {isRequesting ? (
-          <Loader isLoading={true} />
-        ) : (
-          <i className="bx bx-check"></i>
-        )}
-      </button>
-      <button className="decline">
-        <i className="bx bx-x"></i>
-      </button>{" "}
+      {!isRequesting ? (
+        <>
+          <button className="accept" onClick={handleAction("accept")}>
+            <i className="bx bx-check"></i>
+          </button>
+          <button className="decline" onClick={handleAction("decline")}>
+            <i className="bx bx-x"></i>
+          </button>
+        </>
+      ) : (
+        <Loader isLoading={true} />
+      )}
     </div>
   );
 }
@@ -290,25 +273,38 @@ function FriendPendingButtons({
 function FriendBlockedButtons({
   user: targetUser,
   activeUser,
-  handleChangeData,
+  setDataUpdated,
+  requests,
+  setRequests,
 }) {
-  const handleUnblockFriend = (unblockedUser) => {
-    handleChangeData({
-      type: "unblockFriend",
-      newData: activeUser.data.blocked.filter(
-        (blocked) => blocked !== unblockedUser.id
-      ),
-      changeTargetId: activeUser.id,
-    });
-  };
+  const [isRequesting, setIsRequesting] = useState(() =>
+    requests.includes(targetUser?.id) ? true : false
+  );
 
-  return (
-    <div
+  return !isRequesting ? (
+    <button
       onClick={() => {
-        handleUnblockFriend(targetUser);
+        if (isRequesting) return;
+
+        handleUnblockFriend(activeUser, targetUser.id, () => {
+          setDataUpdated(true);
+          setRequests((current) => {
+            const index = current.indexOf(targetUser.id);
+            return deleteElementAtIndex(current, index);
+          });
+        });
+
+        setIsRequesting(true);
+
+        setRequests((current) => {
+          return [...current, targetUser.id];
+        });
       }}
+      className="unblock"
     >
       Unblock
-    </div>
+    </button>
+  ) : (
+    <Loader isLoading={true} />
   );
 }
