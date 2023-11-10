@@ -600,8 +600,6 @@ export const db = {
   },
 };
 
-export const chatDb = {};
-
 export const setDb = (newData, targetId) => {
   db[targetId] = newData;
 };

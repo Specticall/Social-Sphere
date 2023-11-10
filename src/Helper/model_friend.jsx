@@ -7,18 +7,11 @@ import { deleteDuplicatesFrom } from "./helper";
  * @param {String} targetId - ID of User which wants to be added as friend
  * @return {void}
  */
-export const handleAcceptFriend = (
-  activeUserObject,
-  targetId,
-  stateSetter
-) => {
+export const handleAcceptFriend = (activeUserObject, targetId, stateSetter) => {
   // Abort previous processes (LATER) //BUG
 
   // Adds the target id to the friend's list array
-  const newFriends = [
-    ...activeUserObject.friends,
-    targetId,
-  ];
+  const newFriends = [...activeUserObject.friends, targetId];
 
   // remove target id from pending friend request array
   const newFriendRequest = deleteDuplicatesFrom(
@@ -33,13 +26,10 @@ export const handleAcceptFriend = (
     friendRequest: newFriendRequest,
   };
 
+  console.log(newData);
   const putDataToDb = async () => {
     try {
-      await putData(
-        "www.mockdb/post",
-        newData,
-        activeUserObject.id
-      );
+      await putData("www.mockdb/post", newData, activeUserObject.id);
 
       stateSetter();
     } catch (err) {
@@ -62,10 +52,9 @@ export const handleDeclineFriend = (
   stateSetter
 ) => {
   // remove target id from pending friend request array
-  const newFriendRequest =
-    activeUserObject.friendRequest.filter(
-      (req) => req !== targetId
-    );
+  const newFriendRequest = activeUserObject.friendRequest.filter(
+    (req) => req !== targetId
+  );
 
   const newData = {
     ...activeUserObject,
@@ -74,11 +63,7 @@ export const handleDeclineFriend = (
 
   const putDataToDb = async () => {
     try {
-      await putData(
-        "www.mockdb/post",
-        newData,
-        activeUserObject.id
-      );
+      await putData("www.mockdb/post", newData, activeUserObject.id);
 
       stateSetter();
     } catch (err) {
@@ -95,9 +80,7 @@ export const handleUnblockFriend = (
   stateSetter
 ) => {
   // remove target id from pending friend request array
-  const newBlocked = activeUserObject.blocked.filter(
-    (req) => req !== targetId
-  );
+  const newBlocked = activeUserObject.blocked.filter((req) => req !== targetId);
 
   const newData = {
     ...activeUserObject,
@@ -106,11 +89,7 @@ export const handleUnblockFriend = (
 
   const putDataToDb = async () => {
     try {
-      await putData(
-        "www.mockdb/post",
-        newData,
-        activeUserObject.id
-      );
+      await putData("www.mockdb/post", newData, activeUserObject.id);
 
       stateSetter();
     } catch (err) {

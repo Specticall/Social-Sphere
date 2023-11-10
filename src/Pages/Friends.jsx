@@ -14,7 +14,6 @@ import {
 } from "../Helper/model_friend";
 import Skeleton from "react-loading-skeleton";
 import { Loader } from "../Components/Loader";
-import { useLoading } from "../Hooks/useLoading";
 import FriendUtils from "../Components/FriendUtils";
 
 const filters = ["Online", "All", "Pending", "Blocked"];
@@ -25,8 +24,8 @@ const initialState = {
   friends: createFieldPlaceholder(10, "LOADING"),
   filter: 0,
   query: "",
-  request: [],
   sort: 0,
+  requests: [],
 };
 
 function reducer(state, action) {
@@ -48,6 +47,19 @@ function reducer(state, action) {
         ...state,
         sort: action.payload,
       };
+    case "add_request":
+      return {
+        ...state,
+        requests: [...state.requests, action.payload],
+      };
+    case "remove_request":
+      return {
+        ...state,
+        requests: deleteElementAtIndex(
+          state.requests,
+          state.requests.indexOf(action.payload)
+        ),
+      };
 
     default:
       throw new Error("Reducer not specified");
@@ -55,53 +67,20 @@ function reducer(state, action) {
 }
 
 export default function Friends({ activeUser, allUser, setDataUpdated }) {
-  const [selectedFilter, setSelectedFilter] = useState(0);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [requests, setRequests] = useState([]);
-
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  const { isLoading } = useLoading(activeUser);
-
-  // DEPRECATED
-  let friends = isLoading || filterFieldbyId(allUser, activeUser.friends);
-
-  // DEPRECATED
-  const filterMethods = isLoading || [
-    friends.filter((friend) => friend.isOnline),
-    friends,
-    filterFieldbyId(allUser, activeUser.friendRequest),
-    filterFieldbyId(allUser, activeUser.blocked),
-  ];
-
-  // DEPRECATED
-  const queriedFriends = !isLoading
-    ? filterMethods[selectedFilter].filter((friend) =>
-        friend.username
-          .toLocaleLowerCase()
-          .includes(searchQuery.toLocaleLowerCase())
-      )
-    : createFieldPlaceholder(10, "LOADING");
 
   // Wait for friend data.
   useEffect(() => {
+    if (!activeUser) return;
     const friends = filterFieldbyId(allUser, activeUser.friends);
 
     dispatch({ type: "get_friends", payload: friends });
-  }, [allUser, activeUser.friends]);
+  }, [allUser, activeUser?.friends, activeUser]);
 
   const props = {
-    selectedFilter,
-    setSelectedFilter,
     activeUser,
     allUser,
-    friends,
-    queriedFriends,
-    isLoading,
     setDataUpdated,
-    setSearchQuery,
-    requests,
-    setRequests,
     state,
     dispatch,
   };
@@ -120,41 +99,14 @@ export default function Friends({ activeUser, allUser, setDataUpdated }) {
   );
 }
 
-function FriendFilter({
-  selectedFilter,
-  setSelectedFilter,
-  setSearchQuery,
-  dispatch,
-}) {
+function FriendFilter({ dispatch, state }) {
   return (
     <div className="navbar-filters">
-      <ul className="filter">
-        {filters.map((label, i) => {
-          const elClass = `${
-            selectedFilter === i ? "selected" : null
-          } ${label.toLowerCase()}`;
-
-          const elKey = `${label}-${i}`;
-
-          return (
-            <li
-              className={elClass}
-              key={elKey}
-              onClick={() => {
-                setSelectedFilter(i);
-                dispatch({ type: "set_filter", payload: i });
-              }}
-            >
-              <p>{label}</p>
-            </li>
-          );
-        })}
-      </ul>
+      <Filters dispatch={dispatch} state={state} />
       <Searchbar
         hideProfilePic={true}
         className="filter-search"
         inputWatcher={(query) => {
-          setSearchQuery(query);
           dispatch({ type: "set_query", payload: query });
         }}
       />
@@ -162,18 +114,33 @@ function FriendFilter({
   );
 }
 
-function FriendList({
-  selectedFilter,
-  queriedFriends,
-  activeUser,
-  isLoading,
-  setDataUpdated,
-  requests,
-  setRequests,
-  allUser,
-  state,
-  dispatch,
-}) {
+function Filters({ dispatch, state }) {
+  return (
+    <ul className="filter">
+      {filters.map((label, i) => {
+        const elClass = `${
+          state.filter === i ? "selected" : null
+        } ${label.toLowerCase()}`;
+
+        const elKey = `${label}-${i}`;
+
+        return (
+          <li
+            className={elClass}
+            key={elKey}
+            onClick={() => {
+              dispatch({ type: "set_filter", payload: i });
+            }}
+          >
+            <p>{label}</p>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function FriendList({ activeUser, setDataUpdated, allUser, state, dispatch }) {
   const getFilteredFriends = ({ friends, query, filter, sort, status }) => {
     if (status === "loading") return createFieldPlaceholder(10, "LOADING");
 
@@ -203,45 +170,47 @@ function FriendList({
       );
   };
 
-  console.log(getFilteredFriends(state));
-  // DEPRECATED
-  const [sortType, setSortType] = useState(0);
-
-  const props = {
-    activeUser,
-    setDataUpdated,
-    requests,
-    setRequests,
-  };
-
   const emptyFriendsMsg = [
     "You Have No Online Friends",
     "You Have No Friends",
     "You Have No Friend Requests",
     "You Have No User Blocked",
   ];
-  // DEPRECATED
-  const sortingFunctions = isLoading || [
-    (a, b) => a.username?.localeCompare(b.username),
-    (a, b) => b.username?.localeCompare(a.username),
-  ];
 
-  // DEPRECATED
-  // Sort the queriedFriends (mutating)
-  const sortedFriends = isLoading
-    ? queriedFriends
-    : queriedFriends?.sort(sortingFunctions[sortType]);
+  /**
+   * Handles friend list manipulation task
+   * @param {String} type - "accept", "decline", "unblock"
+   * @param {Object} targetUser  - "target user object"
+   */
+  const handleAction = (type, targetUser) => {
+    const stateSetter = () => {
+      setDataUpdated(true);
+      dispatch({ type: "remove_request", payload: targetUser.id });
+    };
+    const dependencies = [activeUser, targetUser.id, stateSetter];
+
+    if (type === "accept") handleAcceptFriend(...dependencies);
+    if (type === "decline") handleDeclineFriend(...dependencies);
+    if (type === "unblock") handleUnblockFriend(...dependencies);
+
+    dispatch({ type: "add_request", payload: targetUser.id });
+  };
+
+  const props = {
+    activeUser,
+    setDataUpdated,
+    dispatch,
+    state,
+    handleAction,
+  };
 
   return (
     <ul className="friends-list">
       {/* SORT */}
       <header>
-        <p>{filters.at(selectedFilter)} - 15</p>
+        <p>{filters.at(state.filter)} - 15</p>
         <Sort
           stateSetter={(type) => {
-            // DEPRECATED
-            setSortType(type);
-
             dispatch({ type: "set_sort", payload: type });
           }}
         />
@@ -251,8 +220,7 @@ function FriendList({
 
       {/* Empty Message */}
       {getFilteredFriends(state).length === 0 && (
-        // BUG
-        <div className="empty-friends">{emptyFriendsMsg[selectedFilter]}</div>
+        <div className="empty-friends">{emptyFriendsMsg[state.filter]}</div>
       )}
 
       {/* List */}
@@ -261,7 +229,7 @@ function FriendList({
           {/* FRIEND PROFILE */}
 
           <article>
-            {isLoading ? (
+            {state.status === "loading" ? (
               <Skeleton
                 width={"2.5rem"}
                 height={"2.5rem"}
@@ -288,12 +256,12 @@ function FriendList({
 
           {/* CONTACT BUTTONS */}
 
-          {selectedFilter === 0 ||
-            (selectedFilter === 1 && <FriendUtils {...props} user={friend} />)}
-          {selectedFilter === 2 && (
+          {state.filter === 0 ||
+            (state.filter === 1 && <FriendUtils {...props} user={friend} />)}
+          {state.filter === 2 && (
             <FriendPendingButtons {...props} user={friend} />
           )}
-          {selectedFilter === 3 && (
+          {state.filter === 3 && (
             <FriendBlockedButtons {...props} user={friend} />
           )}
         </li>
@@ -303,53 +271,38 @@ function FriendList({
 }
 
 // Features component
-function FriendPendingButtons({
-  user: targetUser,
-  activeUser,
-  setDataUpdated,
-  requests,
-  setRequests,
-}) {
+function FriendPendingButtons({ user: targetUser, state, handleAction }) {
   /*
   This state will not be reverted to false even after
   the fetching is finished, this is done so that the
   spinning bar will remain until the component is rerendered
   */
-  const [isRequesting, setIsRequesting] = useState(
-    requests.includes(targetUser?.id) ? true : false
+  const [isRequesting, setIsRequesting] = useState(() =>
+    state.requests.includes(targetUser?.id) ? true : false
   );
-
-  // Refactored accept / decline friend functions
-  const handleAction = (type) => () => {
-    if (isRequesting) return;
-
-    const stateSetter = () => {
-      setDataUpdated(true);
-      setRequests((current) => {
-        const index = current.indexOf(targetUser.id);
-        return deleteElementAtIndex(current, index);
-      });
-    };
-    const dependencies = [activeUser, targetUser.id, stateSetter];
-
-    if (type === "accept") handleAcceptFriend(...dependencies);
-    if (type === "decline") handleDeclineFriend(...dependencies);
-
-    setIsRequesting(true);
-
-    setRequests((current) => {
-      return [...current, targetUser.id];
-    });
-  };
 
   return (
     <div className="friend-pending-buttons">
       {!isRequesting ? (
         <>
-          <button className="accept" onClick={handleAction("accept")}>
+          <button
+            className="accept"
+            onClick={() => {
+              if (isRequesting) return;
+              handleAction("accept", targetUser);
+              setIsRequesting(true);
+            }}
+          >
             <i className="bx bx-check"></i>
           </button>
-          <button className="decline" onClick={handleAction("decline")}>
+          <button
+            className="decline"
+            onClick={() => {
+              if (isRequesting) return;
+              handleAction("decline", targetUser);
+              setIsRequesting(true);
+            }}
+          >
             <i className="bx bx-x"></i>
           </button>
         </>
@@ -360,35 +313,17 @@ function FriendPendingButtons({
   );
 }
 
-function FriendBlockedButtons({
-  user: targetUser,
-  activeUser,
-  setDataUpdated,
-  requests,
-  setRequests,
-}) {
+function FriendBlockedButtons({ user: targetUser, state, handleAction }) {
   const [isRequesting, setIsRequesting] = useState(() =>
-    requests.includes(targetUser?.id) ? true : false
+    state.requests.includes(targetUser?.id) ? true : false
   );
 
   return !isRequesting ? (
     <button
       onClick={() => {
         if (isRequesting) return;
-
-        handleUnblockFriend(activeUser, targetUser.id, () => {
-          setDataUpdated(true);
-          setRequests((current) => {
-            const index = current.indexOf(targetUser.id);
-            return deleteElementAtIndex(current, index);
-          });
-        });
-
+        handleAction("unblock", targetUser);
         setIsRequesting(true);
-
-        setRequests((current) => {
-          return [...current, targetUser.id];
-        });
       }}
       className="unblock"
     >
