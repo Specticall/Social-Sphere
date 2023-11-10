@@ -1,0 +1,11 @@
+.friend-utils.buttons {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  justify-content: center;
+
+  i {
+    font-size: var(--fs-medium);
+    color: var(--clr-gray);
+  }
+}

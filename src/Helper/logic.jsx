@@ -1,17 +1,11 @@
 import { randomInt } from "./helper";
 
 // Function that returns certain amount of items from an array
-const getRandomElements = (
-  arrayInput,
-  amount,
-  depth = 0
-) => {
+const getRandomElements = (arrayInput, amount, depth = 0) => {
   const arr = arrayInput.slice();
   const randomIndex = randomInt(0, arr.length - 1);
 
-  const filteredArrDuplicate = arr.filter(
-    (_, i) => i !== randomIndex
-  );
+  const filteredArrDuplicate = arr.filter((_, i) => i !== randomIndex);
 
   // Early exit if we ever run out of users to recommend
   if (arr.length - 1 < 1) return [arr[randomIndex]];
@@ -19,11 +13,7 @@ const getRandomElements = (
   if (depth < amount - 1) {
     return [
       arr[randomIndex],
-      ...getRandomElements(
-        filteredArrDuplicate,
-        amount,
-        depth + 1
-      ),
+      ...getRandomElements(filteredArrDuplicate, amount, depth + 1),
     ];
   } else {
     return [arr[randomIndex]];
@@ -48,10 +38,7 @@ export const getRecommendation = (
 
   // Remove ids that are the targetId's friends and the target's itself.
   const filteredList = allId.filter((friendId) => {
-    return (
-      !friendsList.includes(friendId) &&
-      friendId !== targetId
-    );
+    return !friendsList.includes(friendId) && friendId !== targetId;
   });
 
   return getRandomElements(filteredList, amount);

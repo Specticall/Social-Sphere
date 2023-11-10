@@ -1,0 +1,40 @@
+.user-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 1.5rem;
+
+  .profile {
+    position: relative;
+
+    .online-indicator {
+      position: absolute;
+      // width: 1.25rem;
+      aspect-ratio: 1;
+      background-color: var(--clr-green);
+      bottom: 0;
+      right: 0;
+      border-radius: 100%;
+      border: 0.15rem solid var(--clr-white);
+    }
+  }
+
+  .pfp {
+    aspect-ratio: 1;
+    object-position: center;
+    object-fit: cover;
+  }
+
+  .info {
+    display: grid;
+    gap: 0.15rem;
+
+    .username {
+      color: var(--clr-gray-dark);
+    }
+    .tag {
+      color: var(--clr-gray);
+    }
+  }
+}

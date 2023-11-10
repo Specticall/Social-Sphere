@@ -12,6 +12,7 @@ import Landing from "./Pages/Landing";
 import { register } from "swiper/element/bundle";
 import FriendReqs from "./Components/FriendReqs";
 import { getData } from "./db/backend";
+import Chatroom from "./Pages/Chatroom";
 // import { getData, postData } from "./db/backend";
 
 // register Swiper custom elements
@@ -19,13 +20,11 @@ register();
 
 function App() {
   const [activePage, setActivePage] = useState("landing");
-  const [isMobile, setIsMobile] = useState(
-    window.innerWidth < 1300
-  );
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1300);
 
   // DATA (Login) -> Email, password, id object
-  const [userLoginData, setUserLoginData] =
-    useState(usersLoginData);
+  const [userLoginData, setUserLoginData] = useState(usersLoginData);
+
   const [activeUserId, setActiveUserId] = useState("");
 
   // A state for force the fetch useEffect hook to trigger
@@ -45,8 +44,7 @@ function App() {
 
     window.addEventListener("resize", detectResize);
 
-    return () =>
-      window.removeEventListener("resize", detectResize);
+    return () => window.removeEventListener("resize", detectResize);
   });
 
   // DATA (User Object)
@@ -72,12 +70,9 @@ function App() {
   }, [activeUserId, activePage, dataUpdated]);
 
   // Checks if the user is viewing the home page (which will show the navbar)
-  const showNavbar = [
-    "friends",
-    "feeds",
-    "chatRoom",
-    "inbox",
-  ].some((page) => activePage === page);
+  const showNavbar = ["friends", "feeds", "chatroom", "inbox"].some(
+    (page) => activePage === page
+  );
 
   // Prop pack
   const props = {
@@ -97,15 +92,16 @@ function App() {
   //prettier-ignore
   return (
       <>
-      {activePage === "landing" ? <Landing {...props}/> : null}
-      {activePage === "login" ? <Login {...props} /> : null}
+      {activePage === "landing" && <Landing {...props}/>}
+      {activePage === "login" && <Login {...props} />}
       <main>
         <div className="navbar-wrapper">
-          {activePage === "feeds" ? <FriendReqs {...props}/> : null}
-          {showNavbar ? <Navbar {...props}/> : null}
+          {activePage === "feeds" && <FriendReqs {...props}/>}
+          {showNavbar && <Navbar {...props}/>}
         </div>
-        {activePage === "feeds" ? <Feeds {...props} /> : null}
-        {activePage === "friends" ? <Friends {...props} /> : null}
+        {activePage === "feeds" && <Feeds {...props} />}
+        {activePage === "friends" && <Friends {...props} />}
+        {activePage === "chatroom" && <Chatroom {...props}/>}
       </main>
     </>
   );

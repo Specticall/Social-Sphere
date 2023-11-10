@@ -17,7 +17,7 @@ const navigations = [
     label: "Chat Room",
     iconClass: "bx bx-chat",
     navPosition: "240%",
-    name: "chatRoom",
+    name: "chatroom",
   },
   {
     label: "Inbox",
@@ -27,10 +27,7 @@ const navigations = [
   },
 ];
 
-export default function Navbar({
-  activePage = "feeds",
-  setActivePage,
-}) {
+export default function Navbar({ activePage = "feeds", setActivePage }) {
   // Switch page to the selected one.
   const updatePage = (newPage) => {
     setActivePage(newPage);
@@ -46,9 +43,7 @@ export default function Navbar({
               {...props}
               key={`${i}-${props.label}`}
               onSelect={() => updatePage(props.name)}
-              className={
-                props.name === activePage ? "selected" : ""
-              }
+              className={props.name === activePage ? "selected" : ""}
             />
           ))}
         </div>
@@ -56,9 +51,7 @@ export default function Navbar({
           className="selector"
           style={{
             transform: `translateY(${
-              navigations.find(
-                (nav) => nav.name === activePage
-              )?.navPosition
+              navigations.find((nav) => nav.name === activePage)?.navPosition
             })`,
           }}
         ></div>
@@ -67,12 +60,7 @@ export default function Navbar({
   );
 }
 
-function NavigationLabel({
-  className = "",
-  label,
-  iconClass,
-  onSelect,
-}) {
+function NavigationLabel({ className = "", label, iconClass, onSelect }) {
   return (
     <li className={className} onClick={(e) => onSelect(e)}>
       <i className={iconClass}></i>

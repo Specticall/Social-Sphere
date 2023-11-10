@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import Searchbar from "../Components/Searchbar";
 import {
   createFieldPlaceholder,
@@ -15,18 +15,58 @@ import {
 import Skeleton from "react-loading-skeleton";
 import { Loader } from "../Components/Loader";
 import { useLoading } from "../Hooks/useLoading";
+import FriendUtils from "../Components/FriendUtils";
 
 const filters = ["Online", "All", "Pending", "Blocked"];
+const initialState = {
+  // "loading", "ready"
+  status: "loading",
+  // allFriends: createFieldPlaceholder(10, "LOADING"),
+  friends: createFieldPlaceholder(10, "LOADING"),
+  filter: 0,
+  query: "",
+  request: [],
+  sort: 0,
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "get_friends":
+      return { ...state, friends: action.payload, status: "ready" };
+    case "set_filter":
+      return {
+        ...state,
+        filter: action.payload,
+      };
+    case "set_query":
+      return {
+        ...state,
+        query: action.payload,
+      };
+    case "set_sort":
+      return {
+        ...state,
+        sort: action.payload,
+      };
+
+    default:
+      throw new Error("Reducer not specified");
+  }
+}
 
 export default function Friends({ activeUser, allUser, setDataUpdated }) {
   const [selectedFilter, setSelectedFilter] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [requests, setRequests] = useState([]);
 
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   const { isLoading } = useLoading(activeUser);
 
+  // DEPRECATED
   let friends = isLoading || filterFieldbyId(allUser, activeUser.friends);
 
+  // DEPRECATED
   const filterMethods = isLoading || [
     friends.filter((friend) => friend.isOnline),
     friends,
@@ -34,6 +74,7 @@ export default function Friends({ activeUser, allUser, setDataUpdated }) {
     filterFieldbyId(allUser, activeUser.blocked),
   ];
 
+  // DEPRECATED
   const queriedFriends = !isLoading
     ? filterMethods[selectedFilter].filter((friend) =>
         friend.username
@@ -41,6 +82,13 @@ export default function Friends({ activeUser, allUser, setDataUpdated }) {
           .includes(searchQuery.toLocaleLowerCase())
       )
     : createFieldPlaceholder(10, "LOADING");
+
+  // Wait for friend data.
+  useEffect(() => {
+    const friends = filterFieldbyId(allUser, activeUser.friends);
+
+    dispatch({ type: "get_friends", payload: friends });
+  }, [allUser, activeUser.friends]);
 
   const props = {
     selectedFilter,
@@ -54,6 +102,8 @@ export default function Friends({ activeUser, allUser, setDataUpdated }) {
     setSearchQuery,
     requests,
     setRequests,
+    state,
+    dispatch,
   };
 
   return (
@@ -70,28 +120,43 @@ export default function Friends({ activeUser, allUser, setDataUpdated }) {
   );
 }
 
-function FriendFilter({ selectedFilter, setSelectedFilter, setSearchQuery }) {
+function FriendFilter({
+  selectedFilter,
+  setSelectedFilter,
+  setSearchQuery,
+  dispatch,
+}) {
   return (
     <div className="navbar-filters">
       <ul className="filter">
-        {filters.map((label, i) => (
-          <li
-            className={`${
-              selectedFilter === i ? "selected" : null
-            } ${label.toLowerCase()}`}
-            key={`${label}-${i}`}
-            onClick={() => {
-              setSelectedFilter(i);
-            }}
-          >
-            <p>{label}</p>
-          </li>
-        ))}
+        {filters.map((label, i) => {
+          const elClass = `${
+            selectedFilter === i ? "selected" : null
+          } ${label.toLowerCase()}`;
+
+          const elKey = `${label}-${i}`;
+
+          return (
+            <li
+              className={elClass}
+              key={elKey}
+              onClick={() => {
+                setSelectedFilter(i);
+                dispatch({ type: "set_filter", payload: i });
+              }}
+            >
+              <p>{label}</p>
+            </li>
+          );
+        })}
       </ul>
       <Searchbar
         hideProfilePic={true}
         className="filter-search"
-        inputWatcher={(query) => setSearchQuery(query)}
+        inputWatcher={(query) => {
+          setSearchQuery(query);
+          dispatch({ type: "set_query", payload: query });
+        }}
       />
     </div>
   );
@@ -105,7 +170,41 @@ function FriendList({
   setDataUpdated,
   requests,
   setRequests,
+  allUser,
+  state,
+  dispatch,
 }) {
+  const getFilteredFriends = ({ friends, query, filter, sort, status }) => {
+    if (status === "loading") return createFieldPlaceholder(10, "LOADING");
+
+    const options = {
+      sorts: [
+        (a, b) => a.username?.localeCompare(b.username),
+        (a, b) => b.username?.localeCompare(a.username),
+      ],
+      filters: [
+        friends.filter((friend) => friend.isOnline),
+        friends,
+        filterFieldbyId(allUser, activeUser.friendRequest),
+        filterFieldbyId(allUser, activeUser.blocked),
+      ],
+    };
+
+    /*
+    Filter Chain :
+    1. Filter Type
+    2. Sort
+    3. Filter Query
+    */
+    return options.filters[filter]
+      .sort(options.sorts[sort])
+      .filter((friend) =>
+        friend.username.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+      );
+  };
+
+  console.log(getFilteredFriends(state));
+  // DEPRECATED
   const [sortType, setSortType] = useState(0);
 
   const props = {
@@ -121,12 +220,13 @@ function FriendList({
     "You Have No Friend Requests",
     "You Have No User Blocked",
   ];
-
+  // DEPRECATED
   const sortingFunctions = isLoading || [
     (a, b) => a.username?.localeCompare(b.username),
     (a, b) => b.username?.localeCompare(a.username),
   ];
 
+  // DEPRECATED
   // Sort the queriedFriends (mutating)
   const sortedFriends = isLoading
     ? queriedFriends
@@ -137,18 +237,26 @@ function FriendList({
       {/* SORT */}
       <header>
         <p>{filters.at(selectedFilter)} - 15</p>
-        <Sort stateSetter={setSortType} />
+        <Sort
+          stateSetter={(type) => {
+            // DEPRECATED
+            setSortType(type);
+
+            dispatch({ type: "set_sort", payload: type });
+          }}
+        />
       </header>
 
       {/* FRIENDS LIST */}
 
       {/* Empty Message */}
-      {sortedFriends.length === 0 ? (
+      {getFilteredFriends(state).length === 0 && (
+        // BUG
         <div className="empty-friends">{emptyFriendsMsg[selectedFilter]}</div>
-      ) : null}
+      )}
 
       {/* List */}
-      {sortedFriends.map((friend) => (
+      {getFilteredFriends(state).map((friend) => (
         <li key={friend.id}>
           {/* FRIEND PROFILE */}
 
@@ -180,35 +288,17 @@ function FriendList({
 
           {/* CONTACT BUTTONS */}
 
-          {selectedFilter === 0 || selectedFilter === 1 ? (
-            <FriendMenuButtons {...props} user={friend} />
-          ) : null}
-          {selectedFilter === 2 ? (
+          {selectedFilter === 0 ||
+            (selectedFilter === 1 && <FriendUtils {...props} user={friend} />)}
+          {selectedFilter === 2 && (
             <FriendPendingButtons {...props} user={friend} />
-          ) : null}
-          {selectedFilter === 3 ? (
+          )}
+          {selectedFilter === 3 && (
             <FriendBlockedButtons {...props} user={friend} />
-          ) : null}
+          )}
         </li>
       ))}
     </ul>
-  );
-}
-
-// The buttons on the right side of the friend cell
-function FriendMenuButtons() {
-  return (
-    <div className="buttons">
-      <button className="call">
-        <i className="bx bx-phone"></i>
-      </button>
-      <button className="chat">
-        <i className="bx bx-chat"></i>
-      </button>
-      <button className="more">
-        <i className="bx bx-dots-vertical-rounded"></i>
-      </button>
-    </div>
   );
 }
 

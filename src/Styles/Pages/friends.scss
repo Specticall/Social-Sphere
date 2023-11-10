@@ -1,8 +1,8 @@
 .page__friends {
-  margin: 1.5rem;
-  margin-top: 3rem;
+  margin-inline: 1.5rem;
+  padding-top: 3rem;
   padding-right: 1.75rem;
-  padding-top: 0.2rem;
+  // padding-top: 0.2rem;
 
   display: grid;
   grid-template-columns: 22rem 1fr;
@@ -167,18 +167,6 @@
 
           .tag {
             color: var(--clr-gray-light);
-          }
-        }
-
-        .buttons {
-          display: flex;
-          align-items: center;
-          gap: 1.25rem;
-          justify-content: center;
-
-          i {
-            font-size: var(--fs-medium);
-            color: var(--clr-gray);
           }
         }
 

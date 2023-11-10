@@ -7,11 +7,10 @@ export default function Image({
   onClick = () => {},
   isCircle = false,
   isVisible = true,
+  style = {},
 }) {
   const borderType = isCircle ? "100%" : null;
-  const source = isUnsplashURL
-    ? `https://source.unsplash.com/${link}`
-    : link;
+  const source = isUnsplashURL ? `https://source.unsplash.com/${link}` : link;
 
   const imageStyle = {
     width: "100%",
@@ -25,8 +24,8 @@ export default function Image({
       <img
         style={
           defaultStyle
-            ? { ...imageStyle, borderRadius: borderType }
-            : { borderRadius: borderType }
+            ? { ...style, ...imageStyle, borderRadius: borderType }
+            : { ...style, borderRadius: borderType }
         }
         src={source}
         alt={alt}

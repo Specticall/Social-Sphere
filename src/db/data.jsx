@@ -346,14 +346,9 @@ export const db = {
     story: {
       dateCreated: Date.now(),
       storyImage: "z4ELCkNmnz0",
-      storyDescription:
-        "Peaceful sea breeze in nearby beach",
+      storyDescription: "Peaceful sea breeze in nearby beach",
     },
-    displayImg: [
-      "9S82-KpAEnE",
-      "JDrTqKyYPEY",
-      "oX91BBCi9z4",
-    ],
+    displayImg: ["9S82-KpAEnE", "JDrTqKyYPEY", "oX91BBCi9z4"],
     friends: ["AAA02", "AAA05", "AAA09"],
     friendRequest: ["AAA07", "AAA03"],
     blocked: ["AAA10"],
@@ -377,15 +372,10 @@ export const db = {
     story: {
       dateCreated: Date.now(),
       storyImage: "numwIW6i8Iw",
-      storyDescription:
-        "Exploring the beauty of nature in Bandung",
+      storyDescription: "Exploring the beauty of nature in Bandung",
       tag: "@johndoe",
     },
-    displayImg: [
-      "r7eNm-rS8uM",
-      "9aEILfISeAg",
-      "I5j46lqAo-o",
-    ],
+    displayImg: ["r7eNm-rS8uM", "9aEILfISeAg", "I5j46lqAo-o"],
     friends: ["AAA01", "AAA03", "AAA04"],
     friendRequest: ["AAA08"],
     blocked: [],
@@ -409,15 +399,10 @@ export const db = {
     story: {
       dateCreated: Date.now(),
       storyImage: "d5dIch5tkzs",
-      storyDescription:
-        "Educational field trip with my students",
+      storyDescription: "Educational field trip with my students",
       tag: "@lindasmith",
     },
-    displayImg: [
-      "hxz83k3Ofi0",
-      "uFLoYNqwbFg",
-      "4h3GMAnAE-I",
-    ],
+    displayImg: ["hxz83k3Ofi0", "uFLoYNqwbFg", "4h3GMAnAE-I"],
     friends: ["AAA01", "AAA02", "AAA05", "AAA07"],
     friendRequest: [],
     blocked: [],
@@ -441,15 +426,10 @@ export const db = {
     story: {
       dateCreated: Date.now(),
       storyImage: "epQdtCvBrc4",
-      storyDescription:
-        "Volunteering at a local medical camp",
+      storyDescription: "Volunteering at a local medical camp",
       tag: "@michaeljohnson",
     },
-    displayImg: [
-      "aor99_D9QGM",
-      "fYTVHcpak2g",
-      "jDqwzyP3MlA",
-    ],
+    displayImg: ["aor99_D9QGM", "fYTVHcpak2g", "jDqwzyP3MlA"],
     friends: ["AAA01", "AAA03", "AAA05", "AAA06"],
     friendRequest: ["AAA09"],
     blocked: [],
@@ -473,15 +453,10 @@ export const db = {
     story: {
       dateCreated: Date.now(),
       storyImage: "f0K_OLxdNcw",
-      storyDescription:
-        "Exploring the vibrant culture of Bali",
+      storyDescription: "Exploring the vibrant culture of Bali",
       tag: "@emilylee",
     },
-    displayImg: [
-      "IqI5MQi6R0c",
-      "yx7TJle8LhM",
-      "T3aGt4SlN_M",
-    ],
+    displayImg: ["IqI5MQi6R0c", "yx7TJle8LhM", "T3aGt4SlN_M"],
     friends: ["AAA01", "AAA03", "AAA04", "AAA06"],
     friendRequest: ["AAA10"],
     blocked: [],
@@ -505,15 +480,10 @@ export const db = {
     story: {
       dateCreated: Date.now(),
       storyImage: "kiv1ggvkgQk",
-      storyDescription:
-        "Showcasing my latest architectural project",
+      storyDescription: "Showcasing my latest architectural project",
       pfp: "vEjg_eDaR0Q",
     },
-    displayImg: [
-      "BzZ485WpIZw",
-      "rVC6O_gDE0Q",
-      "lc9uYwe54us",
-    ],
+    displayImg: ["BzZ485WpIZw", "rVC6O_gDE0Q", "lc9uYwe54us"],
     friends: ["AAA01", "AAA05", "AAA07", "AAA10"],
     friendRequest: ["AAA08"],
     blocked: [],
@@ -537,15 +507,10 @@ export const db = {
     story: {
       dateCreated: Date.now(),
       storyImage: "ip9R11FMbV8",
-      storyDescription:
-        "Lost in the world of books and imagination",
+      storyDescription: "Lost in the world of books and imagination",
       tag: "@nadiar",
     },
-    displayImg: [
-      "w5QDlbjJwEY",
-      "mo9VZnIfRIU",
-      "cYy-o9i8aCs",
-    ],
+    displayImg: ["w5QDlbjJwEY", "mo9VZnIfRIU", "cYy-o9i8aCs"],
     friends: ["AAA01", "AAA03", "AAA04", "AAA09"],
     friendRequest: [],
     blocked: [],
@@ -572,11 +537,7 @@ export const db = {
       storyDescription: "Cooking up a storm in the kitchen",
       tag: "@elenam",
     },
-    displayImg: [
-      "enG-8kd_2qc",
-      "xhMz5xIbhRg",
-      "iczxV56AsXg",
-    ],
+    displayImg: ["enG-8kd_2qc", "xhMz5xIbhRg", "iczxV56AsXg"],
     friends: ["AAA03", "AAA07", "AAA09"],
     friendRequest: [],
     blocked: ["AAA05"],
@@ -600,15 +561,10 @@ export const db = {
     story: {
       dateCreated: Date.now(),
       storyImage: "ShAHFTy-HKQ",
-      storyDescription:
-        "Behind the scenes at a fashion show",
+      storyDescription: "Behind the scenes at a fashion show",
       tag: "@oliviatan",
     },
-    displayImg: [
-      "3b22YhWeYMU",
-      "7CKUpr_WHJk",
-      "Y3Mr-tGXrS0",
-    ],
+    displayImg: ["3b22YhWeYMU", "7CKUpr_WHJk", "Y3Mr-tGXrS0"],
     friends: ["AAA01", "AAA03", "AAA05", "AAA08"],
     friendRequest: [],
     blocked: [],
@@ -632,15 +588,10 @@ export const db = {
     story: {
       dateCreated: Date.now(),
       storyImage: "K7OUs6y_cm8",
-      storyDescription:
-        "Testing a new prototype at the workshop",
+      storyDescription: "Testing a new prototype at the workshop",
       tag: "@markj",
     },
-    displayImg: [
-      "g6Me5mUQQIQ",
-      "k9tjyC1D7BY",
-      "aGT4YgcOMMw",
-    ],
+    displayImg: ["g6Me5mUQQIQ", "k9tjyC1D7BY", "aGT4YgcOMMw"],
     friends: ["AAA02", "AAA06", "AAA08"],
     friendRequest: ["AAA04"],
     blocked: [],
@@ -648,6 +599,8 @@ export const db = {
     chatId: "CCC01",
   },
 };
+
+export const chatDb = {};
 
 export const setDb = (newData, targetId) => {
   db[targetId] = newData;
