@@ -21,4 +21,9 @@
     display: grid;
     gap: 0.25rem;
   }
+
+  &__top-bottom-max {
+    top: 0;
+    bottom: 0;
+  }
 }

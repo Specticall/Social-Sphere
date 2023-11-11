@@ -9,14 +9,13 @@ export default function UserProfile({
   setOpenProfile,
   isMobile,
   activeUser,
-  setActivePage,
+  // setActivePage,
   setActiveUserId,
+  globalDispatch,
 }) {
   const profileEl = useRef(null);
 
-  const [isLoading, setIsLoading] = useState(
-    activeUser ? false : true
-  );
+  const [isLoading, setIsLoading] = useState(activeUser ? false : true);
 
   useEffect(() => {
     setIsLoading(activeUser ? false : true);
@@ -37,8 +36,7 @@ export default function UserProfile({
 
     document.addEventListener("click", closeProfile);
 
-    return () =>
-      document.removeEventListener("click", closeProfile);
+    return () => document.removeEventListener("click", closeProfile);
   }, [setOpenProfile, openProfile, isMobile]);
 
   // DATA deconstruct needed data from active user.
@@ -46,7 +44,8 @@ export default function UserProfile({
 
   // Function that handles logout
   const onLogout = () => {
-    setActivePage("login");
+    // setActivePage("login");
+    globalDispatch({ type: "switch_page", payload: "login" });
     setActiveUserId("");
   };
 
@@ -63,19 +62,14 @@ export default function UserProfile({
         style={
           isMobile
             ? {
-                transform: `translate(${
-                  openProfile ? 0 : 100
-                }%, 0%)`,
+                transform: `translate(${openProfile ? 0 : 100}%, 0%)`,
               }
             : null
         }
       >
         <div className="background"></div>
         <div className="user-profile__wrapper">
-          <button
-            className="user-profile__logout-btn"
-            onClick={onLogout}
-          >
+          <button className="user-profile__logout-btn" onClick={onLogout}>
             <i className="bx bx-log-out"></i>
             Log out
           </button>
@@ -168,10 +162,7 @@ function UserStatus({ user, isLoading }) {
         <li>
           <i className="bx bx-map"></i>
           {isLoading ? (
-            <Skeleton
-              containerClassName="skeleton"
-              height={"20px"}
-            />
+            <Skeleton containerClassName="skeleton" height={"20px"} />
           ) : (
             <>
               {user?.status.city}, {user?.status.country}
@@ -181,28 +172,19 @@ function UserStatus({ user, isLoading }) {
         <li>
           <i className="bx bx-user"></i>
           {user?.status.activity || (
-            <Skeleton
-              containerClassName="skeleton"
-              height={"20px"}
-            />
+            <Skeleton containerClassName="skeleton" height={"20px"} />
           )}
         </li>
         <li>
           <i className="bx bx-heart"></i>
           {user?.status.loveStatus || (
-            <Skeleton
-              containerClassName="skeleton"
-              height={"20px"}
-            />
+            <Skeleton containerClassName="skeleton" height={"20px"} />
           )}
         </li>
         <li>
           <i className="bx bx-calendar"></i>
           {isLoading ? (
-            <Skeleton
-              containerClassName="skeleton"
-              height={"20px"}
-            />
+            <Skeleton containerClassName="skeleton" height={"20px"} />
           ) : (
             `${user?.status.age} Years old`
           )}

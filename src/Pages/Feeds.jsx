@@ -16,12 +16,14 @@ import { storyImage } from "../Data/storydata";
 import { useLoading } from "../Hooks/useLoading";
 
 export default function Feeds({
-  setActivePage,
+  // setActivePage,
   activePage,
   isMobile,
   activeUserId,
   allUser,
   activeUser,
+  globalDispatch,
+  globalState,
 }) {
   const [openProfile, setOpenProfile] = useState(false);
 
@@ -49,12 +51,14 @@ export default function Feeds({
   const props = {
     activeUser,
     activeUserId,
-    setActivePage,
+    // setActivePage,
     activePage,
     openProfile,
     setOpenProfile,
     isMobile,
     allUser,
+    globalDispatch,
+    globalState,
   };
 
   return (

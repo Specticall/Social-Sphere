@@ -10,8 +10,8 @@ will automatically log the user in,
 
 WHEN TURNED ON WILL, DEV WILL NOT BE ABLE TO CHANGE USER.
 */
-export const DEV_LOGIN = "AAA01";
-// export const DEV_LOGIN = null;
+// export const DEV_LOGIN = "AAA01";
+export const DEV_LOGIN = null;
 
 // MOCKUP FOR DB.
 export const FETCH_TIME_SECONDS = 1 + Math.random() * 2;

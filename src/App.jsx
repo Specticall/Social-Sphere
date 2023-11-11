@@ -1,5 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { usersLoginData } from "./Data/userLogindata";
+
+// React router
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 // Pages
 import Login from "./Pages/Login";
@@ -13,14 +16,40 @@ import { register } from "swiper/element/bundle";
 import FriendReqs from "./Components/FriendReqs";
 import { getData } from "./db/backend";
 import Chatroom from "./Pages/Chatroom";
+import ChatroomNav from "./Components/ChatroomNav";
 // import { getData, postData } from "./db/backend";
 
 // register Swiper custom elements
 register();
 
+const initialState = {
+  status: "loading",
+  activePage: "landing",
+  isMobile: window.innerWidth < 1300,
+  activeUserId: "",
+  dataUpdated: null,
+  allUser: {},
+  activeUser: {},
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "refetch_data":
+      return { ...state, dataUpdated: true };
+    case "conclude_refetch":
+      return { ...state, dataUpdated: false };
+    case "toggle_mobile":
+      return { ...state, isMobile: action.payload };
+    case "switch_page":
+      return { ...state, activePage: action.payload };
+    default:
+      throw new Error("Reducer Type Not Specified");
+  }
+}
+
 function App() {
-  const [activePage, setActivePage] = useState("landing");
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1300);
+  const [globalState, globalDispatch] = useReducer(reducer, initialState);
+  // const [activePage, setActivePage] = useState("landing");
 
   // DATA (Login) -> Email, password, id object
   const [userLoginData, setUserLoginData] = useState(usersLoginData);
@@ -28,7 +57,7 @@ function App() {
   const [activeUserId, setActiveUserId] = useState("");
 
   // A state for force the fetch useEffect hook to trigger
-  const [dataUpdated, setDataUpdated] = useState(false);
+  const { dataUpdated, isMobile, activePage } = globalState;
 
   // Detect viewport changes
   useEffect(() => {
@@ -36,9 +65,9 @@ function App() {
       // Only toggle mobile when screensize goes between
       // the 1300px breakpoint
       if (window.innerWidth > 1300 && isMobile) {
-        setIsMobile(false);
+        globalDispatch({ type: "toggle_mobile", payload: false });
       } else if (window.innerWidth <= 1300 && !isMobile) {
-        setIsMobile(true);
+        globalDispatch({ type: "toggle_mobile", payload: true });
       }
     };
 
@@ -56,14 +85,14 @@ function App() {
   useEffect(() => {
     const getUserData = async () => {
       const [activeUser, allUser] = await Promise.all([
-        getData(`www.mockdb/user_id?=AAA01`),
+        getData(`www.mockdb/user_id?=${activeUserId}`),
         getData(`www.mockdb/user_all`),
       ]);
 
       // Waits untill all the data has finished fetching
       setActiveUser(activeUser);
       setAllUser(allUser);
-      setDataUpdated(false);
+      globalDispatch({ type: "conclude_refetch" });
     };
 
     getUserData();
@@ -78,30 +107,52 @@ function App() {
   const props = {
     setUserLoginData,
     userLoginData,
-    setActivePage,
     activePage,
     isMobile,
-    setIsMobile,
     setActiveUserId,
     activeUserId,
     allUser,
     activeUser,
-    setDataUpdated,
+
+    globalDispatch,
+    globalState,
   };
 
-  //prettier-ignore
+  // return (
+  //   <BrowserRouter>
+  //     <Routes>
+  //       <Route index element={<Landing {...props} />} />
+  //       <Route to="login" element={<Login {...props} />} />
+
+  //       <Route to="app" element={<Login {...props} />}>
+  //         <div className="navbar-wrapper">
+  //           <Route to="feeds" element={<FriendReqs {...props} />} />
+  //           <Route to="friends" element={<Navbar {...props} />} />
+  //           <Route to="chatroom" element={<ChatroomNav {...props} />} />
+  //         </div>
+  //         <main>
+  //           <Route to="feeds" element={<Feeds {...props} />} />
+  //           <Route to="friends" element={<Friends {...props} />} />
+  //           <Route to="chatroom" element={<Chatroom {...props} />} />
+  //         </main>
+  //       </Route>
+  //     </Routes>
+  //   </BrowserRouter>
+  // );
+
   return (
-      <>
-      {activePage === "landing" && <Landing {...props}/>}
+    <>
+      {activePage === "landing" && <Landing {...props} />}
       {activePage === "login" && <Login {...props} />}
       <main>
         <div className="navbar-wrapper">
-          {activePage === "feeds" && <FriendReqs {...props}/>}
-          {showNavbar && <Navbar {...props}/>}
+          {activePage === "feeds" && <FriendReqs {...props} />}
+          {showNavbar && <Navbar {...props} />}
+          {activePage === "chatroom" && <ChatroomNav {...props} />}
         </div>
         {activePage === "feeds" && <Feeds {...props} />}
         {activePage === "friends" && <Friends {...props} />}
-        {activePage === "chatroom" && <Chatroom {...props}/>}
+        {activePage === "chatroom" && <Chatroom {...props} />}
       </main>
     </>
   );

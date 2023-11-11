@@ -14,7 +14,12 @@ import { useState } from "react";
   handleAcceptFriend,
   handleDeclineFriend,
 */
-export default function FriendReqs({ activeUser, allUser, setDataUpdated }) {
+export default function FriendReqs({
+  activeUser,
+  allUser,
+  globalDispatch,
+  globalState,
+}) {
   const [requests, setRequests] = useState([]);
   // Get all the friend user objects.
   const friendRequests =
@@ -26,7 +31,6 @@ export default function FriendReqs({ activeUser, allUser, setDataUpdated }) {
     activeUser,
     requests,
     setRequests,
-    setDataUpdated,
   };
 
   return (
@@ -54,7 +58,8 @@ function Request({
   requests,
   isLoading = false,
   activeUser,
-  setDataUpdated,
+  globalDispatch,
+  globalState,
 }) {
   const [isRequesting, setIsRequesting] = useState(
     requests.includes(targetUser?.id) ? true : false
@@ -69,7 +74,7 @@ function Request({
         return deleteElementAtIndex(current, index);
       });
 
-      setDataUpdated(true);
+      globalDispatch({ type: "refetch_data" });
     };
     const dependencies = [activeUser, targetUser.id, stateSetter];
 

@@ -29,11 +29,11 @@ export const getData = async (URL) => {
 // This is not what the real world db looks like. but for this scenario, it's fine
 /**
  * Modify / replace database with given data
- * @param {string} URL - "www.mockdb/post"
+ * @param {string} URL - "www.mockdb/put"
  * @param {Object} newData - Entire array of user objects, cannot be singular
  * @param {string} id - id of a user which the data wants to be updated
  *
- * @example putData("www.mockdb/post", { Hello: "WORLD" }, "AAA01");
+ * @example putData("www.mockdb/put", { Hello: "WORLD" }, "AAA01");
  */
 export const putData = async (URL, newData, targetId) => {
   try {

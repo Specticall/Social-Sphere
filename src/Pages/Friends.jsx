@@ -66,7 +66,12 @@ function reducer(state, action) {
   }
 }
 
-export default function Friends({ activeUser, allUser, setDataUpdated }) {
+export default function Friends({
+  activeUser,
+  allUser,
+  globalDispatch,
+  globalState,
+}) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // Wait for friend data.
@@ -80,9 +85,10 @@ export default function Friends({ activeUser, allUser, setDataUpdated }) {
   const props = {
     activeUser,
     allUser,
-    setDataUpdated,
     state,
     dispatch,
+    globalDispatch,
+    globalState,
   };
 
   return (
@@ -140,7 +146,14 @@ function Filters({ dispatch, state }) {
   );
 }
 
-function FriendList({ activeUser, setDataUpdated, allUser, state, dispatch }) {
+function FriendList({
+  activeUser,
+  allUser,
+  state,
+  dispatch,
+  globalDispatch,
+  globalState,
+}) {
   const getFilteredFriends = ({ friends, query, filter, sort, status }) => {
     if (status === "loading") return createFieldPlaceholder(10, "LOADING");
 
@@ -184,7 +197,7 @@ function FriendList({ activeUser, setDataUpdated, allUser, state, dispatch }) {
    */
   const handleAction = (type, targetUser) => {
     const stateSetter = () => {
-      setDataUpdated(true);
+      globalDispatch({ type: "refetch_data" });
       dispatch({ type: "remove_request", payload: targetUser.id });
     };
     const dependencies = [activeUser, targetUser.id, stateSetter];
@@ -198,7 +211,6 @@ function FriendList({ activeUser, setDataUpdated, allUser, state, dispatch }) {
 
   const props = {
     activeUser,
-    setDataUpdated,
     dispatch,
     state,
     handleAction,

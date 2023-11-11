@@ -26,10 +26,9 @@ export const handleAcceptFriend = (activeUserObject, targetId, stateSetter) => {
     friendRequest: newFriendRequest,
   };
 
-  console.log(newData);
   const putDataToDb = async () => {
     try {
-      await putData("www.mockdb/post", newData, activeUserObject.id);
+      await putData("www.mockdb/put/user", newData, activeUserObject.id);
 
       stateSetter();
     } catch (err) {
@@ -63,7 +62,7 @@ export const handleDeclineFriend = (
 
   const putDataToDb = async () => {
     try {
-      await putData("www.mockdb/post", newData, activeUserObject.id);
+      await putData("www.mockdb/put/user", newData, activeUserObject.id);
 
       stateSetter();
     } catch (err) {
@@ -89,7 +88,7 @@ export const handleUnblockFriend = (
 
   const putDataToDb = async () => {
     try {
-      await putData("www.mockdb/post", newData, activeUserObject.id);
+      await putData("www.mockdb/put/user", newData, activeUserObject.id);
 
       stateSetter();
     } catch (err) {

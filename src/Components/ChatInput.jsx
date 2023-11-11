@@ -1,6 +1,26 @@
-function ChatInput() {
+import { useEffect, useState } from "react";
+
+function ChatInput({ dispatch, state, activeUser }) {
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {}, [state.activeUserChatLog]);
+
+  const handleNewChat = (e) => {
+    e.preventDefault();
+
+    const newChat = {
+      user: activeUser.id,
+      timestamp: Date.now(),
+      message: query,
+    };
+
+    setQuery("");
+
+    dispatch({ type: "send_chat", payload: newChat });
+  };
+
   return (
-    <form className="chat-input">
+    <form className="chat-input" onSubmit={handleNewChat}>
       <div className="attach">
         <i className="bx bx-paperclip"></i>
       </div>
@@ -8,6 +28,8 @@ function ChatInput() {
         type="text"
         className="text-input"
         placeholder="Enter Message..."
+        onChange={(e) => setQuery(e.target.value)}
+        value={query}
       />
       <button className="send-text">
         <i className="bx bxs-send"></i>

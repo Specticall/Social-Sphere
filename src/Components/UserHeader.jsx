@@ -2,7 +2,6 @@ import Skeleton from "react-loading-skeleton";
 import Image from "./Image";
 
 function UserHeader({ imageSource, username, tag, isOnline, height = "5rem" }) {
-  console.log(imageSource);
   return (
     <div className="user-header">
       <div className="profile">

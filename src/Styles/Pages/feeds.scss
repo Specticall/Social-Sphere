@@ -1,13 +1,14 @@
 .page__feeds {
-  margin: 0rem 1.5rem 1.5rem 1.5rem;
-  padding-top: 3rem;
+  // margin: 0rem 1.5rem 1.5rem 1.5rem;
+  padding-top: 1.5rem;
 
   display: grid;
-  grid-template-columns: 22rem 1fr minmax(22.5rem, 0.95fr);
+  // grid-template-columns: 22rem 1fr minmax(22.5rem, 0.95fr);
+  grid-template-columns: 22rem 1fr minmax(22.5rem, 30rem);
   gap: 2rem;
 
   place-items: center;
-  @include stay-center;
+  // @include stay-center;
 
   .your-profile__title {
     color: var(--clr-gray);
@@ -25,6 +26,7 @@
     align-self: start;
   }
   .middle {
+    max-width: 1000px;
     // Search Bar
     .search-bar {
       position: relative;

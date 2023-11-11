@@ -15,14 +15,12 @@ const faqData = [
       "Social Sphere is a cutting-edge social platform dedicated to connecting friends, old and new. It provides a vibrant space for meaningful conversations, real-time interactions in Chat Rooms, intelligent friend suggestions through our Friend Finder, and seamless multi-platform compatibility for users across Android, iOS, and Windows devices.",
   },
   {
-    question:
-      "Q : How does the Friend Finder feature work?",
+    question: "Q : How does the Friend Finder feature work?",
     answer:
       "Our Friend Finder feature uses advanced algorithms to analyze your interests, preferences, and social interactions. It then suggests compatible friends automatically, eliminating the need for manual searches. This ensures that the friends you connect with share your passions, making your social experience more enriching and enjoyable.",
   },
   {
-    question:
-      "Q : Is my privacy protected on Social Sphere?",
+    question: "Q : Is my privacy protected on Social Sphere?",
     answer:
       "Absolutely. We prioritize your privacy and security. All conversations are protected with end-to-end encryption, ensuring that your messages remain private. We have stringent data protection measures in place, and our dedicated support team is always ready to assist you. Your safety and confidentiality are our top priorities.",
   },
@@ -57,8 +55,11 @@ const featureData = [
   },
 ];
 
-export default function Landing({ setActivePage }) {
-  const props = { setActivePage };
+export default function Landing({
+  // setActivePage,
+  globalDispatch,
+}) {
+  const props = { globalDispatch };
 
   return (
     <div className="page__landing">
@@ -104,11 +105,7 @@ function Nav() {
           }}
         ></i>
       </div>
-      <ul
-        className={`nav-container ${
-          mobileNavOpen ? "open" : ""
-        }`}
-      >
+      <ul className={`nav-container ${mobileNavOpen ? "open" : ""}`}>
         <div className="info">
           <li className="logo">
             <img src={logo} alt="Logo" />
@@ -132,17 +129,16 @@ function Nav() {
   );
 }
 
-function Hero({ setActivePage }) {
+function Hero({ globalDispatch }) {
   return (
     <section className="hero" id="hero-section">
       <div className="hero-inside">
         <div className="info">
           <h1>Your Social Circle, Reimagined.</h1>
           <p>
-            Elevate your social experience with our
-            platform. Engage in meaningful conversations,
-            discover shared passions, and plan exciting
-            adventures with your friends, both old and new.
+            Elevate your social experience with our platform. Engage in
+            meaningful conversations, discover shared passions, and plan
+            exciting adventures with your friends, both old and new.
           </p>
           <Button
             buttonText="Get Started"
@@ -150,7 +146,8 @@ function Hero({ setActivePage }) {
             padding="1.25rem 1rem"
             width="40%"
             goToPage={() => {
-              setActivePage("login");
+              // setActivePage("login");
+              globalDispatch({ type: "switch_page", payload: "login" });
             }}
           />
         </div>
@@ -171,20 +168,15 @@ function Features() {
       <div className="info">
         <h2>A new experience to social networking.</h2>
         <ul>
-          {featureData.map(
-            ({ img, alt, title, paragraph }) => (
-              <li
-                key={alt + title}
-                className="feature-cards"
-              >
-                <img src={img} alt={alt} />
-                <div className="feature-info">
-                  <h3>{title}</h3>
-                  <p>{paragraph}</p>
-                </div>
-              </li>
-            )
-          )}
+          {featureData.map(({ img, alt, title, paragraph }) => (
+            <li key={alt + title} className="feature-cards">
+              <img src={img} alt={alt} />
+              <div className="feature-info">
+                <h3>{title}</h3>
+                <p>{paragraph}</p>
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     </section>
@@ -202,9 +194,7 @@ function FAQ() {
           <li
             key={question + i}
             onClick={() =>
-              setCurrentOpen((current) =>
-                current === i ? -1 : i
-              )
+              setCurrentOpen((current) => (current === i ? -1 : i))
             }
           >
             {/* Questions */}
@@ -218,9 +208,7 @@ function FAQ() {
             </div>
             {/* Answers */}
             <div
-              className={`accordion-wrapper ${
-                currentOpen === i ? "open" : ""
-              }`}
+              className={`accordion-wrapper ${currentOpen === i ? "open" : ""}`}
             >
               <article className="accordion">
                 <div className="bottom">{answer}</div>
@@ -239,10 +227,7 @@ function Footer() {
       <div className="footer__content">
         <div className="main">
           <img src={logoGrayscale} alt="footer logo" />
-          <p>
-            Feel free to contact us if you have any
-            inquiries or questions
-          </p>
+          <p>Feel free to contact us if you have any inquiries or questions</p>
           <ul>
             <li>
               <i className="bx bxl-instagram"></i>
@@ -257,9 +242,7 @@ function Footer() {
               <i className="bx bx-envelope"></i>
             </li>
           </ul>
-          <p className="copyright">
-            © 2023 Social Sphere. All rights reserved
-          </p>
+          <p className="copyright">© 2023 Social Sphere. All rights reserved</p>
         </div>
         <div className="links__container">
           <ul className="links">

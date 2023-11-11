@@ -5,9 +5,11 @@ import { useForm } from "react-hook-form";
 import { DEV_LOGIN, EMAIL_REGEX } from "../Helper/config";
 
 export default function Login({
-  setActivePage,
+  // setActivePage,
   userLoginData,
   setActiveUserId,
+  globalDispatch,
+  globalState,
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
@@ -34,9 +36,7 @@ export default function Login({
     const { email, password } = data;
 
     // Find user index
-    const userIndex = userLoginData.findIndex(
-      (data) => data.email === email
-    );
+    const userIndex = userLoginData.findIndex((data) => data.email === email);
 
     // Find user
     const selectedUser = userLoginData.at(userIndex);
@@ -56,7 +56,8 @@ export default function Login({
     setActiveUserId(id);
 
     // Set page to feeds
-    setActivePage("feeds");
+    // setActivePage("feeds");
+    globalDispatch({ type: "switch_page", payload: "feeds" });
 
     // reset input validation state
     setWrongPassword(false);
@@ -69,41 +70,27 @@ export default function Login({
 
   const validateEmail = (emailInput) => {
     // If email does match format (regex) then return early
-    if (!EMAIL_REGEX.test(emailInput))
-      return "Invalid Email";
+    if (!EMAIL_REGEX.test(emailInput)) return "Invalid Email";
 
     // Check if email is registered
     return (
-      userLoginData.some(
-        (data) => data.email === emailInput
-      ) || "Email not registered"
+      userLoginData.some((data) => data.email === emailInput) ||
+      "Email not registered"
     );
   };
 
   return (
     <div id="page__login">
-      <form
-        action="#"
-        onSubmit={handleSubmit(validateInputs)}
-      >
+      <form action="#" onSubmit={handleSubmit(validateInputs)}>
         <img src={logo} alt="Logo" className="logo" />
         <h1>
           Welcome, <span>Log in</span> to your account.
         </h1>
 
-        <div
-          className={`input-wrapper ${
-            errors.email ? "is-error" : ""
-          }`}
-        >
+        <div className={`input-wrapper ${errors.email ? "is-error" : ""}`}>
           <div className="info">
-            <label htmlFor="email-input">
-              Email Address
-            </label>
-            <label
-              htmlFor="email-input"
-              className="input-error"
-            >
+            <label htmlFor="email-input">Email Address</label>
+            <label htmlFor="email-input" className="input-error">
               {errors.email?.message}
             </label>
           </div>
@@ -116,17 +103,10 @@ export default function Login({
             })}
           />
         </div>
-        <div
-          className={`input-wrapper ${
-            wrongPassword ? "is-error" : null
-          }`}
-        >
+        <div className={`input-wrapper ${wrongPassword ? "is-error" : null}`}>
           <div className="info">
             <label htmlFor="password-input">Password</label>
-            <label
-              htmlFor="password-input"
-              className="input-error"
-            >
+            <label htmlFor="password-input" className="input-error">
               Incorrect Password
             </label>
           </div>
@@ -138,9 +118,7 @@ export default function Login({
               {...register("password", { required: true })}
             />
             <div
-              className={`toggle-visibility ${
-                showPassword ? "visible" : ""
-              }`}
+              className={`toggle-visibility ${showPassword ? "visible" : ""}`}
               onClick={() => setShowPassword((cur) => !cur)}
             >
               <i className="bx bx-show"></i>
@@ -158,9 +136,7 @@ export default function Login({
             Forgot Password?
           </button>
         </div>
-        <button className="purple-button purple-hover submit">
-          Log in
-        </button>
+        <button className="purple-button purple-hover submit">Log in</button>
         <p className="signup-link ">
           Don&apos;t have an account? <span>Sign Up</span>
         </p>

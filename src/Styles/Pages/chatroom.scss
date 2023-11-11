@@ -1,7 +1,7 @@
 .chatroom {
   margin-inline: 1.5rem;
-  padding-top: 3rem;
-  padding-bottom: 2rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
   padding-right: 1.75rem;
 
   display: grid;
@@ -9,7 +9,7 @@
   gap: 2rem;
 
   align-items: start;
-  @include stay-center;
+  // @include stay-center;
 
   height: 100vh;
 
@@ -159,4 +159,14 @@
       background-color: var(--clr-chatbubble);
     }
   }
+}
+
+.chatroom-nav {
+  // background-color: red;
+  bottom: 1.5rem;
+  max-width: 20rem;
+  width: 100%;
+  flex: 1;
+
+  margin-left: 1.5rem;
 }

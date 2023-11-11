@@ -27,10 +27,11 @@ const navigations = [
   },
 ];
 
-export default function Navbar({ activePage = "feeds", setActivePage }) {
+export default function Navbar({ activePage = "feeds", globalDispatch }) {
   // Switch page to the selected one.
   const updatePage = (newPage) => {
-    setActivePage(newPage);
+    // setActivePage(newPage);
+    globalDispatch({ type: "switch_page", payload: newPage });
   };
 
   return (
