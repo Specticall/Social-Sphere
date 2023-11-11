@@ -16,7 +16,6 @@ import { storyImage } from "../Data/storydata";
 import { useLoading } from "../Hooks/useLoading";
 
 export default function Feeds({
-  // setActivePage,
   activePage,
   isMobile,
   activeUserId,
@@ -47,39 +46,41 @@ export default function Feeds({
     setOpenProfile(isMobile ? false : true);
   }, [isMobile]);
 
-  // Prop pack
   const props = {
-    activeUser,
-    activeUserId,
-    // setActivePage,
     activePage,
-    openProfile,
-    setOpenProfile,
     isMobile,
+    activeUserId,
     allUser,
+    activeUser,
     globalDispatch,
     globalState,
+    openProfile,
+    setOpenProfile,
   };
 
   return (
-    <div className="page__feeds">
-      <div className="left">{/* <FriendReqs /> */}</div>
-      <div className="middle">
-        <SearchBar
-          onOpenProfile={() => {
-            setOpenProfile((current) => !current);
-          }}
-          props={props}
-          isLoading={activeUser ? false : true}
-        />
-        <Slider items={stories} />
-        <Recommendations {...props} />
-      </div>
-      <div className="right">
-        <h2 className="your-profile__title">YOUR PROFILE</h2>
-        <UserProfile {...props} />
-      </div>
-    </div>
+    <>
+      <main>
+        <div className="page__feeds">
+          <div className="left">{/* <FriendReqs /> */}</div>
+          <div className="middle">
+            <SearchBar
+              onOpenProfile={() => {
+                setOpenProfile((current) => !current);
+              }}
+              props={props}
+              isLoading={activeUser ? false : true}
+            />
+            <Slider items={stories} />
+            <Recommendations {...props} />
+          </div>
+          <div className="right">
+            <h2 className="your-profile__title">YOUR PROFILE</h2>
+            <UserProfile {...props} />
+          </div>
+        </div>
+      </main>
+    </>
   );
 }
 

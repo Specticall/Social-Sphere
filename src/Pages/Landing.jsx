@@ -7,6 +7,7 @@ import featuresChat from "../assets/features-chat.png";
 import featuresFriend from "../assets/features-friend.png";
 import featuresPlatform from "../assets/features-platform.png";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const faqData = [
   {
@@ -129,7 +130,9 @@ function Nav() {
   );
 }
 
-function Hero({ globalDispatch }) {
+function Hero() {
+  const navigate = useNavigate();
+
   return (
     <section className="hero" id="hero-section">
       <div className="hero-inside">
@@ -146,8 +149,7 @@ function Hero({ globalDispatch }) {
             padding="1.25rem 1rem"
             width="40%"
             goToPage={() => {
-              // setActivePage("login");
-              globalDispatch({ type: "switch_page", payload: "login" });
+              navigate("/login", { replace: true });
             }}
           />
         </div>

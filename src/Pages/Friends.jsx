@@ -92,16 +92,18 @@ export default function Friends({
   };
 
   return (
-    <div className="page__friends">
-      {/* FOR NAV */}
-      <div className="left"></div>
-      {/* MAIN CONTENT */}
-      <div className="right">
-        <h1>Your Friends</h1>
-        <FriendFilter {...props} />
-        <FriendList {...props} />
-      </div>
-    </div>
+    <main>
+      <div className="page__friends">
+        {/* FOR NAV */}
+        <div className="left"></div>
+        {/* MAIN CONTENT */}
+        <div className="right">
+          <h1>Your Friends</h1>
+          <FriendFilter {...props} />
+          <FriendList {...props} />
+        </div>
+      </div>{" "}
+    </main>
   );
 }
 
@@ -146,14 +148,7 @@ function Filters({ dispatch, state }) {
   );
 }
 
-function FriendList({
-  activeUser,
-  allUser,
-  state,
-  dispatch,
-  globalDispatch,
-  globalState,
-}) {
+function FriendList({ activeUser, allUser, state, dispatch, globalDispatch }) {
   const getFilteredFriends = ({ friends, query, filter, sort, status }) => {
     if (status === "loading") return createFieldPlaceholder(10, "LOADING");
 

@@ -6,9 +6,9 @@ export default function Button({
   padding = "0.8rem 0rem",
   goToPage = () => {},
   onClick = () => {},
+  children,
 }) {
-  const customClassList =
-    type === "primary" ? "purple-button" : "gray-button";
+  const customClassList = type === "primary" ? "purple-button" : "gray-button";
 
   return (
     <button
@@ -20,6 +20,7 @@ export default function Button({
       }}
     >
       {buttonText}
+      {children}
     </button>
   );
 }

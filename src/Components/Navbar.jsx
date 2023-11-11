@@ -1,3 +1,4 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 
 const navigations = [
@@ -28,10 +29,14 @@ const navigations = [
 ];
 
 export default function Navbar({ activePage = "feeds", globalDispatch }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // Switch page to the selected one.
   const updatePage = (newPage) => {
     // setActivePage(newPage);
-    globalDispatch({ type: "switch_page", payload: newPage });
+    // globalDispatch({ type: "switch_page", payload: newPage });
+    navigate(`/app/${newPage}`, { replace: true });
   };
 
   return (
@@ -52,7 +57,8 @@ export default function Navbar({ activePage = "feeds", globalDispatch }) {
           className="selector"
           style={{
             transform: `translateY(${
-              navigations.find((nav) => nav.name === activePage)?.navPosition
+              navigations.find((nav) => location.pathname.includes(nav.name))
+                ?.navPosition
             })`,
           }}
         ></div>

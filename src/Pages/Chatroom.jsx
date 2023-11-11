@@ -80,24 +80,26 @@ function Chatroom({ activeUser, allUser }) {
   };
 
   return (
-    <div className="chatroom">
-      <div className="nav-placeholder"></div>
+    <main>
+      <div className="chatroom">
+        <div className="nav-placeholder"></div>
 
-      <div className="chat">
-        <header>
-          <UserHeader
-            username={activeUser?.username}
-            tag={activeUser?.tag}
-            imageSource={activeUser?.pfp}
-            isOnline={true}
-            height="3.75rem"
-          />
-          <FriendUtils />
-        </header>
-        <Chatbox {...props} />
-        <ChatInput {...props} />
+        <div className="chat">
+          <header>
+            <UserHeader
+              username={activeUser?.username}
+              tag={activeUser?.tag}
+              imageSource={activeUser?.pfp}
+              isOnline={true}
+              height="3.75rem"
+            />
+            <FriendUtils />
+          </header>
+          <Chatbox {...props} />
+          <ChatInput {...props} />
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
 

@@ -17,6 +17,7 @@ import FriendReqs from "./Components/FriendReqs";
 import { getData } from "./db/backend";
 import Chatroom from "./Pages/Chatroom";
 import ChatroomNav from "./Components/ChatroomNav";
+import AppLayout from "./Pages/AppLayout";
 // import { getData, postData } from "./db/backend";
 
 // register Swiper custom elements
@@ -118,44 +119,37 @@ function App() {
     globalState,
   };
 
-  // return (
-  //   <BrowserRouter>
-  //     <Routes>
-  //       <Route index element={<Landing {...props} />} />
-  //       <Route to="login" element={<Login {...props} />} />
-
-  //       <Route to="app" element={<Login {...props} />}>
-  //         <div className="navbar-wrapper">
-  //           <Route to="feeds" element={<FriendReqs {...props} />} />
-  //           <Route to="friends" element={<Navbar {...props} />} />
-  //           <Route to="chatroom" element={<ChatroomNav {...props} />} />
-  //         </div>
-  //         <main>
-  //           <Route to="feeds" element={<Feeds {...props} />} />
-  //           <Route to="friends" element={<Friends {...props} />} />
-  //           <Route to="chatroom" element={<Chatroom {...props} />} />
-  //         </main>
-  //       </Route>
-  //     </Routes>
-  //   </BrowserRouter>
-  // );
-
   return (
-    <>
-      {activePage === "landing" && <Landing {...props} />}
-      {activePage === "login" && <Login {...props} />}
-      <main>
-        <div className="navbar-wrapper">
-          {activePage === "feeds" && <FriendReqs {...props} />}
-          {showNavbar && <Navbar {...props} />}
-          {activePage === "chatroom" && <ChatroomNav {...props} />}
-        </div>
-        {activePage === "feeds" && <Feeds {...props} />}
-        {activePage === "friends" && <Friends {...props} />}
-        {activePage === "chatroom" && <Chatroom {...props} />}
-      </main>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<Landing {...props} />} />
+        <Route path="login" element={<Login {...props} />} />
+
+        <Route path="app" element={<AppLayout props={props} />}>
+          <Route path="feeds" element={<Feeds {...props} />} />
+          <Route path="friends" element={<Friends {...props} />} />
+          <Route path="chatroom" element={<Chatroom {...props} />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
+
+  // return (
+  //   <>
+  //     {activePage === "landing" && <Landing {...props} />}
+  //     {activePage === "login" && <Login {...props} />}
+  //     <main>
+  //       <div className="navbar-wrapper">
+  //         {activePage === "feeds" && <FriendReqs {...props} />}
+  //         {showNavbar && <Navbar {...props} />}
+  //         {activePage === "chatroom" && <ChatroomNav {...props} />}
+  //       </div>
+  //       {activePage === "feeds" && <Feeds {...props} />}
+  //       {activePage === "friends" && <Friends {...props} />}
+  //       {activePage === "chatroom" && <Chatroom {...props} />}
+  //     </main>
+  //   </>
+  // );
 }
 
 export default App;

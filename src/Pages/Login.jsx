@@ -3,18 +3,20 @@ import Checkmark from "../Components/Checkmark";
 import logo from "../assets/logo.svg";
 import { useForm } from "react-hook-form";
 import { DEV_LOGIN, EMAIL_REGEX } from "../Helper/config";
+import { redirect, useNavigate } from "react-router-dom";
 
 export default function Login({
   // setActivePage,
   userLoginData,
   setActiveUserId,
   globalDispatch,
-  globalState,
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
 
   const hasSubmit = useRef(null);
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -57,7 +59,8 @@ export default function Login({
 
     // Set page to feeds
     // setActivePage("feeds");
-    globalDispatch({ type: "switch_page", payload: "feeds" });
+    // globalDispatch({ type: "switch_page", payload: "feeds" });
+    navigate("/app/feeds", { replace: true });
 
     // reset input validation state
     setWrongPassword(false);
