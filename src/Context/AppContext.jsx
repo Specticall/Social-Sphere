@@ -95,6 +95,7 @@ export function AppProvider({ children }) {
         activeUserId,
         setActiveUserId,
         setUserLoginData,
+        isMobile,
       }}
     >
       {children}

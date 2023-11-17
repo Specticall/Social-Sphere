@@ -17,15 +17,6 @@ import { useLoading } from "../Hooks/useLoading";
 import { useApp } from "../Context/AppContext";
 
 export default function Feeds() {
-  // const {
-  //   activePage,
-  //   isMobile,
-  //   activeUserId,
-  //   allUser,
-  //   activeUser,
-  //   globalDispatch,
-  //   globalState,
-  // } = useApp();
   const { activeUser, isMobile, allUser } = useApp();
   const [openProfile, setOpenProfile] = useState(false);
 
@@ -60,13 +51,7 @@ export default function Feeds() {
         <div className="page__feeds">
           <div className="left">{/* <FriendReqs /> */}</div>
           <div className="middle">
-            <SearchBar
-              onOpenProfile={() => {
-                setOpenProfile((current) => !current);
-              }}
-              activeUser={activeUser}
-              isLoading={activeUser ? false : true}
-            />
+            <FeedsSearchBar setOpenProfile={setOpenProfile} />
             <Slider items={stories} />
             <Recommendations />
           </div>
@@ -77,6 +62,19 @@ export default function Feeds() {
         </div>
       </main>
     </>
+  );
+}
+
+function FeedsSearchBar({ setOpenProfile }) {
+  const { activeUser } = useApp();
+  return (
+    <SearchBar
+      onOpenProfile={() => {
+        setOpenProfile((current) => !current);
+      }}
+      activeUser={activeUser}
+      isLoading={activeUser ? false : true}
+    />
   );
 }
 
@@ -99,13 +97,13 @@ function Recommendations() {
   );
 
   useEffect(() => {
-    // setIsLoading(activeUserId && allUser ? false : true);
-
-    setRecommended(
-      activeUserId && allUser
-        ? getRecommendation(allUser, activeUserId, RECOMMENDATION_AMOUNT)
-        : new Array(3).fill("loading")
-    );
+    if (activeUserId && allUser) {
+      setRecommended(
+        getRecommendation(allUser, activeUserId, RECOMMENDATION_AMOUNT)
+      );
+    } else {
+      setRecommended(new Array(3).fill("loading"));
+    }
   }, [allUser, activeUserId]);
 
   return (

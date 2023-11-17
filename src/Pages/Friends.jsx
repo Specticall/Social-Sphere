@@ -1,116 +1,41 @@
-import { useEffect, useReducer, useState } from "react";
+import { useState } from "react";
 import Searchbar from "../Components/Searchbar";
-import {
-  createFieldPlaceholder,
-  deleteElementAtIndex,
-  filterFieldbyId,
-} from "../Helper/helper";
+import { createFieldPlaceholder, filterFieldbyId } from "../Helper/helper";
 import ProfilePicture from "../Components/ProfilePicture";
 import Sort from "../Components/Sort";
-import {
-  handleAcceptFriend,
-  handleDeclineFriend,
-  handleUnblockFriend,
-} from "../Helper/model_friend";
+
 import Skeleton from "react-loading-skeleton";
 import { Loader } from "../Components/Loader";
 import FriendUtils from "../Components/FriendUtils";
+import { useApp } from "../Context/AppContext";
+import { FriendProvider, useFriends } from "../Context/FriendContext";
 
 const filters = ["Online", "All", "Pending", "Blocked"];
-const initialState = {
-  // "loading", "ready"
-  status: "loading",
-  // allFriends: createFieldPlaceholder(10, "LOADING"),
-  friends: createFieldPlaceholder(10, "LOADING"),
-  filter: 0,
-  query: "",
-  sort: 0,
-  requests: [],
-};
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "get_friends":
-      return { ...state, friends: action.payload, status: "ready" };
-    case "set_filter":
-      return {
-        ...state,
-        filter: action.payload,
-      };
-    case "set_query":
-      return {
-        ...state,
-        query: action.payload,
-      };
-    case "set_sort":
-      return {
-        ...state,
-        sort: action.payload,
-      };
-    case "add_request":
-      return {
-        ...state,
-        requests: [...state.requests, action.payload],
-      };
-    case "remove_request":
-      return {
-        ...state,
-        requests: deleteElementAtIndex(
-          state.requests,
-          state.requests.indexOf(action.payload)
-        ),
-      };
-
-    default:
-      throw new Error("Reducer not specified");
-  }
-}
-
-export default function Friends({
-  activeUser,
-  allUser,
-  globalDispatch,
-  globalState,
-}) {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  // Wait for friend data.
-  useEffect(() => {
-    if (!activeUser) return;
-    const friends = filterFieldbyId(allUser, activeUser.friends);
-
-    dispatch({ type: "get_friends", payload: friends });
-  }, [allUser, activeUser?.friends, activeUser]);
-
-  const props = {
-    activeUser,
-    allUser,
-    state,
-    dispatch,
-    globalDispatch,
-    globalState,
-  };
-
+export default function Friends() {
   return (
-    <main>
-      <div className="page__friends">
-        {/* FOR NAV */}
-        <div className="left"></div>
-        {/* MAIN CONTENT */}
-        <div className="right">
-          <h1>Your Friends</h1>
-          <FriendFilter {...props} />
-          <FriendList {...props} />
+    <FriendProvider>
+      <main>
+        <div className="page__friends">
+          {/* FOR NAV */}
+          <div className="left"></div>
+          {/* MAIN CONTENT */}
+          <div className="right">
+            <h1>Your Friends</h1>
+            <FriendFilter />
+            <FriendListContainer />
+          </div>
         </div>
-      </div>{" "}
-    </main>
+      </main>
+    </FriendProvider>
   );
 }
 
-function FriendFilter({ dispatch, state }) {
+function FriendFilter() {
+  const { dispatch } = useFriends();
   return (
     <div className="navbar-filters">
-      <Filters dispatch={dispatch} state={state} />
+      <Filters />
       <Searchbar
         hideProfilePic={true}
         className="filter-search"
@@ -122,7 +47,8 @@ function FriendFilter({ dispatch, state }) {
   );
 }
 
-function Filters({ dispatch, state }) {
+function Filters() {
+  const { dispatch, state } = useFriends();
   return (
     <ul className="filter">
       {filters.map((label, i) => {
@@ -148,7 +74,10 @@ function Filters({ dispatch, state }) {
   );
 }
 
-function FriendList({ activeUser, allUser, state, dispatch, globalDispatch }) {
+function FriendListContainer() {
+  const { activeUser, allUser } = useApp();
+  const { state } = useFriends();
+
   const getFilteredFriends = ({ friends, query, filter, sort, status }) => {
     if (status === "loading") return createFieldPlaceholder(10, "LOADING");
 
@@ -178,6 +107,31 @@ function FriendList({ activeUser, allUser, state, dispatch, globalDispatch }) {
       );
   };
 
+  return (
+    <ul className="friends-list">
+      <FriendListSort />
+      {/* Display empty list if there are no friends */}
+      {getFilteredFriends(state).length === 0 && <FriendListEmpty />}
+      <FriendList getFilteredFriends={getFilteredFriends} />
+    </ul>
+  );
+}
+
+function FriendListSort() {
+  const { state, dispatch } = useFriends();
+  return (
+    <header>
+      <p>{filters.at(state.filter)} - 15</p>
+      <Sort
+        stateSetter={(type) => {
+          dispatch({ type: "set_sort", payload: type });
+        }}
+      />
+    </header>
+  );
+}
+
+function FriendListEmpty() {
   const emptyFriendsMsg = [
     "You Have No Online Friends",
     "You Have No Friends",
@@ -185,100 +139,60 @@ function FriendList({ activeUser, allUser, state, dispatch, globalDispatch }) {
     "You Have No User Blocked",
   ];
 
-  /**
-   * Handles friend list manipulation task
-   * @param {String} type - "accept", "decline", "unblock"
-   * @param {Object} targetUser  - "target user object"
-   */
-  const handleAction = (type, targetUser) => {
-    const stateSetter = () => {
-      globalDispatch({ type: "refetch_data" });
-      dispatch({ type: "remove_request", payload: targetUser.id });
-    };
-    const dependencies = [activeUser, targetUser.id, stateSetter];
+  const { state } = useFriends();
+  return <div className="empty-friends">{emptyFriendsMsg[state.filter]}</div>;
+}
 
-    if (type === "accept") handleAcceptFriend(...dependencies);
-    if (type === "decline") handleDeclineFriend(...dependencies);
-    if (type === "unblock") handleUnblockFriend(...dependencies);
+function FriendList({ getFilteredFriends }) {
+  const { state } = useFriends();
+  return getFilteredFriends(state).map((friend) => (
+    <li key={friend.id}>
+      <FriendListProfile friend={friend} />
+      <FriendListContactButtons friend={friend} />
+    </li>
+  ));
+}
 
-    dispatch({ type: "add_request", payload: targetUser.id });
-  };
-
-  const props = {
-    activeUser,
-    dispatch,
-    state,
-    handleAction,
-  };
-
+function FriendListProfile({ friend }) {
+  const { state } = useFriends();
   return (
-    <ul className="friends-list">
-      {/* SORT */}
-      <header>
-        <p>{filters.at(state.filter)} - 15</p>
-        <Sort
-          stateSetter={(type) => {
-            dispatch({ type: "set_sort", payload: type });
-          }}
+    <article>
+      {state.status === "loading" ? (
+        <Skeleton width={"2.5rem"} height={"2.5rem"} borderRadius={"100%"} />
+      ) : (
+        <ProfilePicture
+          pfpLink={friend?.pfp}
+          width={"2.5rem"}
+          isOnline={friend?.isOnline}
         />
-      </header>
-
-      {/* FRIENDS LIST */}
-
-      {/* Empty Message */}
-      {getFilteredFriends(state).length === 0 && (
-        <div className="empty-friends">{emptyFriendsMsg[state.filter]}</div>
       )}
+      <div className="info">
+        <h3 className="name">
+          {friend?.username || <Skeleton width={"120px"} height={"20px"} />}
+        </h3>
+        <p className="tag">
+          {friend?.tag || <Skeleton width={"80px"} height={"20px"} />}
+        </p>
+      </div>
+    </article>
+  );
+}
 
-      {/* List */}
-      {getFilteredFriends(state).map((friend) => (
-        <li key={friend.id}>
-          {/* FRIEND PROFILE */}
-
-          <article>
-            {state.status === "loading" ? (
-              <Skeleton
-                width={"2.5rem"}
-                height={"2.5rem"}
-                borderRadius={"100%"}
-              />
-            ) : (
-              <ProfilePicture
-                pfpLink={friend?.pfp}
-                width={"2.5rem"}
-                isOnline={friend?.isOnline}
-              />
-            )}
-            <div className="info">
-              <h3 className="name">
-                {friend?.username || (
-                  <Skeleton width={"120px"} height={"20px"} />
-                )}
-              </h3>
-              <p className="tag">
-                {friend?.tag || <Skeleton width={"80px"} height={"20px"} />}
-              </p>
-            </div>
-          </article>
-
-          {/* CONTACT BUTTONS */}
-
-          {state.filter === 0 ||
-            (state.filter === 1 && <FriendUtils {...props} user={friend} />)}
-          {state.filter === 2 && (
-            <FriendPendingButtons {...props} user={friend} />
-          )}
-          {state.filter === 3 && (
-            <FriendBlockedButtons {...props} user={friend} />
-          )}
-        </li>
-      ))}
-    </ul>
+function FriendListContactButtons({ friend }) {
+  const { state } = useFriends();
+  return (
+    <>
+      {state.filter === 0 ||
+        (state.filter === 1 && <FriendUtils user={friend} />)}
+      {state.filter === 2 && <FriendPendingButtons user={friend} />}
+      {state.filter === 3 && <FriendBlockedButtons user={friend} />}
+    </>
   );
 }
 
 // Features component
-function FriendPendingButtons({ user: targetUser, state, handleAction }) {
+function FriendPendingButtons({ user: targetUser }) {
+  const { state, handleAction } = useFriends();
   /*
   This state will not be reverted to false even after
   the fetching is finished, this is done so that the
@@ -320,7 +234,9 @@ function FriendPendingButtons({ user: targetUser, state, handleAction }) {
   );
 }
 
-function FriendBlockedButtons({ user: targetUser, state, handleAction }) {
+function FriendBlockedButtons({ user: targetUser }) {
+  const { state, handleAction } = useFriends();
+
   const [isRequesting, setIsRequesting] = useState(() =>
     state.requests.includes(targetUser?.id) ? true : false
   );

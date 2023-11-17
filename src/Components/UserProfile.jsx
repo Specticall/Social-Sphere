@@ -49,7 +49,8 @@ export default function UserProfile({ openProfile, setOpenProfile }) {
     isLoading,
   };
 
-  console.log(openProfile);
+  console.log(isMobile);
+
   return (
     <div className="user-profile__container">
       <article
