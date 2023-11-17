@@ -8,6 +8,7 @@ export default function SearchBar({
   props,
   inputWatcher = () => {},
   isLoading = false,
+  activeUser,
 }) {
   return (
     <div className={`search-bar ${className}`}>
@@ -22,16 +23,12 @@ export default function SearchBar({
       {!hideProfilePic ? (
         <div className="pfp-button">
           {isLoading ? (
-            <Skeleton
-              width={"57px"}
-              height={"57px"}
-              borderRadius={"100%"}
-            />
+            <Skeleton width={"57px"} height={"57px"} borderRadius={"100%"} />
           ) : (
             <Image
               isVisible={!isLoading}
-              link={props?.activeUser?.pfp}
-              alt={`${props?.activeUser?.pfp}-mobile`}
+              link={activeUser?.pfp}
+              alt={`${activeUser?.pfp}-mobile`}
               onClick={onOpenProfile}
               defaultStyle={false}
             />

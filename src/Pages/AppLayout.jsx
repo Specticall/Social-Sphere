@@ -3,8 +3,10 @@ import Navbar from "../Components/Navbar";
 import FriendReqs from "../Components/FriendReqs";
 import ChatroomNav from "../Components/ChatroomNav";
 import { DEV_LOGIN } from "../Helper/config";
+import { useApp } from "../Context/AppContext";
 
-function AppLayout({ props }) {
+function AppLayout() {
+  const { activeUserId, setActiveUserId } = useApp();
   const navigation = useNavigate();
   const location = useLocation();
 
@@ -12,9 +14,9 @@ function AppLayout({ props }) {
   Redirects user to login page if DEV_LOGIN is null
   and automatically loads data from DEV_LOGIN is it exist.
   */
-  checkLogin: if (!props.activeUserId) {
+  checkLogin: if (!activeUserId) {
     if (DEV_LOGIN) {
-      props.setActiveUserId(DEV_LOGIN);
+      setActiveUserId(DEV_LOGIN);
       break checkLogin;
     }
     navigation("/login", { replace: true });
@@ -27,9 +29,9 @@ function AppLayout({ props }) {
   return (
     <div className="main-app">
       <div className="navbar-wrapper">
-        <Navbar {...props} />
-        {isCurrentlyAt("/feeds") && <FriendReqs {...props} />}
-        {isCurrentlyAt("/chatroom") && <ChatroomNav {...props} />}
+        <Navbar />
+        {isCurrentlyAt("/feeds") && <FriendReqs />}
+        {isCurrentlyAt("/chatroom") && <ChatroomNav />}
       </div>
       <Outlet />
     </div>

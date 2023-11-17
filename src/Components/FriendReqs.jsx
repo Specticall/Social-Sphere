@@ -8,18 +8,15 @@ import Image from "./Image";
 import Skeleton from "react-loading-skeleton";
 import { Loader } from "./Loader";
 import { useState } from "react";
+import { useApp } from "../Context/AppContext";
 
 /*
   handleChangeData,
   handleAcceptFriend,
   handleDeclineFriend,
 */
-export default function FriendReqs({
-  activeUser,
-  allUser,
-  globalDispatch,
-  globalState,
-}) {
+export default function FriendReqs() {
+  const { activeUser, allUser } = useApp();
   const [requests, setRequests] = useState([]);
   // Get all the friend user objects.
   const friendRequests =
@@ -27,8 +24,6 @@ export default function FriendReqs({
     new Array(2).fill("LOADING");
 
   const props = {
-    allUser,
-    activeUser,
     requests,
     setRequests,
   };
@@ -53,14 +48,13 @@ export default function FriendReqs({
 }
 
 function Request({
-  user: targetUser,
   setRequests,
   requests,
+  user: targetUser,
   isLoading = false,
-  activeUser,
-  globalDispatch,
-  globalState,
 }) {
+  const { activeUser, globalDispatch } = useApp();
+
   const [isRequesting, setIsRequesting] = useState(
     requests.includes(targetUser?.id) ? true : false
   );

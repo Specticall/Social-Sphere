@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
+import { useApp } from "../Context/AppContext";
 
 const navigations = [
   {
@@ -28,7 +29,8 @@ const navigations = [
   },
 ];
 
-export default function Navbar({ activePage = "feeds", globalDispatch }) {
+export default function Navbar() {
+  const { activePage = "feeds" } = useApp();
   const navigate = useNavigate();
   const location = useLocation();
 

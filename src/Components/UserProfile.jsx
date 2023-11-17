@@ -3,16 +3,11 @@ import Image from "./Image";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useApp } from "../Context/AppContext";
 
-export default function UserProfile({
-  openProfile,
-  setOpenProfile,
-  isMobile,
-  activeUser,
-  // setActivePage,
-  setActiveUserId,
-  globalDispatch,
-}) {
+export default function UserProfile({ openProfile, setOpenProfile }) {
+  const { isMobile, activeUser, setActiveUserId, globalDispatch } = useApp();
+
   const profileEl = useRef(null);
 
   const [isLoading, setIsLoading] = useState(activeUser ? false : true);
@@ -54,6 +49,7 @@ export default function UserProfile({
     isLoading,
   };
 
+  console.log(openProfile);
   return (
     <div className="user-profile__container">
       <article

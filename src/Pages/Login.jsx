@@ -3,14 +3,11 @@ import Checkmark from "../Components/Checkmark";
 import logo from "../assets/logo.svg";
 import { useForm } from "react-hook-form";
 import { DEV_LOGIN, EMAIL_REGEX } from "../Helper/config";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useApp } from "../Context/AppContext";
 
-export default function Login({
-  // setActivePage,
-  userLoginData,
-  setActiveUserId,
-  globalDispatch,
-}) {
+export default function Login() {
+  const { userLoginData, setActiveUserId } = useApp();
   const [showPassword, setShowPassword] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
 

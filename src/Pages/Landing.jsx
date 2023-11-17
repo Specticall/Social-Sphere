@@ -56,16 +56,11 @@ const featureData = [
   },
 ];
 
-export default function Landing({
-  // setActivePage,
-  globalDispatch,
-}) {
-  const props = { globalDispatch };
-
+export default function Landing() {
   return (
     <div className="page__landing">
       <Nav />
-      <Hero {...props} />
+      <Hero />
       <Features />
       <FAQ />
       <Footer />

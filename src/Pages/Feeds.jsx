@@ -14,16 +14,19 @@ import { isEmptyObject } from "../Helper/helper";
 // TEMP Mockup Story data
 import { storyImage } from "../Data/storydata";
 import { useLoading } from "../Hooks/useLoading";
+import { useApp } from "../Context/AppContext";
 
-export default function Feeds({
-  activePage,
-  isMobile,
-  activeUserId,
-  allUser,
-  activeUser,
-  globalDispatch,
-  globalState,
-}) {
+export default function Feeds() {
+  // const {
+  //   activePage,
+  //   isMobile,
+  //   activeUserId,
+  //   allUser,
+  //   activeUser,
+  //   globalDispatch,
+  //   globalState,
+  // } = useApp();
+  const { activeUser, isMobile, allUser } = useApp();
   const [openProfile, setOpenProfile] = useState(false);
 
   /*
@@ -47,13 +50,6 @@ export default function Feeds({
   }, [isMobile]);
 
   const props = {
-    activePage,
-    isMobile,
-    activeUserId,
-    allUser,
-    activeUser,
-    globalDispatch,
-    globalState,
     openProfile,
     setOpenProfile,
   };
@@ -68,11 +64,11 @@ export default function Feeds({
               onOpenProfile={() => {
                 setOpenProfile((current) => !current);
               }}
-              props={props}
+              activeUser={activeUser}
               isLoading={activeUser ? false : true}
             />
             <Slider items={stories} />
-            <Recommendations {...props} />
+            <Recommendations />
           </div>
           <div className="right">
             <h2 className="your-profile__title">YOUR PROFILE</h2>
@@ -84,7 +80,9 @@ export default function Feeds({
   );
 }
 
-function Recommendations({ allUser, activeUserId }) {
+function Recommendations() {
+  const { allUser, activeUserId } = useApp();
+
   /*
     State default value is needed to prevent recommendation 
     change everytime user adds a new friend / switch pages.

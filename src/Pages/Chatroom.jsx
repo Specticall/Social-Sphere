@@ -4,7 +4,6 @@ import Chatbox from "../Components/Chatbox";
 import FriendUtils from "../Components/FriendUtils";
 import UserHeader from "../Components/UserHeader";
 import { getData, putData } from "../db/backend";
-import { filterFieldbyId } from "../Helper/helper";
 
 const initialState = {
   status: "loading",
@@ -33,7 +32,7 @@ function reducer(state, action) {
   }
 }
 
-function Chatroom({ activeUser, allUser }) {
+function Chatroom({ activeUser }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const chatBoxEl = useRef(null);
 
