@@ -19,7 +19,7 @@ export default function Button({
         onClick();
       }}
     >
-      {buttonText}
+      {!children ? buttonText : ""}
       {children}
     </button>
   );

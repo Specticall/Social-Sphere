@@ -265,3 +265,13 @@
 
   border-top: 2px solid var(--clr-gray-light);
 }
+
+.friend-list__loader {
+  height: 1rem;
+
+  div {
+    width: 0.75rem;
+    height: 0.75rem;
+    top: 0;
+  }
+}

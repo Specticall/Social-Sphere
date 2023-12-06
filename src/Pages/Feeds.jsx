@@ -15,6 +15,9 @@ import { isEmptyObject } from "../Helper/helper";
 import { storyImage } from "../Data/storydata";
 import { useLoading } from "../Hooks/useLoading";
 import { useApp } from "../Context/AppContext";
+import UserStatus from "../Components/UserStatus";
+import UserHeader from "../Components/UserHeader";
+import { useNavigate } from "react-router-dom";
 
 export default function Feeds() {
   const { activeUser, isMobile, allUser } = useApp();
@@ -66,15 +69,61 @@ export default function Feeds() {
 }
 
 function FeedsSearchBar({ setOpenProfile }) {
-  const { activeUser } = useApp();
+  const { activeUser, allUser } = useApp();
+  const [query, setQuery] = useState(null);
+  const [searchResult, setSearchResult] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!allUser || !activeUser) return;
+    if (!query) {
+      setSearchResult([]);
+      return;
+    }
+    setSearchResult(
+      Object.values(allUser).filter(
+        (user) =>
+          user.username.toLowerCase().includes(query.toLowerCase()) &&
+          user.id !== activeUser.id
+      )
+    );
+  }, [query, allUser, activeUser?.id, activeUser]);
+
+  if (!activeUser || !allUser) return;
+
   return (
-    <SearchBar
-      onOpenProfile={() => {
-        setOpenProfile((current) => !current);
-      }}
-      activeUser={activeUser}
-      isLoading={activeUser ? false : true}
-    />
+    <div className="feeds-searchbar-wrapper">
+      <SearchBar
+        onOpenProfile={() => {
+          setOpenProfile((current) => !current);
+        }}
+        inputWatcher={(query) => {
+          setQuery(query);
+        }}
+        activeUser={activeUser}
+        isLoading={activeUser ? false : true}
+      />
+      {query && (
+        <div className="search-suggestion">
+          {searchResult.map((result) => (
+            <div
+              className="search-suggestion__item"
+              key={`${result.id}-searchsuggestion`}
+              onClick={() => {
+                navigate(`../userhomepage/${result.id}`);
+              }}
+            >
+              <UserHeader
+                username={result.username}
+                tag={result.tag}
+                imageSource={result.pfp}
+                height="3rem"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 

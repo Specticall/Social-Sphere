@@ -1,10 +1,10 @@
 import Skeleton from "react-loading-skeleton";
 import Button from "./Button";
 import Image from "./Image";
+import { Link } from "react-router-dom";
 
 export default function Recommendation({ data }) {
-  const images =
-    data?.displayImg || new Array(3).fill("LOADING");
+  const images = data?.displayImg || new Array(3).fill("LOADING");
 
   return (
     <article className="feeds__recommendation">
@@ -17,11 +17,7 @@ export default function Recommendation({ data }) {
               alt="pfp"
             />
           ) : (
-            <Skeleton
-              width={"52px"}
-              height={"52px"}
-              borderRadius={"100%"}
-            />
+            <Skeleton width={"52px"} height={"52px"} borderRadius={"100%"} />
           )}
           <div className="profile">
             <h3>
@@ -33,14 +29,14 @@ export default function Recommendation({ data }) {
                 />
               )}
             </h3>
-            <p>
-              {data?.tag || (
-                <Skeleton width={"150px"} height={"20px"} />
-              )}
-            </p>
+            <p>{data?.tag || <Skeleton width={"150px"} height={"20px"} />}</p>
           </div>
         </div>
-        <Button type="primary" buttonText="Contact" />
+        {data && (
+          <Link to={`../userhomepage/${data.id}`}>
+            <Button type="primary" buttonText="Contact" />
+          </Link>
+        )}
       </div>
       <p className="caption">
         {data?.aboutMe || (

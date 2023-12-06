@@ -13,3 +13,35 @@
     transform: rotate(360deg);
   }
 }
+
+@keyframes slide {
+  0% {
+    transform: rotate(-5deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+}
+@keyframes slidebg {
+  0% {
+    transform: rotate(-8deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(-4deg);
+    opacity: 1;
+  }
+}
+
+@keyframes floatup {
+  0% {
+    transform: translateY(10%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}

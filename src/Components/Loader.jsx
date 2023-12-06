@@ -1,10 +1,18 @@
-export function Loader({ isLoading = true, style }) {
+export function Loader({ isLoading = true, className }) {
+  // return (
+  //   <i
+  //     className={`bx bx-loader-circle ${isLoading ? "spin-loader" : null}`}
+  //     style={{ fontSize: "2rem" }}
+  //   ></i>
+  // );
   return (
-    <i
-      className={`bx bx-loader-circle ${
-        isLoading ? "spin-loader" : null
-      }`}
-      style={{ fontSize: "2rem" }}
-    ></i>
+    <>
+      <div className={`lds-ellipsis ${className}`}>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </>
   );
 }

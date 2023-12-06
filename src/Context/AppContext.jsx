@@ -9,7 +9,7 @@ import { getData } from "../db/backend";
 import { usersLoginData } from "../Data/userLogindata";
 
 const AppContext = createContext(null);
-
+//
 const initialState = {
   status: "loading",
   activePage: "landing",
@@ -23,9 +23,9 @@ const initialState = {
 function reducer(state, action) {
   switch (action.type) {
     case "refetch_data":
-      return { ...state, dataUpdated: true };
+      return { ...state, status: "loading", dataUpdated: true };
     case "conclude_refetch":
-      return { ...state, dataUpdated: false };
+      return { ...state, status: "ready", dataUpdated: false };
     case "toggle_mobile":
       return { ...state, isMobile: action.payload };
     case "switch_page":

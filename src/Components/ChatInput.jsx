@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
+import { useApp } from "../Context/AppContext";
+import { useChatroom } from "../Context/ChatroomContext";
 
-function ChatInput({ dispatch, state, activeUser }) {
+function ChatInput() {
+  const { activeUser } = useApp();
+  const { dispatch, state } = useChatroom();
   const [query, setQuery] = useState("");
 
-  useEffect(() => {}, [state.activeUserChatLog]);
+  // useEffect(() => {}, [state.activeUserChatLog]);
 
   const handleNewChat = (e) => {
     e.preventDefault();

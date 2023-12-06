@@ -98,6 +98,10 @@
       &.selected {
         color: var(--clr-purple);
 
+        p {
+          color: inherit;
+        }
+
         i {
           color: inherit;
         }

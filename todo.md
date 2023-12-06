@@ -19,3 +19,14 @@ DONE
 
 
 -> Check if the person's friend list contains a story, if yes then add them (in story object form, taken from user object) into an array then place on a state called "stories"
+
+    Friends    Incoming   Outgoing
+01: 05 03 04 | 07 09    | 08
+02: 08 07 06 | 03       |
+03: 01 09 04 |          | 02
+04: 01 03 05 | 09       |
+05: 01 09 04 | 06       |
+06: 02 07 08 |          | 05
+07: 02 06 09 |          | 01
+08: 02 06    | 01       |
+09: 03 05 07 |          | 01 04

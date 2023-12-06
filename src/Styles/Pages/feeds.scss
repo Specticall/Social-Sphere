@@ -79,6 +79,38 @@
     }
   }
 
+  .feeds-searchbar-wrapper {
+    position: relative;
+
+    .search-suggestion {
+      background-color: var(--clr-white);
+      position: absolute;
+      top: 5rem;
+      border-radius: 0.25rem;
+      padding-block: 1rem;
+      max-height: 20rem;
+      overflow-y: scroll;
+      left: 0;
+      right: 0;
+      z-index: 2;
+
+      display: grid;
+      &__item {
+        padding-inline: 1rem;
+        border-bottom: 1px solid var(--clr-gray-light);
+        cursor: pointer;
+        .user-header {
+          padding-block: 0.75rem;
+          justify-content: start;
+        }
+
+        &:hover {
+          background-color: var(--clr-chatbubble);
+        }
+      }
+    }
+  }
+
   @include max-width(desktop) {
     grid-template-columns: 7rem 1fr minmax(22.5rem, 25rem);
   }
@@ -112,5 +144,15 @@
 
   @include max-width(tablet) {
     padding-inline: 2rem;
+  }
+}
+
+.feeds-loader {
+  height: 1rem;
+
+  div {
+    width: 0.5rem;
+    height: 0.5rem;
+    top: 0;
   }
 }

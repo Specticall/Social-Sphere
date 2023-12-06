@@ -7,6 +7,7 @@ import {
 import { useApp } from "./AppContext";
 import {
   handleAcceptFriend,
+  handleCancelRequestFriend,
   handleDeclineFriend,
   handleUnblockFriend,
 } from "../Helper/model_friend";
@@ -82,11 +83,12 @@ export function FriendProvider({ children }) {
       globalDispatch({ type: "refetch_data" });
       dispatch({ type: "remove_request", payload: targetUser.id });
     };
-    const dependencies = [activeUser, targetUser.id, stateSetter];
+    const dependencies = [activeUser, targetUser, stateSetter];
 
     if (type === "accept") handleAcceptFriend(...dependencies);
     if (type === "decline") handleDeclineFriend(...dependencies);
     if (type === "unblock") handleUnblockFriend(...dependencies);
+    if (type === "cancel") handleCancelRequestFriend(...dependencies);
 
     dispatch({ type: "add_request", payload: targetUser.id });
   };

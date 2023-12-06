@@ -4,11 +4,14 @@ import Image from "./Image";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useApp } from "../Context/AppContext";
+import { useNavigate } from "react-router-dom";
+import UserStatus from "./UserStatus";
 
 export default function UserProfile({ openProfile, setOpenProfile }) {
   const { isMobile, activeUser, setActiveUserId, globalDispatch } = useApp();
 
   const profileEl = useRef(null);
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(activeUser ? false : true);
 
@@ -42,14 +45,13 @@ export default function UserProfile({ openProfile, setOpenProfile }) {
     // setActivePage("login");
     globalDispatch({ type: "switch_page", payload: "login" });
     setActiveUserId("");
+    navigate("/login");
   };
 
   const props = {
     user,
     isLoading,
   };
-
-  console.log(isMobile);
 
   return (
     <div className="user-profile__container">
@@ -147,46 +149,6 @@ function UserAboutMe({ user }) {
           />
         )}
       </p>
-    </article>
-  );
-}
-
-function UserStatus({ user, isLoading }) {
-  return (
-    <article className="user-profile__status">
-      <h3>Status</h3>
-      <ul className="status-list">
-        <li>
-          <i className="bx bx-map"></i>
-          {isLoading ? (
-            <Skeleton containerClassName="skeleton" height={"20px"} />
-          ) : (
-            <>
-              {user?.status.city}, {user?.status.country}
-            </>
-          )}
-        </li>
-        <li>
-          <i className="bx bx-user"></i>
-          {user?.status.activity || (
-            <Skeleton containerClassName="skeleton" height={"20px"} />
-          )}
-        </li>
-        <li>
-          <i className="bx bx-heart"></i>
-          {user?.status.loveStatus || (
-            <Skeleton containerClassName="skeleton" height={"20px"} />
-          )}
-        </li>
-        <li>
-          <i className="bx bx-calendar"></i>
-          {isLoading ? (
-            <Skeleton containerClassName="skeleton" height={"20px"} />
-          ) : (
-            `${user?.status.age} Years old`
-          )}
-        </li>
-      </ul>
     </article>
   );
 }

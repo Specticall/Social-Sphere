@@ -42,6 +42,7 @@ export const putData = async (URL, newData, targetId) => {
       targetId,
     });
     const data = res.updated;
+    console.log(data);
 
     if (!res.ok) throw new Error(res.message);
 

@@ -35,14 +35,17 @@ export default function FriendReqs() {
       {friendRequests?.length === 0 ? (
         <div className="req placeholder">YOU HAVE NO REQUEST</div>
       ) : null}
-      {friendRequests?.map((user) => (
-        <Request
-          key={user.id}
-          user={user}
-          isLoading={user === "LOADING"}
-          {...props}
-        />
-      ))}
+      {friendRequests?.map((user) => {
+        if (!user) return;
+        return (
+          <Request
+            key={user.id}
+            user={user}
+            isLoading={user === "LOADING"}
+            {...props}
+          />
+        );
+      })}
     </div>
   );
 }
@@ -70,7 +73,7 @@ function Request({
 
       globalDispatch({ type: "refetch_data" });
     };
-    const dependencies = [activeUser, targetUser.id, stateSetter];
+    const dependencies = [activeUser, targetUser, stateSetter];
 
     if (type === "accept") handleAcceptFriend(...dependencies);
     if (type === "decline") handleDeclineFriend(...dependencies);
@@ -104,7 +107,7 @@ function Request({
           </header>
           <div className="buttons">
             {isRequesting ? (
-              <Loader isLoading={true} />
+              <Loader isLoading={true} className={"feeds-loader"} />
             ) : (
               <>
                 <Button

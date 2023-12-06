@@ -30,7 +30,6 @@ const navigations = [
 ];
 
 export default function Navbar() {
-  const { activePage = "feeds" } = useApp();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -46,14 +45,18 @@ export default function Navbar() {
       <img src={logo} alt="logo" className="logo" />
       <ul>
         <div className="navbar-button__wrapper">
-          {navigations.map((props, i) => (
-            <NavigationLabel
-              {...props}
-              key={`${i}-${props.label}`}
-              onSelect={() => updatePage(props.name)}
-              className={props.name === activePage ? "selected" : ""}
-            />
-          ))}
+          {navigations.map((props, i) => {
+            return (
+              <NavigationLabel
+                {...props}
+                key={`${i}-${props.label}`}
+                onSelect={() => updatePage(props.name)}
+                className={
+                  location.pathname.includes(props.name) ? "selected" : ""
+                }
+              />
+            );
+          })}
         </div>
         <div
           className="selector"

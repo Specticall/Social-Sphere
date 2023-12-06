@@ -18,13 +18,13 @@
 
 @media (hover: hover) {
   .purple-hover:hover {
-    background: var(--clr-purple-light);
+    background: var(--clr-purple-light) !important;
   }
   .purple-button.button-default:hover {
-    background: var(--clr-purple-light);
+    background: var(--clr-purple-light) !important;
   }
   .gray-button.button-default:hover {
-    background: var(--clr-gray-light);
+    background: var(--clr-gray-light) !important;
     color: var(--clr-black);
   }
 }

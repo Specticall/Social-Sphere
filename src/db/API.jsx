@@ -7,7 +7,8 @@ const putData = (resolve, url, { newData, targetId }) => {
     (() => {
       if (url.includes("user")) setDb(newData, targetId);
       if (url.includes("chat-update"))
-        setChatDb(newData, targetId, "modify_chat");
+        setChatDb(newData, targetId, "update_chat");
+      if (url.includes("chat-new")) setChatDb(newData, "_", "create_chat");
 
       return {
         ok: true,

@@ -9,28 +9,72 @@ import { Loader } from "../Components/Loader";
 import FriendUtils from "../Components/FriendUtils";
 import { useApp } from "../Context/AppContext";
 import { FriendProvider, useFriends } from "../Context/FriendContext";
+import { useNavigate } from "react-router-dom";
 
-const filters = ["Online", "All", "Pending", "Blocked"];
+const filters = ["Online", "All", "Pending", "Request"];
 
 export default function Friends() {
   return (
-    <FriendProvider>
-      <main>
-        <div className="page__friends">
-          {/* FOR NAV */}
-          <div className="left"></div>
-          {/* MAIN CONTENT */}
-          <div className="right">
-            <h1>Your Friends</h1>
-            <FriendFilter />
-            <FriendListContainer />
+    <>
+      <FriendProvider>
+        <main>
+          <div className="page__friends">
+            {/* FOR NAV */}
+            <div className="left"></div>
+            <div className="right">
+              <h1>Your Friends</h1>
+              <FriendFilter />
+              <FriendListContainer />
+            </div>
           </div>
-        </div>
-      </main>
-    </FriendProvider>
+        </main>
+      </FriendProvider>
+    </>
   );
 }
+function FriendListContainer() {
+  const { activeUser, allUser } = useApp();
+  const { state } = useFriends();
 
+  const getFilteredFriends = ({ friends, query, filter, sort, status }) => {
+    // console.log(status);
+    if (status === "loading") return createFieldPlaceholder(10, "LOADING");
+
+    const options = {
+      sorts: [
+        (a, b) => a.username?.localeCompare(b.username),
+        (a, b) => b.username?.localeCompare(a.username),
+      ],
+      filters: [
+        friends.filter((friend) => friend.isOnline),
+        friends,
+        filterFieldbyId(allUser, activeUser.friendRequest),
+        filterFieldbyId(allUser, activeUser.outgoingRequest),
+      ],
+    };
+
+    /*
+    Filter Chain :
+    1. Filter Type
+    2. Sort
+    3. Filter Query
+    */
+    return options.filters[filter]
+      .sort(options.sorts[sort])
+      .filter((friend) =>
+        friend.username.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+      );
+  };
+
+  return (
+    <ul className="friends-list">
+      <FriendListSort getFilteredFriends={getFilteredFriends} />
+      {/* Display empty list if there are no friends */}
+      {getFilteredFriends(state).length === 0 && <FriendListEmpty />}
+      <FriendList getFilteredFriends={getFilteredFriends} />
+    </ul>
+  );
+}
 function FriendFilter() {
   const { dispatch } = useFriends();
   return (
@@ -74,54 +118,13 @@ function Filters() {
   );
 }
 
-function FriendListContainer() {
-  const { activeUser, allUser } = useApp();
-  const { state } = useFriends();
-
-  const getFilteredFriends = ({ friends, query, filter, sort, status }) => {
-    if (status === "loading") return createFieldPlaceholder(10, "LOADING");
-
-    const options = {
-      sorts: [
-        (a, b) => a.username?.localeCompare(b.username),
-        (a, b) => b.username?.localeCompare(a.username),
-      ],
-      filters: [
-        friends.filter((friend) => friend.isOnline),
-        friends,
-        filterFieldbyId(allUser, activeUser.friendRequest),
-        filterFieldbyId(allUser, activeUser.blocked),
-      ],
-    };
-
-    /*
-    Filter Chain :
-    1. Filter Type
-    2. Sort
-    3. Filter Query
-    */
-    return options.filters[filter]
-      .sort(options.sorts[sort])
-      .filter((friend) =>
-        friend.username.toLocaleLowerCase().includes(query.toLocaleLowerCase())
-      );
-  };
-
-  return (
-    <ul className="friends-list">
-      <FriendListSort />
-      {/* Display empty list if there are no friends */}
-      {getFilteredFriends(state).length === 0 && <FriendListEmpty />}
-      <FriendList getFilteredFriends={getFilteredFriends} />
-    </ul>
-  );
-}
-
-function FriendListSort() {
+function FriendListSort({ getFilteredFriends }) {
   const { state, dispatch } = useFriends();
   return (
     <header>
-      <p>{filters.at(state.filter)} - 15</p>
+      <p>
+        {filters.at(state.filter)} - {getFilteredFriends(state).length}
+      </p>
       <Sort
         stateSetter={(type) => {
           dispatch({ type: "set_sort", payload: type });
@@ -136,7 +139,7 @@ function FriendListEmpty() {
     "You Have No Online Friends",
     "You Have No Friends",
     "You Have No Friend Requests",
-    "You Have No User Blocked",
+    "You Have No Outgoing Requests",
   ];
 
   const { state } = useFriends();
@@ -145,12 +148,22 @@ function FriendListEmpty() {
 
 function FriendList({ getFilteredFriends }) {
   const { state } = useFriends();
-  return getFilteredFriends(state).map((friend) => (
-    <li key={friend.id}>
-      <FriendListProfile friend={friend} />
-      <FriendListContactButtons friend={friend} />
-    </li>
-  ));
+  const navigate = useNavigate();
+  return getFilteredFriends(state).map((friend) => {
+    // Navigate to user's homepage when clicked.
+    const handleClick = (e) => {
+      if (!friend?.id) return;
+      if (!e.target.classList.contains("container")) return;
+      navigate(`/app/userhomepage/${friend.id}`);
+    };
+    return (
+      <li key={friend.id} onClick={handleClick} className="container">
+        <FriendListProfile friend={friend} />
+
+        <FriendListContactButtons friend={friend} />
+      </li>
+    );
+  });
 }
 
 function FriendListProfile({ friend }) {
@@ -180,17 +193,18 @@ function FriendListProfile({ friend }) {
 
 function FriendListContactButtons({ friend }) {
   const { state } = useFriends();
+  if (!friend) return;
   return (
     <>
-      {state.filter === 0 ||
-        (state.filter === 1 && <FriendUtils user={friend} />)}
+      {(state.filter === 0 || state.filter === 1) && (
+        <FriendUtils user={friend} />
+      )}
       {state.filter === 2 && <FriendPendingButtons user={friend} />}
-      {state.filter === 3 && <FriendBlockedButtons user={friend} />}
+      {state.filter === 3 && <FriendRequestButtons user={friend} />}
     </>
   );
 }
 
-// Features component
 function FriendPendingButtons({ user: targetUser }) {
   const { state, handleAction } = useFriends();
   /*
@@ -228,13 +242,13 @@ function FriendPendingButtons({ user: targetUser }) {
           </button>
         </>
       ) : (
-        <Loader isLoading={true} />
+        <Loader isLoading={true} className={"friend-list__loader"} />
       )}
     </div>
   );
 }
 
-function FriendBlockedButtons({ user: targetUser }) {
+function FriendRequestButtons({ user: targetUser }) {
   const { state, handleAction } = useFriends();
 
   const [isRequesting, setIsRequesting] = useState(() =>
@@ -243,16 +257,21 @@ function FriendBlockedButtons({ user: targetUser }) {
 
   return !isRequesting ? (
     <button
+      // onClick={() => {
+      //   if (isRequesting) return;
+      //   handleAction("unblock", targetUser);
+      //   setIsRequesting(true);
+      // }}
       onClick={() => {
         if (isRequesting) return;
-        handleAction("unblock", targetUser);
+        handleAction("cancel", targetUser);
         setIsRequesting(true);
       }}
-      className="unblock"
+      className="outgoing-request"
     >
-      Unblock
+      Cancel Request
     </button>
   ) : (
-    <Loader isLoading={true} />
+    <Loader isLoading={true} className={"friend-list__loader"} />
   );
 }

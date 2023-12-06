@@ -112,7 +112,14 @@ export const chatDb = {
 };
 
 export const setChatDb = (newData, targetId, type) => {
-  if (type === "modify_chat") chatDb[targetId].chatLog = newData;
+  // if (type === "modify_chat") chatDb[targetId].chatLog = newData;
+  if (type === "update_chat") {
+    chatDb[targetId] = newData;
+  }
+  // if (type === "new_chat") {
+  //   const newId = uuid();
+  //   chatDb[newId] = { id: newId, user: [newData], chatLog: [] };
+  // }
 };
 
 // 10
